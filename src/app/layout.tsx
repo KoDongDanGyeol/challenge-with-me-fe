@@ -1,4 +1,5 @@
 import RecoilProvider from "@/app/_components/config/RecoilProvider";
+import "@/styles/reset.css";
 
 interface RootLayoutProps extends React.PropsWithChildren {
   //
