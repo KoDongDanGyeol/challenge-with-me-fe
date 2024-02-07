@@ -9,6 +9,7 @@ const eslintConfig = {
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
+    "plugin:@tanstack/eslint-plugin-query/recommended",
     "prettier",
   ],
   overrides: [
@@ -27,7 +28,7 @@ const eslintConfig = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  plugins: ["@typescript-eslint", "react", "react-hooks"],
+  plugins: ["@typescript-eslint", "react", "react-hooks", "@tanstack/query"],
   rules: {
     "no-unused-vars": "off",
     "react/react-in-jsx-scope": "off",
@@ -40,6 +41,9 @@ const eslintConfig = {
     ],
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-explicit-any": "warn",
+    "@tanstack/query/exhaustive-deps": "error",
+    "@tanstack/query/no-rest-destructuring": "warn",
+    "@tanstack/query/stable-query-client": "error",
   },
 };
 
