@@ -266,6 +266,10 @@ const StyledGlobal = styled.createGlobalStyle`
     overflow: hidden;
     white-space: nowrap;
   }
+
+  .header-opened {
+    overflow: hidden;
+  }
 `;
 
 export default StyledGlobal;
