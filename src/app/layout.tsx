@@ -32,7 +32,7 @@ const RootLayout = (props: RootLayoutProps) => {
         <script
           dangerouslySetInnerHTML={{
             __html: `(()=>{
-              const stored = localStorage.getItem("spotimate_atomTheme");
+              const stored = localStorage.getItem("ChallengeWithMe_atomTheme");
               const initial = stored ? stored : typeof window !== "undefined" && window?.matchMedia?.("(prefers-color-scheme: dark)")?.matches ? "dark" : "light";
               document?.documentElement?.setAttribute("data-theme", initial);
             })()`,
