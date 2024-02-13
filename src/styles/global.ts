@@ -1,6 +1,6 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from "styled-components"
 
-const styled = { createGlobalStyle };
+const styled = { createGlobalStyle }
 
 const StyledGlobal = styled.createGlobalStyle`
   :root[data-theme="light"] {
@@ -270,6 +270,6 @@ const StyledGlobal = styled.createGlobalStyle`
   .header-opened {
     overflow: hidden;
   }
-`;
+`
 
-export default StyledGlobal;
+export default StyledGlobal

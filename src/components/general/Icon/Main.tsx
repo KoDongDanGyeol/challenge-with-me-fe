@@ -12,6 +12,8 @@ const IconMain = (props: IconProps) => {
   return <IconMainContainer as={Icons[name]} {...restProps} />
 }
 
-const IconMainContainer = styled.div``
+const IconMainContainer = styled.div`
+  //
+`
 
 export default IconMain

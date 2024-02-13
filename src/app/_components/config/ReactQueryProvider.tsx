@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { useState } from "react"
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
 interface ReactQueryProviderProps extends React.PropsWithChildren {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 const ReactQueryProvider = ({ children }: ReactQueryProviderProps) => {
@@ -19,17 +19,15 @@ const ReactQueryProvider = ({ children }: ReactQueryProviderProps) => {
           retry: false,
         },
       },
-    })
-  );
+    }),
+  )
 
   return (
     <QueryClientProvider client={client}>
       {children}
-      <ReactQueryDevtools
-        initialIsOpen={process.env.NEXT_PUBLIC_MODE === "local"}
-      />
+      <ReactQueryDevtools initialIsOpen={process.env.NEXT_PUBLIC_MODE === "local"} />
     </QueryClientProvider>
-  );
-};
+  )
+}
 
-export default ReactQueryProvider;
+export default ReactQueryProvider

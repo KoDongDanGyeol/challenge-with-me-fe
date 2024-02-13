@@ -6,6 +6,6 @@ const nextConfig = {
       pure: true,
     },
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
