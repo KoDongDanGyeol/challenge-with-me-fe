@@ -1,23 +1,23 @@
-import { useEffect, useRef, useState } from "react";
-import { NonUndefined } from "react-hook-form";
-import { Nullable } from "../utils";
-import { Timer, clearTimer, setTimer } from "@/libs/timer";
+import { useEffect, useRef, useState } from "react"
+import { NonUndefined } from "react-hook-form"
+import { Nullable } from "../utils"
+import { Timer, clearTimer, setTimer } from "@/libs/timer"
 
-type Debounce = number;
+type Debounce = number
 
 const useResize = (debounce?: Debounce) => {
-  const timers = useRef<Timer>({ delay: null });
-  const observer = useRef<ResizeObserver | null>(null);
-  const containerRef = useRef<NonUndefined<Nullable<HTMLDivElement>>>(null);
+  const timers = useRef<Timer>({ delay: null })
+  const observer = useRef<ResizeObserver | null>(null)
+  const containerRef = useRef<NonUndefined<Nullable<HTMLDivElement>>>(null)
 
   const [structure, setStructure] = useState<{
-    isDebounce: boolean;
-    width: number;
-    height: number;
-    windowInnerWidth: number;
-    windowOuterWidth: number;
-    windowInnerHeight: number;
-    windowOuterHeight: number;
+    isDebounce: boolean
+    width: number
+    height: number
+    windowInnerWidth: number
+    windowOuterWidth: number
+    windowInnerHeight: number
+    windowOuterHeight: number
   }>(() => ({
     isDebounce: false,
     width: 0,
@@ -26,7 +26,7 @@ const useResize = (debounce?: Debounce) => {
     windowOuterWidth: 0,
     windowInnerHeight: 0,
     windowOuterHeight: 0,
-  }));
+  }))
 
   const resetStructure = () => {
     setStructure(() => ({
@@ -37,18 +37,18 @@ const useResize = (debounce?: Debounce) => {
       windowOuterWidth: 0,
       windowInnerHeight: 0,
       windowOuterHeight: 0,
-    }));
-  };
+    }))
+  }
 
   const updateObserver = () => {
-    if (!containerRef.current && !document?.body) return;
+    if (!containerRef.current && !document?.body) return
     const io = new ResizeObserver(async ([entry]) => {
       setStructure((prev) => ({
         ...prev,
         isDebounce: true,
-      }));
-      clearTimer(timers, { key: "delay" });
-      await setTimer(timers, { key: "delay", delay: debounce ?? 0 });
+      }))
+      clearTimer(timers, { key: "delay" })
+      await setTimer(timers, { key: "delay", delay: debounce ?? 0 })
       setStructure((prev) => ({
         ...prev,
         isDebounce: false,
@@ -58,24 +58,24 @@ const useResize = (debounce?: Debounce) => {
         windowOuterWidth: window.outerWidth,
         windowInnerHeight: window.innerHeight,
         windowOuterHeight: window.outerWidth,
-      }));
-    });
-    io.observe(containerRef.current ?? document?.body);
-    observer.current = io;
-  };
+      }))
+    })
+    io.observe(containerRef.current ?? document?.body)
+    observer.current = io
+  }
 
   const removeObserver = () => {
-    if (!observer?.current) return;
-    observer?.current?.disconnect();
-    resetStructure();
-  };
+    if (!observer?.current) return
+    observer?.current?.disconnect()
+    resetStructure()
+  }
 
   useEffect(() => {
-    updateObserver();
+    updateObserver()
     return () => {
-      removeObserver();
-    };
-  }, []);
+      removeObserver()
+    }
+  }, [])
 
   return {
     resizeRef: {
@@ -83,7 +83,7 @@ const useResize = (debounce?: Debounce) => {
     },
     resizeObserver: observer,
     resizeStructure: structure,
-  };
-};
+  }
+}
 
-export default useResize;
+export default useResize

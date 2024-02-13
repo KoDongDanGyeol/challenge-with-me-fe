@@ -1,36 +1,30 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import useMount from "@/libs/hook/useMount";
+import { useState } from "react"
+import useMount from "@/libs/hook/useMount"
 
 export interface JamMainProps extends React.HTMLAttributes<HTMLDivElement> {
-  delay: number;
+  delay: number
 }
 
 const JamMain = (props: JamMainProps) => {
-  const { delay = 500, className = "", ...restProps } = props;
+  const { delay = 500, className = "", ...restProps } = props
 
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false)
 
   const { mountStructure } = useMount(() => {
-    (async () => {
+    ;(async () => {
       setTimeout(() => {
-        setIsVisible(() => true);
-      }, delay);
-    })();
-  }, []);
+        setIsVisible(() => true)
+      }, delay)
+    })()
+  }, [])
 
   const jamError = () => {
-    throw new Error("Error!");
-  };
+    throw new Error("Error!")
+  }
 
-  return (
-    <>
-      {mountStructure.isMounted && isVisible && (
-        <div className={`${className} ${jamError()}`} {...restProps} />
-      )}
-    </>
-  );
-};
+  return <>{mountStructure.isMounted && isVisible && <div className={`${className} ${jamError()}`} {...restProps} />}</>
+}
 
-export default JamMain;
+export default JamMain

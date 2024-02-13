@@ -1,45 +1,28 @@
-"use client";
+"use client"
 
-import { forwardRef } from "react";
-import styled from "styled-components";
-import {
-  PolymorphicComponentPropWithRef,
-  PolymorphicRef,
-} from "@/types/polymorphic";
-import { LabelNecessity } from "@/components/entry/Label";
+import { forwardRef } from "react"
+import styled from "styled-components"
+import { PolymorphicComponentPropWithRef, PolymorphicRef } from "@/types/polymorphic"
+import { LabelNecessity } from "@/components/entry/Label/type"
 
-export type LabelMainProps<C extends React.ElementType> =
-  PolymorphicComponentPropWithRef<
-    C,
-    {
-      necessity?: LabelNecessity;
-      isRequired?: boolean;
-    }
-  >;
+export type LabelMainProps<C extends React.ElementType> = PolymorphicComponentPropWithRef<
+  C,
+  {
+    necessity?: LabelNecessity
+    isRequired?: boolean
+  }
+>
 
-export type LabelMainComponent = <C extends React.ElementType = "label">(
-  props: LabelMainProps<C>
-) => React.ReactNode;
+export type LabelMainComponent = <C extends React.ElementType = "label">(props: LabelMainProps<C>) => React.ReactNode
 
-const LabelMain: LabelMainComponent = forwardRef(function LabelMain<
-  C extends React.ElementType = "label",
->(props: LabelMainProps<C>, ref?: PolymorphicRef<C>): React.ReactNode {
-  const {
-    as,
-    necessity = LabelNecessity.Icon,
-    isRequired = false,
-    className = "",
-    children,
-    ...restProps
-  } = props;
+const LabelMain: LabelMainComponent = forwardRef(function LabelMain<C extends React.ElementType = "label">(
+  props: LabelMainProps<C>,
+  ref?: PolymorphicRef<C>,
+): React.ReactNode {
+  const { asTag, necessity = LabelNecessity.Icon, isRequired = false, className = "", children, ...restProps } = props
 
   return (
-    <LabelMainContainer
-      ref={ref}
-      as={as ?? "label"}
-      className={`${className}`}
-      {...restProps}
-    >
+    <LabelMainContainer ref={ref} as={asTag ?? "label"} className={`${className}`} {...restProps}>
       {children}
       {necessity === LabelNecessity.Icon && isRequired && (
         <Required>
@@ -53,8 +36,8 @@ const LabelMain: LabelMainComponent = forwardRef(function LabelMain<
         </Required>
       )}
     </LabelMainContainer>
-  );
-});
+  )
+})
 
 const Required = styled.span`
   .asterisk:before {
@@ -64,7 +47,7 @@ const Required = styled.span`
     color: rgb(var(--color-red600));
     vertical-align: middle;
   }
-`;
+`
 
 const LabelMainContainer = styled.label`
   display: block;
@@ -72,6 +55,6 @@ const LabelMainContainer = styled.label`
   ${Required} {
     margin-left: 2px;
   }
-`;
+`
 
-export default LabelMain;
+export default LabelMain

@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
-import RecoilProvider from "@/app/_components/config/RecoilProvider";
-import StyledProvider from "@/app/_components/config/StyledProvider";
-import MocksProvider from "@/app/_components/config/MocksProvider";
-import notoSansKr from "@/styles/font/notoSansKr";
-import "@/styles/reset.css";
+import type { Metadata } from "next"
+import RecoilProvider from "@/app/_components/config/RecoilProvider"
+import StyledProvider from "@/app/_components/config/StyledProvider"
+import MocksProvider from "@/app/_components/config/MocksProvider"
+import notoSansKr from "@/styles/font/notoSansKr"
+import "@/styles/reset.css"
 
 export const metadata: Metadata = {
   title: {
@@ -15,14 +15,14 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
-};
+}
 
 interface RootLayoutProps extends React.PropsWithChildren {
   //
 }
 
 const RootLayout = (props: RootLayoutProps) => {
-  const { children } = props;
+  const { children } = props
 
   return (
     <html lang="ko" className={notoSansKr.variable} suppressHydrationWarning>
@@ -46,7 +46,7 @@ const RootLayout = (props: RootLayoutProps) => {
         </RecoilProvider>
       </body>
     </html>
-  );
-};
+  )
+}
 
-export default RootLayout;
+export default RootLayout

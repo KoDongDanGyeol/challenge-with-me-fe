@@ -3,6 +3,6 @@ export const IconName = {
   ["SymbolGithub"]: "SymbolGithub",
   ["SymbolGoogle"]: "SymbolGoogle",
   ["XMark"]: "XMark",
-} as const;
+} as const
 
-export type IconName = (typeof IconName)[keyof typeof IconName];
+export type IconName = (typeof IconName)[keyof typeof IconName]

@@ -1,11 +1,11 @@
-import Layout from "@/components/display/Layout";
+import Layout from "@/components/display/Layout"
 
 interface ServiceLayoutProps extends React.PropsWithChildren {
   //
 }
 
 const ServiceLayout = (props: ServiceLayoutProps) => {
-  const { children } = props;
+  const { children } = props
 
   return (
     <Layout>
@@ -13,7 +13,7 @@ const ServiceLayout = (props: ServiceLayoutProps) => {
       <Layout.Content>{children}</Layout.Content>
       <Layout.Footer />
     </Layout>
-  );
-};
+  )
+}
 
-export default ServiceLayout;
+export default ServiceLayout
