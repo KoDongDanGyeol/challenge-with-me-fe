@@ -45,6 +45,6 @@ const eslintConfig = {
     "@tanstack/query/no-rest-destructuring": "warn",
     "@tanstack/query/stable-query-client": "error",
   },
-};
+}
 
-module.exports = eslintConfig;
+module.exports = eslintConfig

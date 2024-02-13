@@ -1,5 +1,5 @@
-export type Color = typeof colorLight | typeof colorDark;
-export type ColorKey = keyof Color;
+export type Color = typeof colorLight | typeof colorDark
+export type ColorKey = keyof Color
 
 export const colorLight = {
   gray0: "255, 255, 255",
@@ -57,7 +57,7 @@ export const colorLight = {
   primary700: "0, 58, 140",
   primary800: "0, 39, 102",
   primary900: "0, 22, 64",
-};
+}
 
 export const colorDark = {
   gray0: "255, 255, 255",
@@ -115,4 +115,4 @@ export const colorDark = {
   primary700: "0, 58, 140",
   primary800: "0, 39, 102",
   primary900: "0, 22, 64",
-};
+}

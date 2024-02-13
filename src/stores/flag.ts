@@ -1,23 +1,23 @@
-"use client";
+"use client"
 
-import { AtomEffect, atom } from "recoil";
+import { AtomEffect, atom } from "recoil"
 
-export type Flag = boolean;
+export type Flag = boolean
 
 const localStorageEffect: <T>(key: string) => AtomEffect<T> =
   (key: string) =>
   ({ setSelf, onSet }) => {
-    if (typeof window === "undefined") return;
-    const stored = localStorage.getItem(key);
-    if (stored && Boolean(stored)) setSelf(JSON.parse(stored));
+    if (typeof window === "undefined") return
+    const stored = localStorage.getItem(key)
+    if (stored && Boolean(stored)) setSelf(JSON.parse(stored))
     onSet((value, _value, isReset) => {
-      if (isReset) return localStorage.removeItem(key);
-      localStorage.setItem(key, JSON.stringify(value ?? _value));
-    });
-  };
+      if (isReset) return localStorage.removeItem(key)
+      localStorage.setItem(key, JSON.stringify(value ?? _value))
+    })
+  }
 
 export const atomFlag = atom<Flag>({
   key: "atomFlag",
   default: false,
   effects: [localStorageEffect<Flag>("ChallengeWithMe_atomFlag")],
-});
+})

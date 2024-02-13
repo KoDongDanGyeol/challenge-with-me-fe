@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import Button from "@/components/general/Button";
-import { styled } from "styled-components";
+import Button from "@/components/general/Button"
+import { styled } from "styled-components"
 
 export interface LayoutFooterProps extends React.HTMLAttributes<HTMLElement> {
   //
 }
 
 const LayoutFooter = (props: LayoutFooterProps) => {
-  const { className = "", ...restProps } = props;
+  const { className = "", ...restProps } = props
 
   return (
     <LayoutFooterContainer className={`${className}`} {...restProps}>
@@ -16,24 +16,12 @@ const LayoutFooter = (props: LayoutFooterProps) => {
         <LayoutFooterLink>
           <ul className="link-policy">
             <li>
-              <Button
-                as="a"
-                href="#"
-                shape="plain"
-                variants="secondary"
-                emphasis="minimal"
-              >
+              <Button asTag="a" href="#" shape="plain" variants="secondary" emphasis="minimal">
                 이용약관
               </Button>
             </li>
             <li>
-              <Button
-                as="a"
-                href="#"
-                shape="plain"
-                variants="secondary"
-                emphasis="minimal"
-              >
+              <Button asTag="a" href="#" shape="plain" variants="secondary" emphasis="minimal">
                 개인정보처리방침
               </Button>
             </li>
@@ -45,8 +33,8 @@ const LayoutFooter = (props: LayoutFooterProps) => {
         </LayoutFooterCopyright>
       </div>
     </LayoutFooterContainer>
-  );
-};
+  )
+}
 
 const LayoutFooterLink = styled.div`
   .link-policy {
@@ -56,7 +44,7 @@ const LayoutFooterLink = styled.div`
       padding: 0 8px;
     }
   }
-`;
+`
 
 const LayoutFooterCopyright = styled.div`
   margin-top: 32px;
@@ -68,7 +56,7 @@ const LayoutFooterCopyright = styled.div`
     padding: 0 0.2em;
     color: rgb(var(--color-gray400));
   }
-`;
+`
 
 const LayoutFooterContainer = styled.footer`
   > .inner {
@@ -82,6 +70,6 @@ const LayoutFooterContainer = styled.footer`
       padding: 32px 16px;
     }
   }
-`;
+`
 
-export default LayoutFooter;
+export default LayoutFooter

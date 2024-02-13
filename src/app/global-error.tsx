@@ -1,21 +1,21 @@
-"use client";
+"use client"
 
-import { useEffect } from "react";
-import "@/styles/error.css";
+import { useEffect } from "react"
+import "@/styles/error.css"
 
 interface PageProps {
   error: Error & {
-    digest?: string;
-  };
-  reset: () => void;
+    digest?: string
+  }
+  reset: () => void
 }
 
 const Page = (props: PageProps) => {
-  const { error, reset } = props;
+  const { error, reset } = props
 
   useEffect(() => {
-    console.error(error);
-  }, [error]);
+    console.error(error)
+  }, [error])
 
   return (
     <html>
@@ -26,7 +26,7 @@ const Page = (props: PageProps) => {
         <button onClick={() => window.location.reload()}>Reload page</button>
       </body>
     </html>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page
