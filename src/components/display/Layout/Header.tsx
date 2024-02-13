@@ -110,7 +110,7 @@ const LayoutHeader = (props: LayoutHeaderProps) => {
               <li>
                 <Button
                   as="a"
-                  href="/auth/login"
+                  href="/signIn"
                   shape="plain"
                   variants="secondary"
                   emphasis="minimal"
