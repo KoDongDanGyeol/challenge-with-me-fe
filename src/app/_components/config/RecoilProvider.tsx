@@ -1,24 +1,24 @@
-"use client";
+"use client"
 
-import { useCallback } from "react";
-import { RecoilRoot, SetRecoilState } from "recoil";
-import { Flag, atomFlag } from "@/stores/flag";
+import { useCallback } from "react"
+import { RecoilRoot, SetRecoilState } from "recoil"
+import { Flag, atomFlag } from "@/stores/flag"
 
 interface RecoilProviderProps extends React.PropsWithChildren {
-  flag?: Flag;
+  flag?: Flag
 }
 
 const RecoilProvider = (props: RecoilProviderProps) => {
-  const { flag, children } = props;
+  const { flag, children } = props
 
   const initializeState = useCallback(
     ({ set }: { set: SetRecoilState }) => {
-      if (flag) set(atomFlag, flag);
+      if (flag) set(atomFlag, flag)
     },
-    [flag]
-  );
+    [flag],
+  )
 
-  return <RecoilRoot initializeState={initializeState}>{children}</RecoilRoot>;
-};
+  return <RecoilRoot initializeState={initializeState}>{children}</RecoilRoot>
+}
 
-export default RecoilProvider;
+export default RecoilProvider

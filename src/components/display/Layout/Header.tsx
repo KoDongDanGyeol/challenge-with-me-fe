@@ -1,67 +1,65 @@
-"use client";
+"use client"
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
-import { useRecoilState } from "recoil";
-import { styled } from "styled-components";
-import { Timer, clearTimer, setTimer } from "@/libs/timer";
-import useFocusTrap from "@/libs/hook/useFocusTrap";
-import { atomGlobal } from "@/stores/global";
-import Button from "@/components/general/Button";
-import Icon from "@/components/general/Icon";
-import Logo from "/public/logo.svg";
+import { useCallback, useEffect, useRef, useState } from "react"
+import { usePathname } from "next/navigation"
+import Link from "next/link"
+import Image from "next/image"
+import { useRecoilState } from "recoil"
+import { styled } from "styled-components"
+import { Timer, clearTimer, setTimer } from "@/libs/timer"
+import useFocusTrap from "@/libs/hook/useFocusTrap"
+import { atomGlobal } from "@/stores/global"
+import Button from "@/components/general/Button"
+import Icon from "@/components/general/Icon"
+import Logo from "/public/logo.svg"
 
 export interface LayoutHeaderProps extends React.HTMLAttributes<HTMLElement> {
   //
 }
 
 const LayoutHeader = (props: LayoutHeaderProps) => {
-  const { className = "", ...restProps } = props;
+  const { className = "", ...restProps } = props
 
-  const pathname = usePathname();
-  const timers = useRef<Timer>({ delay: null });
-  const [global, setGlobal] = useRecoilState(atomGlobal);
-  const [header, setHeader] = useState({ isHeaderActivated: false });
-  const { focusTrapRefs, onActivate, onDeactivate } = useFocusTrap(false, [
-    ["Escape", () => toggleSidebar(false)],
-  ]);
+  const pathname = usePathname()
+  const timers = useRef<Timer>({ delay: null })
+  const [global, setGlobal] = useRecoilState(atomGlobal)
+  const [header, setHeader] = useState({ isHeaderActivated: false })
+  const { focusTrapRefs, onActivate, onDeactivate } = useFocusTrap(false, [["Escape", () => toggleSidebar(false)]])
 
   const toggleSidebar = useCallback(
     async (isActivate: boolean) => {
       if (isActivate) {
-        document.body.classList.add("header-opened");
-        setGlobal((prev) => ({ ...prev, isHeaderOpened: isActivate }));
-        clearTimer(timers, { key: "delay" });
-        await setTimer(timers, { key: "delay", delay: 0 });
-        setHeader((prev) => ({ ...prev, isHeaderActivated: isActivate }));
-        clearTimer(timers, { key: "delay" });
-        await setTimer(timers, { key: "delay", delay: 200 });
-        onActivate();
-        return;
+        document.body.classList.add("header-opened")
+        setGlobal((prev) => ({ ...prev, isHeaderOpened: isActivate }))
+        clearTimer(timers, { key: "delay" })
+        await setTimer(timers, { key: "delay", delay: 0 })
+        setHeader((prev) => ({ ...prev, isHeaderActivated: isActivate }))
+        clearTimer(timers, { key: "delay" })
+        await setTimer(timers, { key: "delay", delay: 200 })
+        onActivate()
+        return
       }
-      document.body.classList.remove("header-opened");
-      setHeader((prev) => ({ ...prev, isHeaderActivated: isActivate }));
-      clearTimer(timers, { key: "delay" });
-      await setTimer(timers, { key: "delay", delay: 200 });
-      setGlobal((prev) => ({ ...prev, isHeaderOpened: isActivate }));
-      clearTimer(timers, { key: "delay" });
-      await setTimer(timers, { key: "delay", delay: 0 });
-      onDeactivate();
+      document.body.classList.remove("header-opened")
+      setHeader((prev) => ({ ...prev, isHeaderActivated: isActivate }))
+      clearTimer(timers, { key: "delay" })
+      await setTimer(timers, { key: "delay", delay: 200 })
+      setGlobal((prev) => ({ ...prev, isHeaderOpened: isActivate }))
+      clearTimer(timers, { key: "delay" })
+      await setTimer(timers, { key: "delay", delay: 0 })
+      onDeactivate()
     },
-    [onActivate, onDeactivate, setGlobal]
-  );
+    [onActivate, onDeactivate, setGlobal],
+  )
 
   useEffect(() => {
-    toggleSidebar(false);
-  }, [pathname, toggleSidebar]);
+    toggleSidebar(false)
+  }, [pathname, toggleSidebar])
 
   useEffect(() => {
-    document.body.classList.remove("header-opened");
-    setGlobal((prev) => ({ ...prev, isHeaderOpened: false }));
-    setHeader((prev) => ({ ...prev, isHeaderActivated: false }));
-  }, [global.screen, setGlobal]);
+    document.body.classList.remove("header-opened")
+    setGlobal((prev) => ({ ...prev, isHeaderOpened: false }))
+    setHeader((prev) => ({ ...prev, isHeaderActivated: false }))
+  }, [global.screen, setGlobal])
 
   return (
     <LayoutHeaderContainer className={`${className}`} {...restProps}>
@@ -78,64 +76,34 @@ const LayoutHeader = (props: LayoutHeaderProps) => {
           <LayoutHeaderLink>
             <ul className="link-menu">
               <li>
-                <Link
-                  href="/challenges"
-                  className={
-                    pathname.startsWith("/challenges") ? "current" : ""
-                  }
-                >
+                <Link href="/challenges" className={pathname.startsWith("/challenges") ? "current" : ""}>
                   챌린지
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/questions"
-                  className={pathname.startsWith("/questions") ? "current" : ""}
-                >
+                <Link href="/questions" className={pathname.startsWith("/questions") ? "current" : ""}>
                   질문/답변
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/user/activity"
-                  className={
-                    pathname.startsWith("/user/activity") ? "current" : ""
-                  }
-                >
+                <Link href="/user/activity" className={pathname.startsWith("/user/activity") ? "current" : ""}>
                   활동기록
                 </Link>
               </li>
             </ul>
             <ul className="link-util">
               <li>
-                <Button
-                  as="a"
-                  href="/auth/login"
-                  shape="plain"
-                  variants="secondary"
-                  emphasis="minimal"
-                >
+                <Button asTag="a" href="/auth/login" shape="plain" variants="secondary" emphasis="minimal">
                   로그인
                 </Button>
               </li>
               <li>
-                <Button
-                  as="a"
-                  href="/user"
-                  shape="plain"
-                  variants="secondary"
-                  emphasis="minimal"
-                >
+                <Button asTag="a" href="/user" shape="plain" variants="secondary" emphasis="minimal">
                   마이페이지
                 </Button>
               </li>
               <li>
-                <Button
-                  as="button"
-                  shape="plain"
-                  variants="secondary"
-                  emphasis="minimal"
-                >
+                <Button asTag="button" shape="plain" variants="secondary" emphasis="minimal">
                   로그아웃
                 </Button>
               </li>
@@ -146,19 +114,14 @@ const LayoutHeader = (props: LayoutHeaderProps) => {
             type="button"
             onClick={() => toggleSidebar(!global.isHeaderOpened)}
           >
-            <Icon
-              name={global.isHeaderOpened ? "XMark" : "Bars"}
-              aria-hidden="true"
-            />
-            <span className="sr-only">
-              {global.isHeaderOpened ? "닫기" : "열기"}
-            </span>
+            <Icon name={global.isHeaderOpened ? "XMark" : "Bars"} aria-hidden="true" />
+            <span className="sr-only">{global.isHeaderOpened ? "닫기" : "열기"}</span>
           </LayoutHeaderControl>
         </LayoutHeaderNavigation>
       </div>
     </LayoutHeaderContainer>
-  );
-};
+  )
+}
 
 const LayoutHeaderLogo = styled.h1`
   a {
@@ -167,7 +130,7 @@ const LayoutHeaderLogo = styled.h1`
     width: 100%;
     height: 100%;
   }
-`;
+`
 
 const LayoutHeaderLink = styled.nav`
   display: flex;
@@ -240,7 +203,7 @@ const LayoutHeaderLink = styled.nav`
       }
     }
   }
-`;
+`
 
 const LayoutHeaderControl = styled.button`
   position: absolute;
@@ -254,7 +217,7 @@ const LayoutHeaderControl = styled.button`
     width: 100%;
     stroke: rgb(var(--color-gray400));
   }
-`;
+`
 
 const LayoutHeaderNavigation = styled.div`
   flex: 1 1 0px;
@@ -290,7 +253,7 @@ const LayoutHeaderNavigation = styled.div`
       max-height: 400px;
     }
   }
-`;
+`
 
 const LayoutHeaderContainer = styled.header`
   position: fixed;
@@ -317,6 +280,6 @@ const LayoutHeaderContainer = styled.header`
       padding: 0 16px;
     }
   }
-`;
+`
 
-export default LayoutHeader;
+export default LayoutHeader

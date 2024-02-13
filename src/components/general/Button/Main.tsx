@@ -1,39 +1,29 @@
-"use client";
+"use client"
 
-import { forwardRef } from "react";
-import styled, { css } from "styled-components";
-import { NonUndefined } from "@/libs/utils";
-import {
-  PolymorphicComponentPropWithRef,
-  PolymorphicRef,
-} from "@/types/polymorphic";
-import {
-  ButtonEmphasis,
-  ButtonShape,
-  ButtonSize,
-  ButtonVariants,
-} from "@/components/general/Button";
+import { forwardRef } from "react"
+import styled, { css } from "styled-components"
+import { NonUndefined } from "@/libs/utils"
+import { PolymorphicComponentPropWithRef, PolymorphicRef } from "@/types/polymorphic"
+import { ButtonEmphasis, ButtonShape, ButtonSize, ButtonVariants } from "@/components/general/Button/type"
 
-export type ButtonMainProps<C extends React.ElementType> =
-  PolymorphicComponentPropWithRef<
-    C,
-    {
-      emphasis?: ButtonEmphasis;
-      shape?: ButtonShape;
-      size?: ButtonSize;
-      variants?: ButtonVariants;
-    }
-  >;
+export type ButtonMainProps<C extends React.ElementType> = PolymorphicComponentPropWithRef<
+  C,
+  {
+    emphasis?: ButtonEmphasis
+    shape?: ButtonShape
+    size?: ButtonSize
+    variants?: ButtonVariants
+  }
+>
 
-export type ButtonMainComponent = <C extends React.ElementType = "button">(
-  props: ButtonMainProps<C>
-) => React.ReactNode;
+export type ButtonMainComponent = <C extends React.ElementType = "button">(props: ButtonMainProps<C>) => React.ReactNode
 
-const ButtonMain: ButtonMainComponent = forwardRef(function ButtonMain<
-  C extends React.ElementType = "button",
->(props: ButtonMainProps<C>, ref?: PolymorphicRef<C>): React.ReactNode {
+const ButtonMain: ButtonMainComponent = forwardRef(function ButtonMain<C extends React.ElementType = "button">(
+  props: ButtonMainProps<C>,
+  ref?: PolymorphicRef<C>,
+): React.ReactNode {
   const {
-    as,
+    asTag,
     emphasis = ButtonEmphasis.Bold,
     shape = ButtonShape.Square,
     size = ButtonSize.BASE,
@@ -41,12 +31,12 @@ const ButtonMain: ButtonMainComponent = forwardRef(function ButtonMain<
     className = "",
     children,
     ...restProps
-  } = props;
+  } = props
 
   return (
     <ButtonMainContainer
       ref={ref}
-      as={as ?? "button"}
+      as={asTag ?? "button"}
       $emphasis={emphasis}
       $shape={shape}
       $size={size}
@@ -56,14 +46,14 @@ const ButtonMain: ButtonMainComponent = forwardRef(function ButtonMain<
     >
       {children}
     </ButtonMainContainer>
-  );
-});
+  )
+})
 
 interface ButtonMainStyled<C extends React.ElementType = "button"> {
-  $emphasis: NonUndefined<ButtonMainProps<C>["emphasis"]>;
-  $shape: NonUndefined<ButtonMainProps<C>["shape"]>;
-  $size: NonUndefined<ButtonMainProps<C>["size"]>;
-  $variants: NonUndefined<ButtonMainProps<C>["variants"]>;
+  $emphasis: NonUndefined<ButtonMainProps<C>["emphasis"]>
+  $shape: NonUndefined<ButtonMainProps<C>["shape"]>
+  $size: NonUndefined<ButtonMainProps<C>["size"]>
+  $variants: NonUndefined<ButtonMainProps<C>["variants"]>
 }
 
 const Square = css<ButtonMainStyled>`
@@ -101,12 +91,10 @@ const Square = css<ButtonMainStyled>`
   border-radius: ${(props) =>
     props.$size === ButtonSize.XS || props.$size === ButtonSize.SM
       ? "4px"
-      : props.$size === ButtonSize.BASE ||
-          props.$size === ButtonSize.LG ||
-          props.$size === ButtonSize.XL
+      : props.$size === ButtonSize.BASE || props.$size === ButtonSize.LG || props.$size === ButtonSize.XL
         ? "6px"
         : ""};
-`;
+`
 
 const SquarePrimary = css<ButtonMainStyled>`
   color: ${(props) =>
@@ -152,7 +140,7 @@ const SquarePrimary = css<ButtonMainStyled>`
             ? `rgb(var(--color-primary50))`
             : ""};
   }
-`;
+`
 
 const SquareSecondary = css<ButtonMainStyled>`
   color: ${(props) =>
@@ -198,7 +186,7 @@ const SquareSecondary = css<ButtonMainStyled>`
             ? `rgb(var(--color-gray100))`
             : ""};
   }
-`;
+`
 
 const SquareNegative = css<ButtonMainStyled>`
   color: ${(props) =>
@@ -244,7 +232,7 @@ const SquareNegative = css<ButtonMainStyled>`
             ? `rgb(var(--color-red100))`
             : ""};
   }
-`;
+`
 
 const Plain = css<ButtonMainStyled>`
   font-size: ${(props) => props.theme.typo.size[props.$size]};
@@ -265,19 +253,19 @@ const Plain = css<ButtonMainStyled>`
         : props.$emphasis === ButtonEmphasis.Minimal
           ? ""
           : ""};
-`;
+`
 
 const PlainPrimary = css<ButtonMainStyled>`
   color: rgb(var(--color-primary500));
-`;
+`
 
 const PlainSecondary = css<ButtonMainStyled>`
   color: rgb(var(--color-gray900));
-`;
+`
 
 const PlainNegative = css<ButtonMainStyled>`
   color: rgb(var(--color-red600));
-`;
+`
 
 const ButtonMainContainer = styled.button<ButtonMainStyled>`
   ${(props) =>
@@ -301,6 +289,6 @@ const ButtonMainContainer = styled.button<ButtonMainStyled>`
   &:disabled {
     opacity: 0.8;
   }
-`;
+`
 
-export default ButtonMain;
+export default ButtonMain

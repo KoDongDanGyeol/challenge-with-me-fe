@@ -7,6 +7,6 @@ const prettierConfig = {
   endOfLine: "lf",
   singleQuote: false,
   arrowParens: "always",
-};
+}
 
-module.exports = prettierConfig;
+module.exports = prettierConfig

@@ -1,7 +1,7 @@
-export type TypoSize = typeof typoSize;
-export type TypoSizeKey = keyof TypoSize;
-export type TypoLeading = typeof typoLeading;
-export type TypoLeadingKey = keyof TypoLeading;
+export type TypoSize = typeof typoSize
+export type TypoSizeKey = keyof TypoSize
+export type TypoLeading = typeof typoLeading
+export type TypoLeadingKey = keyof TypoLeading
 
 export const typoSize = {
   xs: "12px",
@@ -16,7 +16,7 @@ export const typoSize = {
   "6xl": "60px",
   "7xl": "72px",
   "8xl": "96px",
-};
+}
 
 export const typoLeading = {
   xs: 1.33,
@@ -37,4 +37,4 @@ export const typoLeading = {
   normal: 1.5,
   relaxed: 1.625,
   loose: 2,
-};
+}

@@ -1,27 +1,20 @@
-"use client";
+"use client"
 
-import styled from "styled-components";
-import {
-  useController,
-  Control,
-  FieldValues,
-  FieldPath,
-  RegisterOptions,
-} from "react-hook-form";
+import styled from "styled-components"
+import { useController, Control, FieldValues, FieldPath, RegisterOptions } from "react-hook-form"
 
-export interface InputMainProps<T extends FieldValues>
-  extends React.HTMLAttributes<HTMLInputElement> {
-  control: Control<T>;
-  rules?: RegisterOptions<T>;
-  name: FieldPath<T>;
-  type?: string;
-  placeholder?: string;
-  disabled?: boolean;
-  autoComplete?: "on" | "off";
-  min?: string | number;
-  max?: string | number;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: () => void;
+export interface InputMainProps<T extends FieldValues> extends React.HTMLAttributes<HTMLInputElement> {
+  control: Control<T>
+  rules?: RegisterOptions<T>
+  name: FieldPath<T>
+  type?: string
+  placeholder?: string
+  disabled?: boolean
+  autoComplete?: "on" | "off"
+  min?: string | number
+  max?: string | number
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onBlur?: () => void
 }
 
 const InputMain = <T extends FieldValues>(props: InputMainProps<T>) => {
@@ -39,9 +32,9 @@ const InputMain = <T extends FieldValues>(props: InputMainProps<T>) => {
     onChange,
     onBlur,
     ...restProps
-  } = props;
+  } = props
 
-  const { field, fieldState } = useController({ control, name, rules });
+  const { field, fieldState } = useController({ control, name, rules })
 
   return (
     <InputMainContainer className={`${className}`}>
@@ -63,23 +56,23 @@ const InputMain = <T extends FieldValues>(props: InputMainProps<T>) => {
                 ? +event.target.value
                 : type === "tel"
                   ? event.target.value.match(/\\d+/g)?.join("")
-                  : event.target.value
-            );
-          else field.onChange("");
-          onChange?.(event);
+                  : event.target.value,
+            )
+          else field.onChange("")
+          onChange?.(event)
         }}
         onBlur={() => {
-          field.onBlur();
-          onBlur?.();
+          field.onBlur()
+          onBlur?.()
         }}
         {...restProps}
       />
     </InputMainContainer>
-  );
-};
+  )
+}
 
 const InputMainContainer = styled.div`
   //
-`;
+`
 
-export default InputMain;
+export default InputMain
