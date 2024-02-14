@@ -22,14 +22,16 @@ const LayoutContentContainer = styled.main`
     margin: 0 auto;
     width: 100%;
     max-width: 1280px;
-    padding: 0 32px;
+    padding-left: 32px;
+    padding-right: 32px;
   }
   header + & {
     padding-top: 65px;
   }
   @media ${(props) => props.theme.screen.device.md} {
     .container {
-      padding: 0 16px;
+      padding-left: 16px;
+      padding-right: 16px;
     }
   }
 `

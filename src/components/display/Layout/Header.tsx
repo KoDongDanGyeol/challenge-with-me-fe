@@ -93,14 +93,18 @@ const LayoutHeader = (props: LayoutHeaderProps) => {
             </ul>
             <ul className="link-util">
               <li>
-                <Button asTag="a" href="/auth/login" shape="plain" variants="secondary" emphasis="minimal">
-                  로그인
-                </Button>
+                <Link href="/auth/login" passHref={true} legacyBehavior={true}>
+                  <Button asTag="a" shape="plain" variants="secondary" emphasis="minimal">
+                    로그인
+                  </Button>
+                </Link>
               </li>
               <li>
-                <Button asTag="a" href="/user" shape="plain" variants="secondary" emphasis="minimal">
-                  마이페이지
-                </Button>
+                <Link href="/user" passHref={true} legacyBehavior={true}>
+                  <Button asTag="a" shape="plain" variants="secondary" emphasis="minimal">
+                    마이페이지
+                  </Button>
+                </Link>
               </li>
               <li>
                 <Button asTag="button" shape="plain" variants="secondary" emphasis="minimal">
