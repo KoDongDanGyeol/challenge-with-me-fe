@@ -72,7 +72,19 @@ const InputMain = <T extends FieldValues>(props: InputMainProps<T>) => {
 }
 
 const InputMainContainer = styled.div`
-  //
+  input {
+    border-radius: 6px;
+    padding: 9px 13px;
+    border: 1px solid rgb(var(--color-gray300));
+  }
+
+  input:error {
+    border: 1px solid #ef4444;
+  }
+  input:disable {
+    background-color: rgb(var(--color-gray50));
+    color: rgb(var(--color-gray200));
+  }
 `
 
 export default InputMain
