@@ -270,6 +270,196 @@ const StyledGlobal = styled.createGlobalStyle`
   .header-opened {
     overflow: hidden;
   }
+
+  .markdown {
+    position: relative;
+    font-size: ${(props) => props.theme.typo.size.sm};
+    line-height: ${(props) => props.theme.typo.leading.sm};
+    font-weight: 400;
+    font-family: var(--font-notoSansKr);
+    color: rgb(var(--color-gray900));
+    background: rgb(var(--color-gray0));
+    word-wrap: break-word;
+
+    * + * {
+      margin-top: 1em;
+    }
+
+    ul {
+      padding-left: 1.25em;
+      list-style-type: disc;
+      ul {
+        list-style-type: circle;
+      }
+      ul ul {
+        list-style-type: square;
+      }
+    }
+
+    ol {
+      padding-left: 1.25em;
+      list-style-type: decimal;
+    }
+
+    li {
+      ul,
+      ol {
+        margin-top: 0.5em;
+      }
+      & + li {
+        margin-top: 0.5em;
+      }
+    }
+
+    .task-list-item {
+      text-indent: -1.25em;
+      list-style-type: none;
+      input[type="checkbox"] {
+        margin: 0;
+        width: auto;
+        vertical-align: middle;
+        appearance: auto;
+        -webkit-appearance: auto;
+      }
+    }
+
+    h1 {
+      font-size: ${(props) => props.theme.typo.size["2xl"]};
+      line-height: ${(props) => props.theme.typo.leading["2xl"]};
+    }
+
+    h2 {
+      font-size: ${(props) => props.theme.typo.size.xl};
+      line-height: ${(props) => props.theme.typo.leading.xl};
+    }
+
+    h3 {
+      font-size: ${(props) => props.theme.typo.size.lg};
+      line-height: ${(props) => props.theme.typo.leading.lg};
+    }
+
+    h4 {
+      font-size: ${(props) => props.theme.typo.size.base};
+      line-height: ${(props) => props.theme.typo.leading.base};
+    }
+
+    strong,
+    b {
+      font-weight: 700;
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    a {
+      text-decoration: underline;
+    }
+
+    hr {
+      border-top: 1px solid rgb(var(--color-gray200));
+      margin: 1em 0;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    blockquote {
+      padding: 0 1em;
+      color: rgb(var(--color-gray500));
+      border-left: 0.25em solid rgb(var(--color-gray300));
+    }
+
+    .markdown-table {
+      table {
+        border: 1px solid rgb(var(--color-gray300));
+        th,
+        td {
+          margin: 0;
+          padding: 0.25em 0.5em;
+          text-align: left;
+          background: rgb(var(--color-gray50));
+          border: 1px solid rgb(var(--color-gray300));
+        }
+      }
+    }
+
+    .markdown-table-auto {
+      table {
+        overflow-x: auto;
+        width: auto;
+      }
+    }
+
+    .markdown-card {
+      & + .markdown-card {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid rgb(var(--color-gray200));
+      }
+    }
+
+    .code-block {
+      border: 1px solid rgb(var(--color-gray300));
+      border-radius: 4px;
+    }
+
+    .code-inline {
+      margin-top: 0;
+      display: inline-block;
+      padding: 0.25em 0.5em;
+      background: rgb(var(--color-gray50));
+      border: 1px solid rgb(var(--color-gray300));
+      border-radius: 4px;
+      font-size: ${(props) => props.theme.typo.size.xs};
+      line-height: ${(props) => props.theme.typo.leading.xs};
+    }
+
+    .color-gray {
+      color: rgb(var(--color-gray500));
+    }
+    .color-success {
+      color: rgb(var(--color-primary500));
+    }
+    .color-danger {
+      color: rgb(var(--color-red500));
+    }
+
+    sub,
+    sup {
+      font-size: 75%;
+      line-height: 0;
+      position: relative;
+      vertical-align: baseline;
+    }
+    sup {
+      top: -0.5em;
+    }
+    sub {
+      bottom: -0.25em;
+    }
+
+    [data-footnotes] {
+      font-size: ${(props) => props.theme.typo.size.xs};
+      line-height: ${(props) => props.theme.typo.leading.xs};
+      border-top: 1px solid rgb(var(--color-gray300));
+    }
+
+    [data-footnote-ref] {
+      text-decoration: none;
+      &:before {
+        content: "[";
+      }
+      &:after {
+        content: "]";
+      }
+    }
+
+    [data-footnote-backref] {
+      text-decoration: none;
+    }
+  }
 `
 
 export default StyledGlobal
