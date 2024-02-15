@@ -51,6 +51,8 @@ const Required = styled.span`
 
 const LabelMainContainer = styled.label`
   display: block;
+  font-size: ${(props) => props.theme.typo.size.sm};
+  line-height: ${(props) => props.theme.typo.leading.sm};
   font-weight: 500;
   ${Required} {
     margin-left: 2px;

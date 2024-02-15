@@ -26,7 +26,8 @@ interface HelperMainStyled {
   $variants: NonUndefined<HelperMainProps["variants"]>
 }
 
-const HelperMainContainer = styled.div<HelperMainStyled>`
+const HelperMainContainer = styled.span<HelperMainStyled>`
+  display: block;
   font-size: ${({ theme }) => theme.typo.size.sm};
   line-height: ${({ theme }) => theme.typo.leading.sm};
   color: ${(props) =>
@@ -35,6 +36,9 @@ const HelperMainContainer = styled.div<HelperMainStyled>`
       : props.$variants === HelperVariants.Error
         ? `rgb(var(--color-red600))`
         : ""};
+  * + & {
+    margin-top: 4px;
+  }
 `
 
 export default HelperMain
