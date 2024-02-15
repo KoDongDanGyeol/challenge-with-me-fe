@@ -28,6 +28,9 @@ const LayoutContentContainer = styled.main`
   header + & {
     padding-top: 65px;
   }
+  header + & {
+    padding-top: 65px;
+  }
   @media ${(props) => props.theme.screen.device.md} {
     .container {
       padding-left: 16px;
