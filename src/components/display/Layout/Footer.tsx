@@ -1,7 +1,8 @@
 "use client"
 
-import Button from "@/components/general/Button"
+import Link from "next/link"
 import { styled } from "styled-components"
+import Button from "@/components/general/Button"
 
 export interface LayoutFooterProps extends React.HTMLAttributes<HTMLElement> {
   //
@@ -16,14 +17,18 @@ const LayoutFooter = (props: LayoutFooterProps) => {
         <LayoutFooterLink>
           <ul className="link-policy">
             <li>
-              <Button asTag="a" href="#" shape="plain" variants="secondary" emphasis="minimal">
-                이용약관
-              </Button>
+              <Link href="#" passHref={true} legacyBehavior={true}>
+                <Button asTag="a" shape="plain" variants="secondary" emphasis="minimal">
+                  이용약관
+                </Button>
+              </Link>
             </li>
             <li>
-              <Button asTag="a" href="#" shape="plain" variants="secondary" emphasis="minimal">
-                개인정보처리방침
-              </Button>
+              <Link href="#" passHref={true} legacyBehavior={true}>
+                <Button asTag="a" shape="plain" variants="secondary" emphasis="minimal">
+                  개인정보처리방침
+                </Button>
+              </Link>
             </li>
           </ul>
         </LayoutFooterLink>
