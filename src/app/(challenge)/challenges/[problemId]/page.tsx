@@ -1,11 +1,7 @@
 import ChallengeDetail from "@/app/(challenge)/challenges/_components/form/ChallengeDetail"
 
 const Page = () => {
-  return (
-    <article className="container">
-      <ChallengeDetail />
-    </article>
-  )
+  return <ChallengeDetail asTag="article" className="container" />
 }
 
 export default Page

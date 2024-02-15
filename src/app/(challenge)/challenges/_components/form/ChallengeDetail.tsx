@@ -1,16 +1,24 @@
 "use client"
 
-import { useState } from "react"
+import { forwardRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import Link from "next/link"
 import styled from "styled-components"
+import { PolymorphicComponentPropWithRef, PolymorphicRef } from "@/types/polymorphic"
 import IDE, { IDETypes, IDESolutionResultType, IDESolutionResultStatus } from "@/components/form/IDE"
 import PageHeading from "@/components/display/PageHeading"
 import Button from "@/components/general/Button"
 
-interface ChallengeDetailProps extends React.HTMLAttributes<HTMLDivElement> {
-  //
-}
+export type ChallengeDetailProps<C extends React.ElementType> = PolymorphicComponentPropWithRef<
+  C,
+  {
+    //
+  }
+>
+
+export type ChallengeDetailComponent = <C extends React.ElementType = "article">(
+  props: ChallengeDetailProps<C>,
+) => React.ReactNode
 
 const challenge = {
   guide: `
@@ -149,8 +157,10 @@ Here is a simple footnote[^1]. With some additional text after it.
   },
 }
 
-const ChallengeDetail = (props: ChallengeDetailProps) => {
-  const { className = "" } = props
+const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeDetail<
+  C extends React.ElementType = "article",
+>(props: ChallengeDetailProps<C>, ref?: PolymorphicRef<C>): React.ReactNode {
+  const { asTag, className = "", ...restProps } = props
 
   const [structure, setStructure] = useState<{
     mode: "solution" | "testcase"
@@ -183,95 +193,69 @@ const ChallengeDetail = (props: ChallengeDetailProps) => {
   }
 
   return (
-    <ChallengeDetailContainer onSubmit={handleSubmit(onSubmit)} className={`${className}`}>
-      <IDE.Grid gridArea="leading">
-        <PageHeading>
-          <PageHeading.Breadcrumb>
-            <Link href="#">
-              <span>기출</span>
-            </Link>
-            <Link href="#">
-              <span>유형</span>
-            </Link>
-            <span>제목</span>
-          </PageHeading.Breadcrumb>
-          <PageHeading.Title asTag={"h2"}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus optio id eum totam. Aperiam, saepe
-            dignissimos! Maxime cupiditate, nemo aperiam eos eligendi vero quasi quidem labore hic saepe quos ab?
-          </PageHeading.Title>
-        </PageHeading>
-      </IDE.Grid>
-      <IDE.Grid gridArea="challenge">
-        <IDE.Head>문제 설명</IDE.Head>
-        <IDE.Markdown>{challenge.guide}</IDE.Markdown>
-      </IDE.Grid>
-      {structure.mode === "solution" && (
-        <IDE.Grid gridArea="editor">
-          <IDE.Head>{`solution.${structure.language}`}</IDE.Head>
-          <IDE.SolutionEditor<IDETypes>
-            control={control}
-            name="solution"
-            rules={{}}
-            defaultLanguage={structure.language}
-          />
+    <ChallengeDetailContainer ref={ref} as={asTag} className={`${className}`} {...restProps}>
+      <ChallengeDetailIDE onSubmit={handleSubmit(onSubmit)}>
+        <IDE.Grid gridArea="leading">
+          <PageHeading>
+            <PageHeading.Breadcrumb>
+              <Link href="#">
+                <span>기출</span>
+              </Link>
+              <Link href="#">
+                <span>유형</span>
+              </Link>
+              <span>제목</span>
+            </PageHeading.Breadcrumb>
+            <PageHeading.Title asTag={"h2"}>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus optio id eum totam. Aperiam, saepe
+              dignissimos! Maxime cupiditate, nemo aperiam eos eligendi vero quasi quidem labore hic saepe quos ab?
+            </PageHeading.Title>
+          </PageHeading>
         </IDE.Grid>
-      )}
-      {structure.mode === "testcase" && (
-        <IDE.Grid gridArea="editor">
-          <IDE.Head>테스트 케이스</IDE.Head>
-          <IDE.TestcaseEditor<IDETypes> control={control} name="testcaseValue" testcaseType={challenge.testcaseType} />
+        <IDE.Grid gridArea="challenge">
+          <IDE.Head>문제 설명</IDE.Head>
+          <IDE.Markdown>{challenge.guide}</IDE.Markdown>
         </IDE.Grid>
-      )}
-      {structure.mode === "solution" && (
-        <IDE.Grid gridArea="result">
-          <IDE.Head>실행 결과</IDE.Head>
-          <IDE.SolutionResult {...challenge.result} />
-        </IDE.Grid>
-      )}
-      {structure.mode === "testcase" && (
-        <IDE.Grid gridArea="result">
-          <IDE.Head>테스트 케이스 형식</IDE.Head>
-          <IDE.TestcaseResult errorMessage={formState.errors.testcaseValue?.userDraft?.root?.message} />
-        </IDE.Grid>
-      )}
-      <IDE.Grid gridArea="trailing">
-        <IDE.Control>
-          <Link href="#" passHref={true} legacyBehavior={true}>
-            <Button asTag="a" shape="square" variants="primary" emphasis="subtle" size="sm">
-              질문 (n)
-            </Button>
-          </Link>
-          <Button
-            type="button"
-            shape="square"
-            variants="primary"
-            emphasis="subtle"
-            size="sm"
-            onClick={() => {
-              setStructure((prev) => ({
-                ...prev,
-                mode: prev.mode === "solution" ? "testcase" : "solution",
-              }))
-            }}
-          >
-            {structure.mode === "solution" ? "테스트 케이스 추가하기" : "문제로 돌아가기"}
-          </Button>
-        </IDE.Control>
         {structure.mode === "solution" && (
-          <IDE.Control>
-            <Button type="button" shape="square" variants="primary" emphasis="subtle" size="sm">
-              초기화
-            </Button>
-            <Button type="button" shape="square" variants="primary" emphasis="subtle" size="sm">
-              코드 실행
-            </Button>
-            <Button type="submit" shape="square" variants="primary" emphasis="bold" size="sm">
-              제출 후 채점하기
-            </Button>
-          </IDE.Control>
+          <IDE.Grid gridArea="editor">
+            <IDE.Head>{`solution.${structure.language}`}</IDE.Head>
+            <IDE.SolutionEditor<IDETypes>
+              control={control}
+              name="solution"
+              rules={{}}
+              defaultLanguage={structure.language}
+            />
+          </IDE.Grid>
         )}
         {structure.mode === "testcase" && (
+          <IDE.Grid gridArea="editor">
+            <IDE.Head>테스트 케이스</IDE.Head>
+            <IDE.TestcaseEditor<IDETypes>
+              control={control}
+              name="testcaseValue"
+              testcaseType={challenge.testcaseType}
+            />
+          </IDE.Grid>
+        )}
+        {structure.mode === "solution" && (
+          <IDE.Grid gridArea="result">
+            <IDE.Head>실행 결과</IDE.Head>
+            <IDE.SolutionResult {...challenge.result} />
+          </IDE.Grid>
+        )}
+        {structure.mode === "testcase" && (
+          <IDE.Grid gridArea="result">
+            <IDE.Head>테스트 케이스 형식</IDE.Head>
+            <IDE.TestcaseResult errorMessage={formState.errors.testcaseValue?.userDraft?.root?.message} />
+          </IDE.Grid>
+        )}
+        <IDE.Grid gridArea="trailing">
           <IDE.Control>
+            <Link href="#" passHref={true} legacyBehavior={true}>
+              <Button asTag="a" shape="square" variants="primary" emphasis="subtle" size="sm">
+                질문 (n)
+              </Button>
+            </Link>
             <Button
               type="button"
               shape="square"
@@ -279,29 +263,66 @@ const ChallengeDetail = (props: ChallengeDetailProps) => {
               emphasis="subtle"
               size="sm"
               onClick={() => {
-                resetField("testcaseValue.userDraft")
+                setStructure((prev) => ({
+                  ...prev,
+                  mode: prev.mode === "solution" ? "testcase" : "solution",
+                }))
               }}
             >
-              초기화
-            </Button>
-            <Button type="submit" shape="square" variants="primary" emphasis="bold" size="sm">
-              저장 후 문제로 돌아가기
+              {structure.mode === "solution" ? "테스트 케이스 추가하기" : "문제로 돌아가기"}
             </Button>
           </IDE.Control>
-        )}
-      </IDE.Grid>
+          {structure.mode === "solution" && (
+            <IDE.Control>
+              <Button type="button" shape="square" variants="primary" emphasis="subtle" size="sm">
+                초기화
+              </Button>
+              <Button type="button" shape="square" variants="primary" emphasis="subtle" size="sm">
+                코드 실행
+              </Button>
+              <Button type="submit" shape="square" variants="primary" emphasis="bold" size="sm">
+                제출 후 채점하기
+              </Button>
+            </IDE.Control>
+          )}
+          {structure.mode === "testcase" && (
+            <IDE.Control>
+              <Button
+                type="button"
+                shape="square"
+                variants="primary"
+                emphasis="subtle"
+                size="sm"
+                onClick={() => {
+                  resetField("testcaseValue.userDraft")
+                }}
+              >
+                초기화
+              </Button>
+              <Button type="submit" shape="square" variants="primary" emphasis="bold" size="sm">
+                저장 후 문제로 돌아가기
+              </Button>
+            </IDE.Control>
+          )}
+        </IDE.Grid>
+      </ChallengeDetailIDE>
     </ChallengeDetailContainer>
   )
-}
+})
 
-const ChallengeDetailContainer = styled(IDE)`
-  margin-top: 24px;
-  margin-bottom: 24px;
+const ChallengeDetailIDE = styled(IDE)`
   height: calc(100vh - 48px);
   @media ${(props) => props.theme.screen.device.md} {
     height: auto;
-    margin-top: 16px;
-    margin-bottom: 16px;
+  }
+`
+
+const ChallengeDetailContainer = styled.article`
+  padding-top: 24px;
+  padding-bottom: 24px;
+  @media ${(props) => props.theme.screen.device.md} {
+    padding-top: 16px;
+    padding-bottom: 16px;
   }
 `
 
