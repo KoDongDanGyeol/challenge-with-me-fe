@@ -1,3 +1,4 @@
+export * from "@/components/general/Icon/data/ArrowUturnLeft"
 export * from "@/components/general/Icon/data/Bars"
 export * from "@/components/general/Icon/data/Check"
 export * from "@/components/general/Icon/data/ChevronUpDown"
