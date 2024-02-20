@@ -66,7 +66,10 @@ const IDESolutionResult = (props: IDESolutionResultProps) => {
                       <td>실행 결과</td>
                       <td>
                         {resultStatus === IDESolutionResultStatus.Wait && (
-                          <Icon name="Loading" className="icon-loading" />
+                          <span>
+                            <Icon name="Loading" className="icon-loading" aria-hidden={true} />
+                            <span className="sr-only">loading</span>
+                          </span>
                         )}
                         {resultStatus === IDESolutionResultStatus.Cancel && null}
                         {resultStatus === IDESolutionResultStatus.Complete && (
@@ -122,7 +125,10 @@ const IDESolutionResult = (props: IDESolutionResultProps) => {
                       <td>{`테스트 ${index + 1}`}</td>
                       <td>
                         {resultStatus === IDESolutionResultStatus.Wait && (
-                          <Icon name="Loading" className="icon-loading" />
+                          <span>
+                            <Icon name="Loading" className="icon-loading" aria-hidden={true} />
+                            <span className="sr-only">loading</span>
+                          </span>
                         )}
                         {resultStatus === IDESolutionResultStatus.Cancel && null}
                         {resultStatus === IDESolutionResultStatus.Complete && (
