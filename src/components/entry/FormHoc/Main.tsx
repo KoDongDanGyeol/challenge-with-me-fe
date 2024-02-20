@@ -2,20 +2,20 @@
 
 import styled from "styled-components"
 import { FieldValues, SubmitHandler, UseFormReturn } from "react-hook-form"
+import { SelectMainProps } from "@/components/entry/Select"
 
 export interface FormHocMainProps<T extends FieldValues>
   extends React.PropsWithChildren<React.HTMLAttributes<HTMLFormElement>> {
-  formAction?: {
-    reset?: string
-    submit?: string
-  }
+  formTitle: string
   formData: UseFormReturn<T>
+  formAction?: {
+    [key in "reset" | "submit"]?: string
+  }
   formPlaceholder?: {
-    [key in keyof T]?: T[key] extends object
-      ? { [subKey in keyof T[key]]?: string }
-      : T[key] extends Array<object>
-        ? { [subKey in keyof T[key][number]]?: string }
-        : string
+    [key in keyof T]?: string
+  }
+  formOptionGroups?: {
+    [key in keyof T]?: SelectMainProps<T>["optionGroups"]
   }
   isLoading?: boolean
   isSuccess?: boolean

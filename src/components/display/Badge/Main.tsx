@@ -1,9 +1,9 @@
 "use client"
 
-import Icon from "@/components/general/Icon"
 import styled from "styled-components"
+import Icon from "@/components/general/Icon"
 
-export interface BadgeMainProps extends React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>> {
+export interface BadgeMainProps extends React.PropsWithChildren<React.HTMLAttributes<HTMLSpanElement>> {
   onRemove: () => void
 }
 

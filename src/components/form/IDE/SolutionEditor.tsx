@@ -6,7 +6,7 @@ import Editor, { EditorProps } from "@monaco-editor/react"
 import styled from "styled-components"
 import useResize from "@/libs/hook/useResize"
 
-export interface IDESolutionEditorProps<T extends FieldValues> extends React.PropsWithChildren<EditorProps> {
+export interface IDESolutionEditorProps<T extends FieldValues> extends EditorProps {
   control: Control<T>
   rules?: RegisterOptions<T>
   name: FieldPath<T>
