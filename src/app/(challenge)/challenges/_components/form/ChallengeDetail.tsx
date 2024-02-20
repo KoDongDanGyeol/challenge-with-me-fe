@@ -193,7 +193,7 @@ const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeD
   }
 
   return (
-    <ChallengeDetailContainer ref={ref} as={asTag} className={`${className}`} {...restProps}>
+    <ChallengeDetailContainer ref={ref} as={asTag ?? "article"} className={`${className}`} {...restProps}>
       <ChallengeDetailIDE onSubmit={handleSubmit(onSubmit)}>
         <IDE.Grid gridArea="leading">
           <PageHeading>

@@ -21,13 +21,13 @@ const PageHeadingTitle: PageHeadingTitleComponent = forwardRef(function PageHead
   const { asTag, className = "", children, ...restProps } = props
 
   return (
-    <PageHeadingTitleContainer ref={ref} as={asTag ?? "div"} className={`${className}`} {...restProps}>
+    <PageHeadingTitleContainer ref={ref} as={asTag ?? "h2"} className={`${className}`} {...restProps}>
       {children}
     </PageHeadingTitleContainer>
   )
 })
 
-const PageHeadingTitleContainer = styled.div`
+const PageHeadingTitleContainer = styled.h2`
   font-size: ${(props) => props.theme.typo.size["2xl"]};
   line-height: ${(props) => props.theme.typo.leading["2xl"]};
   color: rgb(var(--color-gray900));

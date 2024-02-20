@@ -199,7 +199,7 @@ const IDETestcaseEditor = <T extends FieldValues = IDETypes>(props: IDETestcaseE
                     removeFields(rowIndex)
                   }}
                 >
-                  <Icon name="XCircle" />
+                  <Icon name="XCircle" aria-hidden={true} />
                   <span className="sr-only">삭제</span>
                 </button>
               </td>
