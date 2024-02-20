@@ -6,4 +6,6 @@ export const Icons = data
 
 export type { IconName }
 
-export default IconMain
+export default Object.assign(IconMain, {
+  //
+})
