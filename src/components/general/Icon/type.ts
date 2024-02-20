@@ -2,6 +2,8 @@ export const IconName = {
   ["ArrowUturnLeft"]: "ArrowUturnLeft",
   ["Bars"]: "Bars",
   ["Check"]: "Check",
+  ["ChevronLeft"]: "ChevronLeft",
+  ["ChevronRight"]: "ChevronRight",
   ["ChevronUpDown"]: "ChevronUpDown",
   ["Loading"]: "Loading",
   ["SymbolGithub"]: "SymbolGithub",
