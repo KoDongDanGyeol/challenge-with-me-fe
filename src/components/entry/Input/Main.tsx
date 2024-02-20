@@ -13,6 +13,8 @@ export interface InputMainProps<T extends FieldValues> extends React.HTMLAttribu
   autoComplete?: "on" | "off"
   min?: string | number
   max?: string | number
+  appendIcon?: React.ReactNode
+  appendButton?: React.ReactNode
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   onBlur?: () => void
 }
@@ -28,6 +30,8 @@ const InputMain = <T extends FieldValues>(props: InputMainProps<T>) => {
     autoComplete = "off",
     min,
     max,
+    appendIcon,
+    appendButton,
     className = "",
     onChange,
     onBlur,
@@ -67,12 +71,51 @@ const InputMain = <T extends FieldValues>(props: InputMainProps<T>) => {
         }}
         {...restProps}
       />
+      {appendIcon && <InputMainIcon>{appendIcon}</InputMainIcon>}
+      {appendButton && <InputMainButton>{appendButton}</InputMainButton>}
     </InputMainContainer>
   )
 }
 
+const InputMainIcon = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  transform: translateY(-50%);
+  button {
+    display: block;
+    padding: 4px;
+  }
+  svg {
+    width: 20px;
+    stroke: rgb(var(--color-gray400));
+  }
+`
+
+const InputMainButton = styled.div`
+  /*  */
+`
+
 const InputMainContainer = styled.div`
-  //
+  position: relative;
+  display: flex;
+  gap: 8px;
+  input {
+    padding: 8px 12px;
+    font-size: ${(props) => props.theme.typo.size.sm};
+    line-height: ${(props) => props.theme.typo.leading.sm};
+    border: 1px solid rgb(var(--color-gray300));
+    border-radius: 6px;
+    &:disabled {
+      color: rgb(var(--color-gray500));
+      background-color: rgb(var(--color-gray50));
+    }
+  }
+  &:has(${InputMainIcon}) {
+    input {
+      padding-right: 36px;
+    }
+  }
 `
 
 export default InputMain
