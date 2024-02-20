@@ -192,10 +192,12 @@ const SelectMainListbox = styled.div`
   z-index: 1;
   .inner {
     margin-top: 4px;
+    max-height: 228px;
     padding: 4px 0;
     background: rgb(var(--color-gray0));
     border: 1px solid rgb(var(--color-gray300));
     border-radius: 6px;
+    overflow-y: auto;
   }
   button {
     position: relative;
