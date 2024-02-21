@@ -6,10 +6,10 @@ import { SelectMainProps } from "@/components/entry/Select"
 
 export interface FormHocMainProps<T extends FieldValues>
   extends React.PropsWithChildren<React.HTMLAttributes<HTMLFormElement>> {
-  formTitle: string
   formData: UseFormReturn<T>
+  formTitle?: string
   formAction?: {
-    [key in "reset" | "submit"]?: string
+    [key in "reset" | "submit" | "back"]?: string
   }
   formPlaceholder?: {
     [key in keyof T]?: string
