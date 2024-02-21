@@ -113,7 +113,7 @@ const ChallengeQuestionHome: ChallengeQuestionHomeComponent = forwardRef(functio
   }
 
   return (
-    <ChallengeQuestionHomeContainer ref={ref} as={asTag} className={`${className}`} {...restProps}>
+    <ChallengeQuestionHomeContainer ref={ref} as={asTag ?? "section"} className={`${className}`} {...restProps}>
       {/* ChallengeQuestionHomeHeading */}
       <ChallengeQuestionHomeHeading>
         <PageHeading.Breadcrumb>
@@ -198,7 +198,7 @@ const ChallengeQuestionHomeResult = styled.div`
   }
 `
 
-const ChallengeQuestionHomeContainer = styled.article`
+const ChallengeQuestionHomeContainer = styled.section`
   padding-top: 40px;
   ${ChallengeQuestionHomeHeading} {
   }
