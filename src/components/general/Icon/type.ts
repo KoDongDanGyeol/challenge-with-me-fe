@@ -9,6 +9,7 @@ export const IconName = {
   ["ExclamationCircle"]: "ExclamationCircle",
   ["Loading"]: "Loading",
   ["MagnifyingGlass"]: "MagnifyingGlass",
+  ["Photo"]: "Photo",
   ["SymbolGithub"]: "SymbolGithub",
   ["SymbolGoogle"]: "SymbolGoogle",
   ["XCircle"]: "XCircle",
