@@ -9,7 +9,6 @@ export interface QuestionListMainProps extends React.HTMLAttributes<HTMLDivEleme
     id: number
     challenge: string
     title: string
-    content?: string
     name: string
     createdAt: string
     answerCounts: number
@@ -28,24 +27,23 @@ const QuestionListMain = (props: QuestionListMainProps) => {
               <div className="row-main">
                 <span className="col-challenge">{question?.challenge}</span>
                 <strong className="col-title">{question?.title}</strong>
-                {question?.content && <p className="col-content">{question?.content}</p>}
               </div>
               <div className="row-extra">
-                <span className="col-extra">
+                <div className="col-extra">
                   <Icon name="UserCircle" aria-hidden={true} />
-                  <em className="sr-only">질문자</em>
-                  {question?.name}
-                </span>
-                <span className="col-extra">
+                  <span className="sr-only">질문자</span>
+                  <span>{question?.name}</span>
+                </div>
+                <div className="col-extra">
                   <Icon name="Calendar" aria-hidden={true} />
-                  <em className="sr-only">등록일</em>
-                  {new Date(question?.createdAt).toJSON().slice(0, 10)}
-                </span>
-                <span className="col-extra">
+                  <span className="sr-only">등록일</span>
+                  <span>{new Date(question?.createdAt).toJSON().slice(0, 10)}</span>
+                </div>
+                <div className="col-extra">
                   <Icon name="ChatBubbleLeftEllipsis" aria-hidden={true} />
-                  <em className="sr-only">답글</em>
-                  {question?.answerCounts}
-                </span>
+                  <span className="sr-only">답변</span>
+                  <span>{question?.answerCounts}</span>
+                </div>
               </div>
             </Link>
           </li>
@@ -80,26 +78,39 @@ const QuestionListMainContainer = styled.div`
   .col-challenge {
     font-size: ${(props) => props.theme.typo.size.sm};
     line-height: ${(props) => props.theme.typo.leading.sm};
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .col-title {
     font-size: ${(props) => props.theme.typo.size.base};
     line-height: ${(props) => props.theme.typo.leading.base};
     font-weight: 500;
-  }
-  .col-content {
-    font-size: ${(props) => props.theme.typo.size.sm};
-    line-height: ${(props) => props.theme.typo.leading.sm};
-    color: rgb(var(--color-gray500));
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .col-extra {
     display: flex;
     gap: 6px;
+    max-width: 33%;
     font-size: ${(props) => props.theme.typo.size.sm};
     line-height: ${(props) => props.theme.typo.leading.sm};
     color: rgb(var(--color-gray500));
     svg {
       width: 16px;
       stroke: rgb(var(--color-gray500));
+    }
+    span {
+      flex: 1 1 0px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  @media ${(props) => props.theme.screen.device.md} {
+    .row-extra {
+      gap: 16px;
     }
   }
 `

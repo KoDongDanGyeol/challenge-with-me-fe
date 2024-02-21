@@ -17,7 +17,7 @@ const SolutionCardContent = (props: SolutionCardContentProps) => {
   const { cardId, language, submitCode, isLiked, className = "", onLike, ...restProps } = props
 
   return (
-    <SolutionCardContentContent className={`${className}`} $hasLike={Boolean(onLike)} {...restProps}>
+    <SolutionCardContentContainer className={`${className}`} $hasLike={Boolean(onLike)} {...restProps}>
       <Markdown>{`~~~${language} ${submitCode}`}</Markdown>
       {onLike && (
         <Button
@@ -34,7 +34,7 @@ const SolutionCardContent = (props: SolutionCardContentProps) => {
           좋아요
         </Button>
       )}
-    </SolutionCardContentContent>
+    </SolutionCardContentContainer>
   )
 }
 
@@ -42,7 +42,7 @@ interface SolutionCardContentStyled {
   $hasLike: boolean
 }
 
-const SolutionCardContentContent = styled.div<SolutionCardContentStyled>`
+const SolutionCardContentContainer = styled.div<SolutionCardContentStyled>`
   position: relative;
   &:not(:first-child) {
     margin-top: 16px;

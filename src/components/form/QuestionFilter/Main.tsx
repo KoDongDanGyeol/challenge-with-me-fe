@@ -1,8 +1,11 @@
 "use client"
 
+import Link from "next/link"
+import { useParams } from "next/navigation"
 import { FieldValues } from "react-hook-form"
 import styled from "styled-components"
 import PageFilter from "@/components/display/PageFilter"
+import Button from "@/components/general/Button"
 import Icon from "@/components/general/Icon"
 import FormHoc, { FormHocMainProps } from "@/components/entry/FormHoc"
 import Input from "@/components/entry/Input"
@@ -16,6 +19,7 @@ export interface QuestionFilterMainProps<T extends FieldValues = QuestionFilterT
 const QuestionFilterMain = FormHoc<QuestionFilterTypes>((props: QuestionFilterMainProps) => {
   const { formTitle, formAction, formData, formPlaceholder, formOptionGroups, handleValid, ...restProps } = props
 
+  const params = useParams<{ problemId?: string }>()
   const { control, handleSubmit } = formData
 
   return (
@@ -71,6 +75,13 @@ const QuestionFilterMain = FormHoc<QuestionFilterTypes>((props: QuestionFilterMa
             handleSubmit(handleValid)()
           }}
         />
+        {params?.problemId && (
+          <Link href={`/challenges/${params?.problemId}/questions/create`} passHref={true} legacyBehavior={true}>
+            <Button asTag="a" shape="square" variants="primary" emphasis="subtle" size="sm">
+              질문하기
+            </Button>
+          </Link>
+        )}
       </PageFilter.Action>
     </QuestionFilterMainContainer>
   )
