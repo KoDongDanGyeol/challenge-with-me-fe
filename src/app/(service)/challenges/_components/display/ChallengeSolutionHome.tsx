@@ -2,7 +2,7 @@
 
 import { forwardRef, useMemo } from "react"
 import Link from "next/link"
-import { useRouter, useSearchParams, useParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import styled from "styled-components"
 import { PolymorphicComponentPropWithRef, PolymorphicRef } from "@/types/polymorphic"
@@ -24,27 +24,31 @@ export type SolutionHomeComponent = <C extends React.ElementType = "section">(
 ) => React.ReactNode
 
 const response = {
-  id: 1,
-  pedigree: {
-    value: "2024-KAKAO-WINTER-INTERNSHIP",
-    text: "2024 KAKAO WINTER INTERNSHIP",
+  challengeDetail: {
+    id: 1,
+    pedigree: {
+      value: "2024-KAKAO-WINTER-INTERNSHIP",
+      text: "2024 KAKAO WINTER INTERNSHIP",
+    },
+    type: {
+      value: "hash",
+      text: "해시",
+    },
+    title: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus optio id eum totam.
+      Aperiam, saepe dignissimos! Maxime cupiditate, nemo aperiam eos eligendi vero quasi quidem labore hic saepe quos ab?
+    `,
   },
-  type: {
-    value: "hash",
-    text: "해시",
-  },
-  title: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus optio id eum totam.
-    Aperiam, saepe dignissimos! Maxime cupiditate, nemo aperiam eos eligendi vero quasi quidem labore hic saepe quos ab?
-  `,
-  totalPage: 12,
-  solutions: [
-    {
-      id: 0,
-      name: "Lorem ipsum",
-      imgUrl: "https://source.unsplash.com/random/300x300/?person",
-      isLiked: true,
-      language: "java",
-      submitCode: `
+  solutionList: {
+    totalPage: 12,
+    totalCount: 120,
+    solutions: [
+      {
+        id: 0,
+        name: "Lorem ipsum",
+        imgUrl: "https://source.unsplash.com/random/300x300/?person",
+        isLiked: true,
+        language: "java",
+        submitCode: `
 import java.util.Scanner;
 
 public class Solution {
@@ -53,14 +57,14 @@ public class Solution {
     String a = sc.next();
   }
 }`,
-    },
-    {
-      id: 1,
-      name: "Dolor sit",
-      imgUrl: "",
-      isLiked: false,
-      language: "java",
-      submitCode: `
+      },
+      {
+        id: 1,
+        name: "Dolor sit",
+        imgUrl: "",
+        isLiked: false,
+        language: "java",
+        submitCode: `
 import java.util.Scanner;
 
 public class Solution {
@@ -69,8 +73,9 @@ public class Solution {
     String a = sc.next();
   }
 }`,
-    },
-  ],
+      },
+    ],
+  },
 }
 
 const SolutionHome: SolutionHomeComponent = forwardRef(function SolutionHome<C extends React.ElementType = "section">(
@@ -81,7 +86,6 @@ const SolutionHome: SolutionHomeComponent = forwardRef(function SolutionHome<C e
 
   const router = useRouter()
   const searchParams = useSearchParams()
-  const params = useParams<{ problemId: string }>()
 
   const filterForm = useForm<SolutionFilterTypes>({
     defaultValues: {
@@ -95,14 +99,14 @@ const SolutionHome: SolutionHomeComponent = forwardRef(function SolutionHome<C e
           .find(({ value }) => searchParams?.get("type") ?? "" === value)?.value ?? "all",
       size: 10,
       page: !isNaN(Number(searchParams?.get("page")))
-        ? Math.max(Math.min(Number(searchParams?.get("page") ?? 1), response?.totalPage), 1)
+        ? Math.max(Math.min(Number(searchParams?.get("page") ?? 1), response?.solutionList?.totalPage), 1)
         : 1,
     },
   })
 
   const isSearched = useMemo(() => {
-    if (searchParams?.get("language") !== "java") return true
-    if (searchParams?.get("type") !== "all") return true
+    if ((searchParams?.get("language") ?? "java") !== "java") return true
+    if ((searchParams?.get("type") ?? "all") !== "all") return true
     // if (Number(searchParams?.get("page") ?? 1) > 1) return true
     return false
   }, [searchParams])
@@ -122,7 +126,7 @@ const SolutionHome: SolutionHomeComponent = forwardRef(function SolutionHome<C e
       ...(data?.type ? { type: data?.type } : {}),
       ...(data?.page > 1 ? { page: data?.page?.toString() } : {}),
     })
-    router.replace(`/solutions/${params?.problemId}?${newParams?.toString()}`)
+    router.replace(`/challenges/${response?.challengeDetail?.id}/solutions?${newParams?.toString()}`)
   }
 
   return (
@@ -130,21 +134,21 @@ const SolutionHome: SolutionHomeComponent = forwardRef(function SolutionHome<C e
       {/* SolutionHomeHeading */}
       <SolutionHomeHeading>
         <PageHeading.Breadcrumb>
-          {response?.pedigree && (
-            <Link href={`/challenges?pedigree=${response?.pedigree?.value}&sort=latest`}>
-              <span>{response?.pedigree?.text}</span>
+          {response?.challengeDetail?.pedigree && (
+            <Link href={`/challenges?pedigree=${response?.challengeDetail?.pedigree?.value}&sort=latest`}>
+              <span>{response?.challengeDetail?.pedigree?.text}</span>
             </Link>
           )}
-          {response?.type && (
-            <Link href={`/challenges?type=${response?.type?.value}&sort=latest`}>
-              <span>{response?.type?.text}</span>
+          {response?.challengeDetail?.type && (
+            <Link href={`/challenges?type=${response?.challengeDetail?.type?.value}&sort=latest`}>
+              <span>{response?.challengeDetail?.type?.text}</span>
             </Link>
           )}
-          <Link href={`/challenges/${response?.id}`}>
-            <span>{response?.title}</span>
+          <Link href={`/challenges/${response?.challengeDetail?.id}`}>
+            <span>{response?.challengeDetail?.title}</span>
           </Link>
         </PageHeading.Breadcrumb>
-        <PageHeading.Title asTag={"h2"}>{response?.title ?? ""}</PageHeading.Title>
+        <PageHeading.Title asTag={"h2"}>{response?.challengeDetail?.title ?? ""}</PageHeading.Title>
       </SolutionHomeHeading>
       {/* SolutionHomeFilter */}
       <SolutionHomeFilter
@@ -162,10 +166,10 @@ const SolutionHome: SolutionHomeComponent = forwardRef(function SolutionHome<C e
       />
       {/* SolutionHomeResult */}
       <SolutionHomeResult>
-        {response?.solutions?.length ? (
+        {response?.solutionList?.solutions?.length ? (
           <>
             <SolutionHomeList>
-              {response?.solutions?.map((solution) => (
+              {response?.solutionList?.solutions?.map((solution) => (
                 <SolutionCard key={solution?.id} asTag="li">
                   <SolutionCard.Profile
                     cardId={solution?.id}
@@ -183,7 +187,11 @@ const SolutionHome: SolutionHomeComponent = forwardRef(function SolutionHome<C e
                 </SolutionCard>
               ))}
             </SolutionHomeList>
-            <Pagination page={filterForm.getValues("page")} totalPage={response?.totalPage} onPaging={onPaging} />
+            <Pagination
+              page={filterForm.getValues("page")}
+              totalPage={response?.solutionList?.totalPage}
+              onPaging={onPaging}
+            />
           </>
         ) : isSearched ? (
           <Notice type="block">
