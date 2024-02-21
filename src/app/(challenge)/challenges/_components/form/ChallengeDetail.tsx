@@ -21,151 +21,155 @@ export type ChallengeDetailComponent = <C extends React.ElementType = "article">
 ) => React.ReactNode
 
 const response = {
-  id: 1,
-  pedigree: {
-    value: "2024-KAKAO-WINTER-INTERNSHIP",
-    text: "2024 KAKAO WINTER INTERNSHIP",
-  },
-  type: {
-    value: "hash",
-    text: "해시",
-  },
-  title: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus optio id eum totam.
-    Aperiam, saepe dignissimos! Maxime cupiditate, nemo aperiam eos eligendi vero quasi quidem labore hic saepe quos ab?
-  `,
-  content: `
-# Heading 1
-## Heading 2
-### Heading 3
-#### Heading 4
-##### Heading 5
-###### Heading 6
-
-**Bold** or __Bold__
-
-*Italic* or _Italic_
-
-~Cancel~ or ~~Cancel~~
-
-[Link Text](http://www.google.com/)
-
-![Alt Text]()
-
-- ul>li 1
-- ul>li 2
-    - ul>li 2-1
-    - ul>li 2-2
-        - ul>li 3-1
-        - ul>li 3-2
-
-1. ol>li 1
-2. ol>li 2
-    1. ol>li 2-1
-    2. ol>li 2-2
-
-* [ ] Task
-* [x] Checked
-
-> Blockquotes
-
-| th 1 | th 2 |
-| ------ | ------ |
-| td 1   | td 2   |
-
-| a | b  |  c |  d  |
-| - | :- | -: | :-: |
-| lorem   | lorem   | lorem   | lorem   |
-
-Lorem \`ipsum\` dolor
-
-~~~java
-import java.util.Scanner;
-
-public class Solution {
-  public static void main(String[] args) {
-    Scanner sc = new Scanner(System.in);
-    String a = sc.next();
-  }
-}
-~~~
-
-\`\`\`java
-import java.util.Scanner;
-
-public class Solution {
-  public static void main(String[] args) {
-    Scanner sc = new Scanner(System.in);
-    String a = sc.next();
-  }
-}
-\`\`\`
-
----
-
-***
-
-# XSS Attack Vectors
-
-## Potential Exploits
-
-- Exploit 1: [malicious payload](javascript:alert("hi%20there"))
-- Exploit 2: <a>hello</a>
-- Exploit 3: <script>alert('Exploit 3')</script>
-- Exploit 4: <a href="\x01javascript:javascript:alert(1)">test</a>
-- Exploit 5: [![owasp]()](javascript:javascript:alert("Exploit%205"))
-- Exploit 6: [__bold exploit__](javascript:javascript:alert("Exploit%206"))
-- Exploit 7: [*italic exploit*](javascript:javascript:alert("Exploit%207"))
-- Exploit 8: [really anything](javascript:javascript:alert("Exploit%208"))
-- Exploit 9: [really anything - single](javascript:alert("Exploit%209"))
-- Exploit 10: <a href="javascript:alert("Hello")">Hello!</a>
-
-## Working Exploits
-
-- None!
-
-## Other
-
-- This is a [real link to Google](https://google.com).
-
----
-
-Here is a simple footnote[^1]. With some additional text after it.
-
-[^1]: My reference.
-  `,
-  testcaseType: {
-    input: ["int[][]", "int", "int"],
-    expected: "int",
-  },
-  testcaseValue: [
-    {
-      input: ["[[1,2],[2,3]]", "3", "2"],
-      expected: "28",
+  challengeDetail: {
+    id: 1,
+    pedigree: {
+      value: "2024-KAKAO-WINTER-INTERNSHIP",
+      text: "2024 KAKAO WINTER INTERNSHIP",
     },
-    {
-      input: ["[[4,4,3],[3,2,2],[2,1,0]]", "5", "3"],
-      expected: "0",
+    type: {
+      value: "hash",
+      text: "해시",
     },
-  ],
-  result: {
-    resultType: "ready" as IDESolutionResultType,
-    resultStatus: "complete" as IDESolutionResultStatus,
-    resultGrade: [
+    title: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus optio id eum totam.
+      Aperiam, saepe dignissimos! Maxime cupiditate, nemo aperiam eos eligendi vero quasi quidem labore hic saepe quos ab?
+    `,
+    content: `
+  # Heading 1
+  ## Heading 2
+  ### Heading 3
+  #### Heading 4
+  ##### Heading 5
+  ###### Heading 6
+  
+  **Bold** or __Bold__
+  
+  *Italic* or _Italic_
+  
+  ~Cancel~ or ~~Cancel~~
+  
+  [Link Text](http://www.google.com/)
+  
+  ![Alt Text]()
+  
+  - ul>li 1
+  - ul>li 2
+      - ul>li 2-1
+      - ul>li 2-2
+          - ul>li 3-1
+          - ul>li 3-2
+  
+  1. ol>li 1
+  2. ol>li 2
+      1. ol>li 2-1
+      2. ol>li 2-2
+  
+  * [ ] Task
+  * [x] Checked
+  
+  > Blockquotes
+  
+  | th 1 | th 2 |
+  | ------ | ------ |
+  | td 1   | td 2   |
+  
+  | a | b  |  c |  d  |
+  | - | :- | -: | :-: |
+  | lorem   | lorem   | lorem   | lorem   |
+  
+  Lorem \`ipsum\` dolor
+  
+  ~~~java
+  import java.util.Scanner;
+  
+  public class Solution {
+    public static void main(String[] args) {
+      Scanner sc = new Scanner(System.in);
+      String a = sc.next();
+    }
+  }
+  ~~~
+  
+  \`\`\`java
+  import java.util.Scanner;
+  
+  public class Solution {
+    public static void main(String[] args) {
+      Scanner sc = new Scanner(System.in);
+      String a = sc.next();
+    }
+  }
+  \`\`\`
+  
+  ---
+  
+  ***
+  
+  # XSS Attack Vectors
+  
+  ## Potential Exploits
+  
+  - Exploit 1: [malicious payload](javascript:alert("hi%20there"))
+  - Exploit 2: <a>hello</a>
+  - Exploit 3: <script>alert('Exploit 3')</script>
+  - Exploit 4: <a href="\x01javascript:javascript:alert(1)">test</a>
+  - Exploit 5: [![owasp]()](javascript:javascript:alert("Exploit%205"))
+  - Exploit 6: [__bold exploit__](javascript:javascript:alert("Exploit%206"))
+  - Exploit 7: [*italic exploit*](javascript:javascript:alert("Exploit%207"))
+  - Exploit 8: [really anything](javascript:javascript:alert("Exploit%208"))
+  - Exploit 9: [really anything - single](javascript:alert("Exploit%209"))
+  - Exploit 10: <a href="javascript:alert("Hello")">Hello!</a>
+  
+  ## Working Exploits
+  
+  - None!
+  
+  ## Other
+  
+  - This is a [real link to Google](https://google.com).
+  
+  ---
+  
+  Here is a simple footnote[^1]. With some additional text after it.
+  
+  [^1]: My reference.
+    `,
+    testcaseType: {
+      input: ["int[][]", "int", "int"],
+      expected: "int",
+    },
+    testcaseValue: [
       {
         input: ["[[1,2],[2,3]]", "3", "2"],
         expected: "28",
-        output: "실행한 결괏값 50이 기댓값 28과 다릅니다.",
-        passed: false,
-        errorMsg: "lorem...",
       },
       {
         input: ["[[4,4,3],[3,2,2],[2,1,0]]", "5", "3"],
         expected: "0",
-        output: "테스트를 통과하였습니다.",
-        passed: true,
-        errorMsg: "lorem...",
       },
     ],
+  },
+  challengeIDE: {
+    result: {
+      resultType: "ready" as IDESolutionResultType,
+      resultStatus: "complete" as IDESolutionResultStatus,
+      resultGrade: [
+        {
+          input: ["[[1,2],[2,3]]", "3", "2"],
+          expected: "28",
+          output: "실행한 결괏값 50이 기댓값 28과 다릅니다.",
+          passed: false,
+          errorMsg: "lorem...",
+        },
+        {
+          input: ["[[4,4,3],[3,2,2],[2,1,0]]", "5", "3"],
+          expected: "0",
+          output: "테스트를 통과하였습니다.",
+          passed: true,
+          errorMsg: "lorem...",
+        },
+      ],
+    },
   },
 }
 
@@ -185,9 +189,9 @@ const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeD
   const { control, formState, getValues, setValue, resetField, handleSubmit } = useForm<IDETypes>({
     defaultValues: {
       solution: "",
-      testcaseType: response?.testcaseType,
+      testcaseType: response?.challengeDetail?.testcaseType,
       testcaseValue: {
-        public: response?.testcaseValue.map(({ input, expected }) => ({ input, expected })),
+        public: response?.challengeDetail?.testcaseValue.map(({ input, expected }) => ({ input, expected })),
         userSaved: [],
         userDraft: [],
       },
@@ -211,24 +215,24 @@ const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeD
         <IDE.Grid gridArea="leading">
           <PageHeading>
             <PageHeading.Breadcrumb>
-              {response?.pedigree && (
-                <Link href={`/challenges?pedigree=${response?.pedigree?.value}&sort=latest`}>
-                  <span>{response?.pedigree?.text}</span>
+              {response?.challengeDetail?.pedigree && (
+                <Link href={`/challenges?pedigree=${response?.challengeDetail?.pedigree?.value}&sort=latest`}>
+                  <span>{response?.challengeDetail?.pedigree?.text}</span>
                 </Link>
               )}
-              {response?.type && (
-                <Link href={`/challenges?type=${response?.type?.value}&sort=latest`}>
-                  <span>{response?.type?.text}</span>
+              {response?.challengeDetail?.type && (
+                <Link href={`/challenges?type=${response?.challengeDetail?.type?.value}&sort=latest`}>
+                  <span>{response?.challengeDetail?.type?.text}</span>
                 </Link>
               )}
-              <span>{response?.title}</span>
+              <span>{response?.challengeDetail?.title}</span>
             </PageHeading.Breadcrumb>
-            <PageHeading.Title asTag={"h2"}>{response?.title ?? ""}</PageHeading.Title>
+            <PageHeading.Title asTag={"h2"}>{response?.challengeDetail?.title ?? ""}</PageHeading.Title>
           </PageHeading>
         </IDE.Grid>
         <IDE.Grid gridArea="challenge">
           <IDE.Head>문제 설명</IDE.Head>
-          <IDE.Markdown>{response?.content ?? ""}</IDE.Markdown>
+          <IDE.Markdown>{response?.challengeDetail?.content ?? ""}</IDE.Markdown>
         </IDE.Grid>
         {structure.mode === "solution" && (
           <IDE.Grid gridArea="editor">
@@ -247,7 +251,7 @@ const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeD
             <IDE.TestcaseEditor<IDETypes>
               control={control}
               name="testcaseValue"
-              testcaseType={response?.testcaseType}
+              testcaseType={response?.challengeDetail?.testcaseType}
             />
           </IDE.Grid>
         )}
@@ -255,9 +259,9 @@ const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeD
           <IDE.Grid gridArea="result">
             <IDE.Head>실행 결과</IDE.Head>
             <IDE.SolutionResult
-              resultType={response?.result?.resultType}
-              resultStatus={response?.result?.resultStatus}
-              resultGrade={response?.result?.resultGrade}
+              resultType={response?.challengeIDE?.result?.resultType}
+              resultStatus={response?.challengeIDE?.result?.resultStatus}
+              resultGrade={response?.challengeIDE?.result?.resultGrade}
             />
           </IDE.Grid>
         )}
@@ -269,7 +273,7 @@ const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeD
         )}
         <IDE.Grid gridArea="trailing">
           <IDE.Control>
-            <Link href={`/challenges/${response?.id}/questions`} passHref={true} legacyBehavior={true}>
+            <Link href={`/challenges/${response?.challengeDetail?.id}/questions`} passHref={true} legacyBehavior={true}>
               <Button asTag="a" shape="square" variants="primary" emphasis="subtle" size="sm">
                 질문 (n)
               </Button>
@@ -336,6 +340,7 @@ const ChallengeDetailIDE = styled(IDE)`
 `
 
 const ChallengeDetailContainer = styled.article`
+  max-width: 100% !important;
   padding-top: 24px;
   padding-bottom: 24px;
   @media ${(props) => props.theme.screen.device.md} {

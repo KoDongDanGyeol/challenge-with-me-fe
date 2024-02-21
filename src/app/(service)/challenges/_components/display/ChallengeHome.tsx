@@ -12,81 +12,83 @@ import Notice from "@/components/display/Notice"
 import ChallengeFilter, { ChallengeFilterTypes, ChallengeFilterOptionGroups } from "@/components/form/ChallengeFilter"
 
 const response = {
-  totalPage: 12,
-  totalCount: 120,
-  pedigree: [
-    {
-      label: "기출 선택",
-      options: [
-        { value: "2024-KAKAO-WINTER-INTERNSHIP", text: "2024 KAKAO WINTER INTERNSHIP" },
-        { value: "2023-KAKAO-BLIND-RECRUITMENT", text: "2023 KAKAO BLIND RECRUITMENT" },
-        { value: "2022-KAKAO-TECH-INTERNSHIP", text: "2022 KAKAO TECH INTERNSHIP" },
-        { value: "2022-KAKAO-BLIND-RECRUITMENT", text: "2022 KAKAO BLIND RECRUITMENT" },
-      ],
-    },
-  ],
-  challenges: [
-    {
-      id: 0,
-      state: "unsolved" as const,
-      title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      type: "해시",
-      level: "Lv. 0",
-      pedigree: "2024 KAKAO WINTER INTERNSHIP",
-      completeCount: 9,
-      correctRate: 0,
-    },
-    {
-      id: 1,
-      state: "solving" as const,
-      title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      type: "해시",
-      level: "Lv. 1",
-      pedigree: "2024 KAKAO WINTER INTERNSHIP",
-      completeCount: 99,
-      correctRate: 3.14159,
-    },
-    {
-      id: 2,
-      state: "solved" as const,
-      title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      type: "해시",
-      level: "Lv. 2",
-      pedigree: "2024 KAKAO WINTER INTERNSHIP",
-      completeCount: 999,
-      correctRate: 50.5,
-    },
-    {
-      id: 3,
-      state: "solving" as const,
-      title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      type: "해시",
-      level: "Lv. 3",
-      pedigree: "2024 KAKAO WINTER INTERNSHIP",
-      completeCount: 9999,
-      correctRate: 3.14159,
-    },
-    {
-      id: 4,
-      state: "solved" as const,
-      title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      type: "해시",
-      level: "Lv. 4",
-      pedigree: "2024 KAKAO WINTER INTERNSHIP",
-      completeCount: 99999,
-      correctRate: 50.5,
-    },
-    {
-      id: 5,
-      state: "solved" as const,
-      title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      type: "해시",
-      level: "Lv. 5",
-      pedigree: "2024 KAKAO WINTER INTERNSHIP",
-      completeCount: 99999999,
-      correctRate: 50.5,
-    },
-  ],
+  challengeList: {
+    totalPage: 12,
+    totalCount: 120,
+    pedigree: [
+      {
+        label: "기출 선택",
+        options: [
+          { value: "2024-KAKAO-WINTER-INTERNSHIP", text: "2024 KAKAO WINTER INTERNSHIP" },
+          { value: "2023-KAKAO-BLIND-RECRUITMENT", text: "2023 KAKAO BLIND RECRUITMENT" },
+          { value: "2022-KAKAO-TECH-INTERNSHIP", text: "2022 KAKAO TECH INTERNSHIP" },
+          { value: "2022-KAKAO-BLIND-RECRUITMENT", text: "2022 KAKAO BLIND RECRUITMENT" },
+        ],
+      },
+    ],
+    challenges: [
+      {
+        id: 0,
+        state: "unsolved" as const,
+        title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        type: "해시",
+        level: "Lv. 0",
+        pedigree: "2024 KAKAO WINTER INTERNSHIP",
+        completeCount: 9,
+        correctRate: 0,
+      },
+      {
+        id: 1,
+        state: "solving" as const,
+        title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        type: "해시",
+        level: "Lv. 1",
+        pedigree: "2024 KAKAO WINTER INTERNSHIP",
+        completeCount: 99,
+        correctRate: 3.14159,
+      },
+      {
+        id: 2,
+        state: "solved" as const,
+        title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        type: "해시",
+        level: "Lv. 2",
+        pedigree: "2024 KAKAO WINTER INTERNSHIP",
+        completeCount: 999,
+        correctRate: 50.5,
+      },
+      {
+        id: 3,
+        state: "solving" as const,
+        title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        type: "해시",
+        level: "Lv. 3",
+        pedigree: "2024 KAKAO WINTER INTERNSHIP",
+        completeCount: 9999,
+        correctRate: 3.14159,
+      },
+      {
+        id: 4,
+        state: "solved" as const,
+        title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        type: "해시",
+        level: "Lv. 4",
+        pedigree: "2024 KAKAO WINTER INTERNSHIP",
+        completeCount: 99999,
+        correctRate: 50.5,
+      },
+      {
+        id: 5,
+        state: "solved" as const,
+        title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        type: "해시",
+        level: "Lv. 5",
+        pedigree: "2024 KAKAO WINTER INTERNSHIP",
+        completeCount: 99999999,
+        correctRate: 50.5,
+      },
+    ],
+  },
 }
 
 export type ChallengeHomeProps<C extends React.ElementType> = PolymorphicComponentPropWithRef<
@@ -122,7 +124,7 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
         .flatMap(({ options }) => options)
         .filter(({ value }) => (searchParams?.get("level") ?? "").split(", ")?.includes(value.toString()))
         .map(({ value }) => value),
-      pedigree: response.pedigree
+      pedigree: response?.challengeList?.pedigree
         .flatMap(({ options }) => options)
         .filter(({ value }) => (searchParams?.get("pedigree") ?? "").split(", ")?.includes(value.toString()))
         .map(({ value }) => value),
@@ -132,7 +134,7 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
           .flatMap(({ options }) => options)
           .find(({ value }) => searchParams?.get("sort") ?? "" === value)?.value ?? "latest",
       page: !isNaN(Number(searchParams?.get("page")))
-        ? Math.max(Math.min(Number(searchParams?.get("page") ?? 1), response?.totalPage), 1)
+        ? Math.max(Math.min(Number(searchParams?.get("page") ?? 1), response?.challengeList?.totalPage), 1)
         : 1,
     },
   })
@@ -143,7 +145,7 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
     if ((searchParams?.get("level")?.split(",") ?? []).length) return true
     if ((searchParams?.get("pedigree")?.split(",") ?? []).length) return true
     if ((searchParams?.get("keyword") ?? "").length) return true
-    // if (searchParams?.get("sort") !== "latest") return true
+    // if ((searchParams?.get("sort") ?? "latest") !== "latest") return true
     // if (Number(searchParams?.get("page") ?? 1) > 1) return true
     return false
   }, [searchParams])
@@ -174,7 +176,7 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
       </ChallengeHomeHeading>
       {/* ChallengeHomeFilter */}
       <ChallengeHomeFilter
-        formTitle={isSearched ? `검색된 문제 ${response?.totalCount}개` : `모든 문제`}
+        formTitle={isSearched ? `검색된 문제 ${response?.challengeList?.totalCount}개` : `모든 문제`}
         formData={filterForm}
         formPlaceholder={{
           state: "상태",
@@ -189,7 +191,7 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
           type: ChallengeFilterOptionGroups?.type ?? [],
           level: ChallengeFilterOptionGroups?.level ?? [],
           sort: ChallengeFilterOptionGroups?.sort ?? [],
-          pedigree: response?.pedigree ?? [],
+          pedigree: response?.challengeList?.pedigree ?? [],
         }}
         formAction={{
           submit: "검색",
@@ -198,10 +200,14 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
       />
       {/* ChallengeHomeResult */}
       <ChallengeHomeResult>
-        {response?.challenges?.length ? (
+        {response?.challengeList?.challenges?.length ? (
           <>
-            <ChallengeList data={response?.challenges ?? []} />
-            <Pagination page={filterForm.getValues("page")} totalPage={response?.totalPage} onPaging={onPaging} />
+            <ChallengeList data={response?.challengeList?.challenges ?? []} />
+            <Pagination
+              page={filterForm.getValues("page")}
+              totalPage={response?.challengeList?.totalPage}
+              onPaging={onPaging}
+            />
           </>
         ) : isSearched ? (
           <Notice type="block">
