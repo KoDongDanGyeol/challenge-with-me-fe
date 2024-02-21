@@ -15,20 +15,21 @@ const SolutionCardProfile = (props: SolutionCardProfileProps) => {
 
   return (
     <SolutionCardProfileContainer className={`${className}`} {...restProps}>
-      <Picture ratio={[1, 1]} rounded="full" src={imgUrl} alt="" />
-      <div>
+      <SolutionCardProfilePicture ratio={[1, 1]} rounded="full" src={imgUrl} alt="" />
+      <SolutionCardProfileInfo>
         <strong>{name}</strong>
         <span>{language}</span>
-      </div>
+      </SolutionCardProfileInfo>
     </SolutionCardProfileContainer>
   )
 }
 
-const SolutionCardProfileContainer = styled.div`
-  display: grid;
-  gap: 12px;
-  grid-template-columns: 40px 1fr;
-  align-items: center;
+const SolutionCardProfilePicture = styled(Picture)`
+  width: 40px;
+`
+
+const SolutionCardProfileInfo = styled.div`
+  flex: 1 1 0px;
   strong {
     display: block;
     font-size: ${(props) => props.theme.typo.size.sm};
@@ -41,6 +42,12 @@ const SolutionCardProfileContainer = styled.div`
     line-height: ${(props) => props.theme.typo.leading.sm};
     color: rgb(var(--color-gray500));
   }
+`
+
+const SolutionCardProfileContainer = styled.div`
+  display: flex;
+  gap: 12px;
+  align-items: center;
 `
 
 export default SolutionCardProfile

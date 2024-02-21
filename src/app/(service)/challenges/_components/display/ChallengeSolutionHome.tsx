@@ -24,7 +24,7 @@ export type SolutionHomeComponent = <C extends React.ElementType = "section">(
 ) => React.ReactNode
 
 const response = {
-  totalPage: 12,
+  id: 1,
   pedigree: {
     value: "2024-KAKAO-WINTER-INTERNSHIP",
     text: "2024 KAKAO WINTER INTERNSHIP",
@@ -36,6 +36,7 @@ const response = {
   title: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus optio id eum totam.
     Aperiam, saepe dignissimos! Maxime cupiditate, nemo aperiam eos eligendi vero quasi quidem labore hic saepe quos ab?
   `,
+  totalPage: 12,
   solutions: [
     {
       id: 0,
@@ -102,7 +103,7 @@ const SolutionHome: SolutionHomeComponent = forwardRef(function SolutionHome<C e
   const isSearched = useMemo(() => {
     if (searchParams?.get("language") !== "java") return true
     if (searchParams?.get("type") !== "all") return true
-    if (Number(searchParams?.get("page") ?? 1) > 1) return true
+    // if (Number(searchParams?.get("page") ?? 1) > 1) return true
     return false
   }, [searchParams])
 
@@ -139,13 +140,15 @@ const SolutionHome: SolutionHomeComponent = forwardRef(function SolutionHome<C e
               <span>{response?.type?.text}</span>
             </Link>
           )}
-          <span>{response?.title}</span>
+          <Link href={`/challenges/${response?.id}`}>
+            <span>{response?.title}</span>
+          </Link>
         </PageHeading.Breadcrumb>
         <PageHeading.Title asTag={"h2"}>{response?.title ?? ""}</PageHeading.Title>
       </SolutionHomeHeading>
       {/* SolutionHomeFilter */}
       <SolutionHomeFilter
-        formTitle={"전체 풀이"}
+        formTitle={"모든 풀이"}
         formData={filterForm}
         formPlaceholder={{
           language: "언어",
