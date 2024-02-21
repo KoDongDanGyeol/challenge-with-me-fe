@@ -20,8 +20,19 @@ export type ChallengeDetailComponent = <C extends React.ElementType = "article">
   props: ChallengeDetailProps<C>,
 ) => React.ReactNode
 
-const challenge = {
-  guide: `
+const response = {
+  pedigree: {
+    value: "2024-KAKAO-WINTER-INTERNSHIP",
+    text: "2024 KAKAO WINTER INTERNSHIP",
+  },
+  type: {
+    value: "hash",
+    text: "해시",
+  },
+  title: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus optio id eum totam.
+    Aperiam, saepe dignissimos! Maxime cupiditate, nemo aperiam eos eligendi vero quasi quidem labore hic saepe quos ab?
+  `,
+  content: `
 # Heading 1
 ## Heading 2
 ### Heading 3
@@ -120,7 +131,7 @@ public class Solution {
 Here is a simple footnote[^1]. With some additional text after it.
 
 [^1]: My reference.
-`,
+  `,
   testcaseType: {
     input: ["int[][]", "int", "int"],
     expected: "int",
@@ -173,9 +184,9 @@ const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeD
   const { control, formState, getValues, setValue, resetField, handleSubmit } = useForm<IDETypes>({
     defaultValues: {
       solution: "",
-      testcaseType: challenge.testcaseType,
+      testcaseType: response?.testcaseType,
       testcaseValue: {
-        public: challenge.testcaseValue.map(({ input, expected }) => ({ input, expected })),
+        public: response?.testcaseValue.map(({ input, expected }) => ({ input, expected })),
         userSaved: [],
         userDraft: [],
       },
@@ -194,27 +205,29 @@ const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeD
 
   return (
     <ChallengeDetailContainer ref={ref} as={asTag ?? "article"} className={`${className}`} {...restProps}>
+      {/* ChallengeDetailIDE */}
       <ChallengeDetailIDE onSubmit={handleSubmit(onSubmit)}>
         <IDE.Grid gridArea="leading">
           <PageHeading>
             <PageHeading.Breadcrumb>
-              <Link href="#">
-                <span>기출</span>
-              </Link>
-              <Link href="#">
-                <span>유형</span>
-              </Link>
-              <span>제목</span>
+              {response?.pedigree && (
+                <Link href={`/challenges?pedigree=${response?.pedigree?.value}&sort=latest`}>
+                  <span>{response?.pedigree?.text}</span>
+                </Link>
+              )}
+              {response?.type && (
+                <Link href={`/challenges?type=${response?.type?.value}&sort=latest`}>
+                  <span>{response?.type?.text}</span>
+                </Link>
+              )}
+              <span>{response?.title}</span>
             </PageHeading.Breadcrumb>
-            <PageHeading.Title asTag={"h2"}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus optio id eum totam. Aperiam, saepe
-              dignissimos! Maxime cupiditate, nemo aperiam eos eligendi vero quasi quidem labore hic saepe quos ab?
-            </PageHeading.Title>
+            <PageHeading.Title asTag={"h2"}>{response?.title ?? ""}</PageHeading.Title>
           </PageHeading>
         </IDE.Grid>
         <IDE.Grid gridArea="challenge">
           <IDE.Head>문제 설명</IDE.Head>
-          <IDE.Markdown>{challenge.guide}</IDE.Markdown>
+          <IDE.Markdown>{response?.content ?? ""}</IDE.Markdown>
         </IDE.Grid>
         {structure.mode === "solution" && (
           <IDE.Grid gridArea="editor">
@@ -233,14 +246,18 @@ const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeD
             <IDE.TestcaseEditor<IDETypes>
               control={control}
               name="testcaseValue"
-              testcaseType={challenge.testcaseType}
+              testcaseType={response?.testcaseType}
             />
           </IDE.Grid>
         )}
         {structure.mode === "solution" && (
           <IDE.Grid gridArea="result">
             <IDE.Head>실행 결과</IDE.Head>
-            <IDE.SolutionResult {...challenge.result} />
+            <IDE.SolutionResult
+              resultType={response?.result?.resultType}
+              resultStatus={response?.result?.resultStatus}
+              resultGrade={response?.result?.resultGrade}
+            />
           </IDE.Grid>
         )}
         {structure.mode === "testcase" && (
