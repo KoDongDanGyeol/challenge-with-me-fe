@@ -85,11 +85,11 @@ const LayoutHeader = (props: LayoutHeaderProps) => {
                   질문/답변
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="/user/activity" className={pathname.startsWith("/user/activity") ? "current" : ""}>
                   활동기록
                 </Link>
-              </li>
+              </li> */}
             </ul>
             <ul className="link-util">
               <li>

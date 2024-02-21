@@ -21,6 +21,7 @@ export type ChallengeDetailComponent = <C extends React.ElementType = "article">
 ) => React.ReactNode
 
 const response = {
+  id: 1,
   pedigree: {
     value: "2024-KAKAO-WINTER-INTERNSHIP",
     text: "2024 KAKAO WINTER INTERNSHIP",
@@ -268,7 +269,7 @@ const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeD
         )}
         <IDE.Grid gridArea="trailing">
           <IDE.Control>
-            <Link href="#" passHref={true} legacyBehavior={true}>
+            <Link href={`/challenges/${response?.id}/questions`} passHref={true} legacyBehavior={true}>
               <Button asTag="a" shape="square" variants="primary" emphasis="subtle" size="sm">
                 질문 (n)
               </Button>
