@@ -47,13 +47,11 @@ const ChallengeFilterMain = FormHoc<ChallengeFilterTypes>((props: ChallengeFilte
       ...prev,
       [key]: getBadge(key),
     }))
-    handleSubmit(handleValid)()
   }
 
   const removeBadge = (key: keyof Badge, option: Badge[keyof Badge][number]) => {
     const newValue = getValues(key).filter((key) => key !== option.value)
-    setValue(key, newValue as string[] | number[])
-    handleSubmit(handleValid)()
+    setValue(key, newValue)
   }
 
   const resetBadge = () => {
@@ -61,108 +59,137 @@ const ChallengeFilterMain = FormHoc<ChallengeFilterTypes>((props: ChallengeFilte
     setValue("type", [])
     setValue("level", [])
     setValue("pedigree", [])
-    handleSubmit(handleValid)()
   }
 
   return (
-    <ChallengeFilterMainContainer id="challenge-filter" onSubmit={handleSubmit(handleValid)} noValidate {...restProps}>
-      <PageFilter>
-        <PageFilter.Search>
-          <Select<ChallengeFilterTypes>
-            control={control}
-            name="state"
-            rules={{}}
-            title="상태 선택"
-            multiple={true}
-            shape="square"
-            placeholder={formPlaceholder?.state ?? ""}
-            optionGroups={formOptionGroups?.state ?? []}
-            className="col-select"
-            onChange={() => appendBadge("state")}
-          />
-          <Select<ChallengeFilterTypes>
-            control={control}
-            name="type"
-            rules={{}}
-            title="유형 선택"
-            multiple={true}
-            shape="square"
-            placeholder={formPlaceholder?.type ?? ""}
-            optionGroups={formOptionGroups?.type ?? []}
-            className="col-select"
-            onChange={() => appendBadge("type")}
-          />
-          <Select<ChallengeFilterTypes>
-            control={control}
-            name="level"
-            rules={{}}
-            title="난이도 선택"
-            multiple={true}
-            shape="square"
-            placeholder="난이도"
-            optionGroups={formOptionGroups?.level ?? []}
-            className="col-select"
-            onChange={() => appendBadge("level")}
-          />
-          <Select<ChallengeFilterTypes>
-            control={control}
-            name="pedigree"
-            rules={{}}
-            title="기출 선택"
-            multiple={true}
-            shape="square"
-            placeholder="기출"
-            optionGroups={formOptionGroups?.pedigree ?? []}
-            className="col-select"
-            onChange={() => appendBadge("pedigree")}
-          />
-          <Input<ChallengeFilterTypes>
-            control={control}
-            name="keyword"
-            rules={{}}
-            type="text"
-            placeholder={formPlaceholder?.keyword ?? ""}
-            appendIcon={
-              <button type="submit">
-                <Icon name="MagnifyingGlass" aria-hidden={true} />
-                <span className="sr-only">{formAction?.submit ?? "검색"}</span>
-              </button>
-            }
-            className="col-input"
-          />
-        </PageFilter.Search>
-        <PageFilter.Badge onReset={resetBadge}>
-          {(Object.entries(badge) as ObjectEntries<Badge>).map(([key, options]) =>
-            !options.length ? null : (
-              <Fragment key={key}>
-                {options.map((option) => (
-                  <Badge key={`${key}-${option.value}`} onRemove={() => removeBadge(key, option)}>
-                    {option.text}
-                  </Badge>
-                ))}
-              </Fragment>
-            ),
-          )}
-        </PageFilter.Badge>
-        <PageFilter.Title>{formTitle ?? "전체 문제"}</PageFilter.Title>
-        <PageFilter.Action>
-          <Select<ChallengeFilterTypes>
-            control={control}
-            name="sort"
-            rules={{}}
-            title="정렬 선택"
-            multiple={false}
-            shape="plain"
-            placeholder="정렬"
-            optionGroups={formOptionGroups?.sort ?? []}
-          />
-        </PageFilter.Action>
-      </PageFilter>
+    <ChallengeFilterMainContainer
+      id="challenge-filter"
+      asTag="form"
+      onSubmit={handleSubmit(handleValid)}
+      noValidate
+      {...restProps}
+    >
+      <PageFilter.Search>
+        <Select<ChallengeFilterTypes>
+          control={control}
+          name="state"
+          rules={{}}
+          multiple={true}
+          shape="square"
+          title={`${formPlaceholder?.state} 선택`}
+          placeholder={formPlaceholder?.state ?? ""}
+          optionGroups={formOptionGroups?.state ?? []}
+          className="col-select"
+          onChange={() => {
+            appendBadge("state")
+            handleSubmit(handleValid)()
+          }}
+        />
+        <Select<ChallengeFilterTypes>
+          control={control}
+          name="type"
+          rules={{}}
+          multiple={true}
+          shape="square"
+          title={`${formPlaceholder?.type} 선택`}
+          placeholder={formPlaceholder?.type ?? ""}
+          optionGroups={formOptionGroups?.type ?? []}
+          className="col-select"
+          onChange={() => {
+            appendBadge("type")
+            handleSubmit(handleValid)()
+          }}
+        />
+        <Select<ChallengeFilterTypes>
+          control={control}
+          name="level"
+          rules={{}}
+          multiple={true}
+          shape="square"
+          title={`${formPlaceholder?.level} 선택`}
+          placeholder={formPlaceholder?.level ?? ""}
+          optionGroups={formOptionGroups?.level ?? []}
+          className="col-select"
+          onChange={() => {
+            appendBadge("level")
+            handleSubmit(handleValid)()
+          }}
+        />
+        <Select<ChallengeFilterTypes>
+          control={control}
+          name="pedigree"
+          rules={{}}
+          multiple={true}
+          shape="square"
+          title={`${formPlaceholder?.pedigree} 선택`}
+          placeholder={formPlaceholder?.pedigree ?? ""}
+          optionGroups={formOptionGroups?.pedigree ?? []}
+          className="col-select"
+          onChange={() => {
+            appendBadge("pedigree")
+            handleSubmit(handleValid)()
+          }}
+        />
+        <Input<ChallengeFilterTypes>
+          control={control}
+          name="keyword"
+          rules={{}}
+          type="text"
+          placeholder={formPlaceholder?.keyword ?? ""}
+          appendIcon={
+            <button type="submit">
+              <Icon name="MagnifyingGlass" aria-hidden={true} />
+              <span className="sr-only">{formAction?.submit ?? "검색"}</span>
+            </button>
+          }
+          className="col-input"
+        />
+      </PageFilter.Search>
+      <PageFilter.Badge
+        onReset={() => {
+          resetBadge()
+          handleSubmit(handleValid)()
+        }}
+      >
+        {(Object.entries(badge) as ObjectEntries<Badge>).map(([key, options]) =>
+          !options.length ? null : (
+            <Fragment key={key}>
+              {options.map((option) => (
+                <Badge
+                  key={`${key}-${option.value}`}
+                  onRemove={() => {
+                    removeBadge(key, option)
+                    handleSubmit(handleValid)()
+                  }}
+                >
+                  {option.text}
+                </Badge>
+              ))}
+            </Fragment>
+          ),
+        )}
+      </PageFilter.Badge>
+      <PageFilter.Title>{formTitle}</PageFilter.Title>
+      <PageFilter.Action>
+        <Select<ChallengeFilterTypes>
+          control={control}
+          name="sort"
+          rules={{}}
+          multiple={false}
+          shape="plain"
+          title={`${formPlaceholder?.sort} 선택`}
+          placeholder={formPlaceholder?.sort ?? ""}
+          optionGroups={formOptionGroups?.sort ?? []}
+          onChange={() => {
+            handleSubmit(handleValid)()
+          }}
+        />
+      </PageFilter.Action>
     </ChallengeFilterMainContainer>
   )
 })
 
-const ChallengeFilterMainContainer = styled.form`
+const ChallengeFilterMainContainer = styled(PageFilter)`
   .col-select {
     width: auto;
   }
