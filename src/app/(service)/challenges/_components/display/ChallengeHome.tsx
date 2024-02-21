@@ -13,6 +13,7 @@ import ChallengeFilter, { ChallengeFilterTypes, ChallengeFilterOptionGroups } fr
 
 const response = {
   totalPage: 12,
+  totalCount: 120,
   pedigree: [
     {
       label: "기출 선택",
@@ -141,9 +142,9 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
     if ((searchParams?.get("type")?.split(",") ?? []).length) return true
     if ((searchParams?.get("level")?.split(",") ?? []).length) return true
     if ((searchParams?.get("pedigree")?.split(",") ?? []).length) return true
-    if (searchParams?.get("keyword") !== "") return true
-    if (searchParams?.get("sort") !== "latest") return true
-    if (Number(searchParams?.get("page") ?? 1) > 1) return true
+    if ((searchParams?.get("keyword") ?? "").length) return true
+    // if (searchParams?.get("sort") !== "latest") return true
+    // if (Number(searchParams?.get("page") ?? 1) > 1) return true
     return false
   }, [searchParams])
 
@@ -173,7 +174,7 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
       </ChallengeHomeHeading>
       {/* ChallengeHomeFilter */}
       <ChallengeHomeFilter
-        formTitle={"전체 문제"}
+        formTitle={isSearched ? `검색된 문제 ${response?.totalCount}개` : `모든 문제`}
         formData={filterForm}
         formPlaceholder={{
           state: "상태",
