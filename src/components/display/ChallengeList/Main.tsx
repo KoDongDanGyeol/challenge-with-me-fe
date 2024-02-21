@@ -7,10 +7,10 @@ import Icon from "@/components/general/Icon"
 export interface ChallengeListMainProps extends React.HTMLAttributes<HTMLDivElement> {
   data: {
     id: number
-    state: "unsolved" | "solving" | "solved"
+    state: string
     title: string
     type: string
-    level: number
+    level: string
     pedigree: string
     completeCount: number
     correctRate: number
@@ -64,7 +64,9 @@ const ChallengeListMain = (props: ChallengeListMainProps) => {
                 <span className="color-gray">{`${challenge.type} | ${challenge.pedigree}`}</span>
               </td>
               <td className="col-level">
-                <span className={`color-level${challenge.level}`}>{`Lv. ${challenge.level}`}</span>
+                <span className={`color-level${parseInt(challenge.level.replace(/\D/g, ""), 10)}`}>
+                  {challenge.level}
+                </span>
               </td>
               <td className="col-count">
                 <span className="color-gray">{`${challenge.completeCount > 9999999 ? "+" : ""}${Math.min(challenge.completeCount, 9999999).toLocaleString("ko-KR")}명`}</span>
