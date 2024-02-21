@@ -38,7 +38,7 @@ const response = {
         content: "어디가 잘 못 된 걸까요??",
         name: "Lorem ipsum",
         createdAt: "2024-02-20T11:13:22.281246",
-        answerCounts: 2,
+        answerCounts: 1,
       },
       {
         id: 1,
