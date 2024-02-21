@@ -1,7 +1,7 @@
 "use client"
 
 import styled from "styled-components"
-import Picture from "@/components/display/Picture"
+import Profile from "@/components/display/Profile"
 
 export interface SolutionCardProfileProps extends React.HTMLAttributes<HTMLDivElement> {
   cardId: number
@@ -15,39 +15,17 @@ const SolutionCardProfile = (props: SolutionCardProfileProps) => {
 
   return (
     <SolutionCardProfileContainer className={`${className}`} {...restProps}>
-      <SolutionCardProfilePicture ratio={[1, 1]} rounded="full" src={imgUrl} alt="" />
-      <SolutionCardProfileInfo>
-        <strong>{name}</strong>
-        <span>{language}</span>
-      </SolutionCardProfileInfo>
+      <Profile.Picture src={imgUrl} />
+      <Profile.Content name={name}>
+        <span className="col-content">{language}</span>
+      </Profile.Content>
     </SolutionCardProfileContainer>
   )
 }
 
-const SolutionCardProfilePicture = styled(Picture)`
-  width: 40px;
-`
-
-const SolutionCardProfileInfo = styled.div`
-  flex: 1 1 0px;
-  strong {
-    display: block;
-    font-size: ${(props) => props.theme.typo.size.sm};
-    line-height: ${(props) => props.theme.typo.leading.sm};
-    font-weight: 500;
+const SolutionCardProfileContainer = styled(Profile)`
+  .col-content {
   }
-  span {
-    display: block;
-    font-size: ${(props) => props.theme.typo.size.sm};
-    line-height: ${(props) => props.theme.typo.leading.sm};
-    color: rgb(var(--color-gray500));
-  }
-`
-
-const SolutionCardProfileContainer = styled.div`
-  display: flex;
-  gap: 12px;
-  align-items: center;
 `
 
 export default SolutionCardProfile
