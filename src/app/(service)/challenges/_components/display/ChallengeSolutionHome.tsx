@@ -12,15 +12,15 @@ import Notice from "@/components/display/Notice"
 import Pagination from "@/components/display/Pagination"
 import SolutionFilter, { SolutionFilterTypes, SolutionFilterOptionGroups } from "@/components/form/SolutionFilter"
 
-export type SolutionHomeProps<C extends React.ElementType> = PolymorphicComponentPropWithRef<
+export type ChallengeSolutionHomeProps<C extends React.ElementType> = PolymorphicComponentPropWithRef<
   C,
   {
     //
   }
 >
 
-export type SolutionHomeComponent = <C extends React.ElementType = "section">(
-  props: SolutionHomeProps<C>,
+export type ChallengeSolutionHomeComponent = <C extends React.ElementType = "section">(
+  props: ChallengeSolutionHomeProps<C>,
 ) => React.ReactNode
 
 const response = {
@@ -78,10 +78,9 @@ public class Solution {
   },
 }
 
-const SolutionHome: SolutionHomeComponent = forwardRef(function SolutionHome<C extends React.ElementType = "section">(
-  props: SolutionHomeProps<C>,
-  ref?: PolymorphicRef<C>,
-): React.ReactNode {
+const ChallengeSolutionHome: ChallengeSolutionHomeComponent = forwardRef(function ChallengeSolutionHome<
+  C extends React.ElementType = "section",
+>(props: ChallengeSolutionHomeProps<C>, ref?: PolymorphicRef<C>): React.ReactNode {
   const { asTag, className = "", ...restProps } = props
 
   const router = useRouter()
@@ -130,9 +129,9 @@ const SolutionHome: SolutionHomeComponent = forwardRef(function SolutionHome<C e
   }
 
   return (
-    <SolutionHomeContainer ref={ref} as={asTag ?? "section"} className={`${className}`} {...restProps}>
-      {/* SolutionHomeHeading */}
-      <SolutionHomeHeading>
+    <ChallengeSolutionHomeContainer ref={ref} as={asTag ?? "section"} className={`${className}`} {...restProps}>
+      {/* ChallengeSolutionHomeHeading */}
+      <ChallengeSolutionHomeHeading>
         <PageHeading.Breadcrumb>
           {response?.challengeDetail?.pedigree && (
             <Link href={`/challenges?pedigree=${response?.challengeDetail?.pedigree?.value}&sort=latest`}>
@@ -149,9 +148,9 @@ const SolutionHome: SolutionHomeComponent = forwardRef(function SolutionHome<C e
           </Link>
         </PageHeading.Breadcrumb>
         <PageHeading.Title asTag={"h2"}>{response?.challengeDetail?.title ?? ""}</PageHeading.Title>
-      </SolutionHomeHeading>
-      {/* SolutionHomeFilter */}
-      <SolutionHomeFilter
+      </ChallengeSolutionHomeHeading>
+      {/* ChallengeSolutionHomeFilter */}
+      <ChallengeSolutionHomeFilter
         formTitle={"모든 풀이"}
         formData={filterForm}
         formPlaceholder={{
@@ -164,11 +163,11 @@ const SolutionHome: SolutionHomeComponent = forwardRef(function SolutionHome<C e
         }}
         handleValid={onSubmit}
       />
-      {/* SolutionHomeResult */}
-      <SolutionHomeResult>
+      {/* ChallengeSolutionHomeResult */}
+      <ChallengeSolutionHomeResult>
         {response?.solutionList?.solutions?.length ? (
           <>
-            <SolutionHomeList>
+            <ChallengeSolutionHomeList>
               {response?.solutionList?.solutions?.map((solution) => (
                 <SolutionCard key={solution?.id} asTag="li">
                   <SolutionCard.Profile
@@ -186,7 +185,7 @@ const SolutionHome: SolutionHomeComponent = forwardRef(function SolutionHome<C e
                   />
                 </SolutionCard>
               ))}
-            </SolutionHomeList>
+            </ChallengeSolutionHomeList>
             <Pagination
               page={filterForm.getValues("page")}
               totalPage={response?.solutionList?.totalPage}
@@ -205,24 +204,24 @@ const SolutionHome: SolutionHomeComponent = forwardRef(function SolutionHome<C e
             <Notice.Title>등록된 풀이가 없습니다</Notice.Title>
           </Notice>
         )}
-      </SolutionHomeResult>
-    </SolutionHomeContainer>
+      </ChallengeSolutionHomeResult>
+    </ChallengeSolutionHomeContainer>
   )
 })
 
-const SolutionHomeHeading = styled(PageHeading)`
+const ChallengeSolutionHomeHeading = styled(PageHeading)`
   /*  */
 `
 
-const SolutionHomeFilter = styled(SolutionFilter)`
+const ChallengeSolutionHomeFilter = styled(SolutionFilter)`
   /*  */
 `
 
-const SolutionHomeList = styled.ul`
+const ChallengeSolutionHomeList = styled.ul`
   /*  */
 `
 
-const SolutionHomeResult = styled.div`
+const ChallengeSolutionHomeResult = styled.div`
   nav {
     margin-top: 24px;
   }
@@ -233,27 +232,27 @@ const SolutionHomeResult = styled.div`
   }
 `
 
-const SolutionHomeContainer = styled.section`
+const ChallengeSolutionHomeContainer = styled.section`
   padding-top: 40px;
-  ${SolutionHomeHeading} {
+  ${ChallengeSolutionHomeHeading} {
   }
-  ${SolutionHomeFilter} {
+  ${ChallengeSolutionHomeFilter} {
     margin-top: 24px;
   }
-  ${SolutionHomeResult} {
+  ${ChallengeSolutionHomeResult} {
     margin-top: 24px;
   }
   @media ${(props) => props.theme.screen.device.md} {
     padding-top: 24px;
-    ${SolutionHomeHeading} {
+    ${ChallengeSolutionHomeHeading} {
     }
-    ${SolutionHomeFilter} {
+    ${ChallengeSolutionHomeFilter} {
       margin-top: 16px;
     }
-    ${SolutionHomeResult} {
+    ${ChallengeSolutionHomeResult} {
       margin-top: 16px;
     }
   }
 `
 
-export default SolutionHome
+export default ChallengeSolutionHome

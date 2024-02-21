@@ -99,7 +99,7 @@ const QuestionHome: QuestionHomeComponent = forwardRef(function QuestionHome<C e
   }
 
   return (
-    <QuestionHomeContainer ref={ref} as={asTag} className={`${className}`} {...restProps}>
+    <QuestionHomeContainer ref={ref} as={asTag ?? "section"} className={`${className}`} {...restProps}>
       {/* QuestionHomeHeading */}
       <QuestionHomeHeading>
         <PageHeading.Title asTag="h2">질문/답변</PageHeading.Title>
@@ -169,7 +169,7 @@ const QuestionHomeResult = styled.div`
   }
 `
 
-const QuestionHomeContainer = styled.article`
+const QuestionHomeContainer = styled.section`
   padding-top: 40px;
   ${QuestionHomeHeading} {
   }

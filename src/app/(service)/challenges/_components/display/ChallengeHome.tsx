@@ -169,7 +169,7 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
   }
 
   return (
-    <ChallengeHomeContainer ref={ref} as={asTag} className={`${className}`} {...restProps}>
+    <ChallengeHomeContainer ref={ref} as={asTag ?? "section"} className={`${className}`} {...restProps}>
       {/* ChallengeHomeHeading */}
       <ChallengeHomeHeading>
         <PageHeading.Title asTag="h2">챌린지</PageHeading.Title>
@@ -245,7 +245,7 @@ const ChallengeHomeResult = styled.div`
   }
 `
 
-const ChallengeHomeContainer = styled.article`
+const ChallengeHomeContainer = styled.section`
   padding-top: 40px;
   ${ChallengeHomeHeading} {
   }
