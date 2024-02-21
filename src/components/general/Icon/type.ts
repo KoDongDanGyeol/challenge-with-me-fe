@@ -7,6 +7,8 @@ export const IconName = {
   ["ChevronRight"]: "ChevronRight",
   ["ChevronUpDown"]: "ChevronUpDown",
   ["ExclamationCircle"]: "ExclamationCircle",
+  ["Heart"]: "Heart",
+  ["HeartSolid"]: "HeartSolid",
   ["Loading"]: "Loading",
   ["MagnifyingGlass"]: "MagnifyingGlass",
   ["Photo"]: "Photo",
