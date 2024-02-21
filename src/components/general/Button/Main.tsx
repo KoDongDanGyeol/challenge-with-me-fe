@@ -268,6 +268,9 @@ const PlainNegative = css<ButtonMainStyled>`
 `
 
 const ButtonMainContainer = styled.button<ButtonMainStyled>`
+  display: flex;
+  align-items: center;
+  gap: 4px;
   ${(props) =>
     props.$shape === ButtonShape.Square
       ? props.$variants === ButtonVariants.Primary
@@ -288,6 +291,20 @@ const ButtonMainContainer = styled.button<ButtonMainStyled>`
         : null}
   &:disabled {
     opacity: 0.8;
+  }
+  svg {
+    width: ${(props) =>
+      props.$size === ButtonSize.XS
+        ? "14px"
+        : props.$size === ButtonSize.SM
+          ? "16px"
+          : props.$size === ButtonSize.BASE
+            ? "16px"
+            : props.$size === ButtonSize.LG
+              ? "18px"
+              : props.$size === ButtonSize.XL
+                ? "18px"
+                : ""};
   }
 `
 
