@@ -14,12 +14,13 @@ export interface PictureMainProps extends ImageProps {
   rounded?: PictureRounded
   src: string
   text?: string
+  className?: string
   onLoad?: React.ReactEventHandler<HTMLImageElement>
   onError?: React.ReactEventHandler<HTMLImageElement>
 }
 
 const PictureMain = (props: PictureMainProps) => {
-  const { alt, icon, ratio, rounded = PictureRounded.NONE, src, text, onLoad, onError, ...restProps } = props
+  const { alt, icon, ratio, rounded = PictureRounded.NONE, src, text, className, onLoad, onError, ...restProps } = props
 
   const [structure, setStructure] = useState<{
     isLoaded: boolean
@@ -41,7 +42,7 @@ const PictureMain = (props: PictureMainProps) => {
   }, [src])
 
   return (
-    <PictureMainContainer $ratio={ratio ?? [0, 0]} $rounded={rounded ?? "none"}>
+    <PictureMainContainer className={`${className}`} $ratio={ratio ?? [0, 0]} $rounded={rounded ?? "none"}>
       {structure.src && !structure.isErrored ? (
         <Image
           fill={true}

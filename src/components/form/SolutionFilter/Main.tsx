@@ -26,7 +26,7 @@ const SolutionFilterMain = FormHoc<SolutionFilterTypes>((props: SolutionFilterMa
     >
       <PageFilter.Title>{formTitle}</PageFilter.Title>
       <PageFilter.Action>
-        <Select<SolutionFilterTypes>
+        {/* <Select<SolutionFilterTypes>
           control={control}
           name="language"
           rules={{}}
@@ -38,7 +38,7 @@ const SolutionFilterMain = FormHoc<SolutionFilterTypes>((props: SolutionFilterMa
           onChange={() => {
             handleSubmit(handleValid)()
           }}
-        />
+        /> */}
         <Select<SolutionFilterTypes>
           control={control}
           name="type"

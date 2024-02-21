@@ -20,7 +20,7 @@ const PageHeadingBreadcrumb = (props: PageHeadingBreadcrumbProps) => {
     >
       <li>
         <h1>
-          <Link href="#">
+          <Link href="/challenges">
             <span>Challenge With Me</span>
           </Link>
         </h1>
