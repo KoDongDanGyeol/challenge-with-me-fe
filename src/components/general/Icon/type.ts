@@ -1,6 +1,8 @@
 export const IconName = {
   ["ArrowUturnLeft"]: "ArrowUturnLeft",
   ["Bars"]: "Bars",
+  ["Calendar"]: "Calendar",
+  ["ChatBubbleLeftEllipsis"]: "ChatBubbleLeftEllipsis",
   ["Check"]: "Check",
   ["CheckCircle"]: "CheckCircle",
   ["ChevronLeft"]: "ChevronLeft",
@@ -14,6 +16,7 @@ export const IconName = {
   ["Photo"]: "Photo",
   ["SymbolGithub"]: "SymbolGithub",
   ["SymbolGoogle"]: "SymbolGoogle",
+  ["UserCircle"]: "UserCircle",
   ["XCircle"]: "XCircle",
   ["XMark"]: "XMark",
 } as const
