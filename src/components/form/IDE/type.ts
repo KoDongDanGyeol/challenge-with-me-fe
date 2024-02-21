@@ -1,3 +1,25 @@
+export interface IDETypes {
+  solution: string
+  testcaseType: {
+    input: string[]
+    expected: string
+  }
+  testcaseValue: {
+    public: {
+      input: string[]
+      expected: string
+    }[]
+    userSaved: {
+      input: string[]
+      expected: string
+    }[]
+    userDraft: {
+      input: string[]
+      expected: string
+    }[]
+  }
+}
+
 export const IDEGridArea = {
   Leading: "leading",
   Challenge: "challenge",

@@ -51,6 +51,7 @@ const PaginationMainContainer = styled.nav`
     font-size: ${(props) => props.theme.typo.size.sm};
     line-height: ${(props) => props.theme.typo.leading.sm};
     svg {
+      margin: 0 auto;
       width: 16px;
     }
     &:hover,

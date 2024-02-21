@@ -7,31 +7,10 @@ import IDESolutionEditor, { IDESolutionEditorProps } from "@/components/form/IDE
 import IDESolutionResult, { IDESolutionResultProps } from "@/components/form/IDE/SolutionResult"
 import IDETestcaseEditor, { IDETestcaseEditorProps } from "@/components/form/IDE/TestcaseEditor"
 import IDETestcaseResult, { IDETestcaseResultProps } from "@/components/form/IDE/TestcaseResult"
-import { IDEGridArea, IDESolutionResultStatus, IDESolutionResultType } from "@/components/form/IDE/type"
-
-export interface IDETypes {
-  solution: string
-  testcaseType: {
-    input: string[]
-    expected: string
-  }
-  testcaseValue: {
-    public: {
-      input: string[]
-      expected: string
-    }[]
-    userSaved: {
-      input: string[]
-      expected: string
-    }[]
-    userDraft: {
-      input: string[]
-      expected: string
-    }[]
-  }
-}
+import { IDETypes, IDEGridArea, IDESolutionResultStatus, IDESolutionResultType } from "@/components/form/IDE/type"
 
 export type {
+  IDETypes,
   IDEGridArea,
   IDESolutionResultStatus,
   IDESolutionResultType,

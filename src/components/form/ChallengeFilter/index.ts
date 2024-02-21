@@ -1,16 +1,9 @@
+import { ChallengeFilterTypes, ChallengeFilterOptionGroups } from "@/components/form/ChallengeFilter/type"
 import ChallengeFilterMain, { ChallengeFilterMainProps } from "@/components/form/ChallengeFilter/Main"
 
-export interface ChallengeFilterTypes {
-  state: string[]
-  type: string[]
-  level: number[]
-  pedigree: string[]
-  keyword: string
-  sort: string
-  page: number
-}
+export { ChallengeFilterOptionGroups }
 
-export type { ChallengeFilterMainProps }
+export type { ChallengeFilterTypes, ChallengeFilterMainProps }
 
 export default Object.assign(ChallengeFilterMain, {
   //

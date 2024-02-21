@@ -9,17 +9,28 @@ import PageHeading from "@/components/display/PageHeading"
 import ChallengeList from "@/components/display/ChallengeList"
 import Pagination from "@/components/display/Pagination"
 import Notice from "@/components/display/Notice"
-import ChallengeFilter, { ChallengeFilterTypes } from "@/components/form/ChallengeFilter"
+import ChallengeFilter, { ChallengeFilterTypes, ChallengeFilterOptionGroups } from "@/components/form/ChallengeFilter"
 
-const challenges = {
+const response = {
   totalPage: 12,
+  pedigree: [
+    {
+      label: "기출 선택",
+      options: [
+        { value: "2024-KAKAO-WINTER-INTERNSHIP", text: "2024 KAKAO WINTER INTERNSHIP" },
+        { value: "2023-KAKAO-BLIND-RECRUITMENT", text: "2023 KAKAO BLIND RECRUITMENT" },
+        { value: "2022-KAKAO-TECH-INTERNSHIP", text: "2022 KAKAO TECH INTERNSHIP" },
+        { value: "2022-KAKAO-BLIND-RECRUITMENT", text: "2022 KAKAO BLIND RECRUITMENT" },
+      ],
+    },
+  ],
   challenges: [
     {
       id: 0,
       state: "unsolved" as const,
       title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
       type: "해시",
-      level: 0,
+      level: "Lv. 0",
       pedigree: "2024 KAKAO WINTER INTERNSHIP",
       completeCount: 9,
       correctRate: 0,
@@ -29,7 +40,7 @@ const challenges = {
       state: "solving" as const,
       title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
       type: "해시",
-      level: 1,
+      level: "Lv. 1",
       pedigree: "2024 KAKAO WINTER INTERNSHIP",
       completeCount: 99,
       correctRate: 3.14159,
@@ -39,7 +50,7 @@ const challenges = {
       state: "solved" as const,
       title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
       type: "해시",
-      level: 2,
+      level: "Lv. 2",
       pedigree: "2024 KAKAO WINTER INTERNSHIP",
       completeCount: 999,
       correctRate: 50.5,
@@ -49,7 +60,7 @@ const challenges = {
       state: "solving" as const,
       title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
       type: "해시",
-      level: 3,
+      level: "Lv. 3",
       pedigree: "2024 KAKAO WINTER INTERNSHIP",
       completeCount: 9999,
       correctRate: 3.14159,
@@ -59,7 +70,7 @@ const challenges = {
       state: "solved" as const,
       title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
       type: "해시",
-      level: 4,
+      level: "Lv. 4",
       pedigree: "2024 KAKAO WINTER INTERNSHIP",
       completeCount: 99999,
       correctRate: 50.5,
@@ -69,7 +80,7 @@ const challenges = {
       state: "solved" as const,
       title: "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
       type: "해시",
-      level: 5,
+      level: "Lv. 5",
       pedigree: "2024 KAKAO WINTER INTERNSHIP",
       completeCount: 99999999,
       correctRate: 50.5,
@@ -98,22 +109,40 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
 
   const filterForm = useForm<ChallengeFilterTypes>({
     defaultValues: {
-      state: searchParams?.get("state")?.split(",") ?? [],
-      type: searchParams?.get("type")?.split(",") ?? [],
-      level: searchParams?.get("level")?.split(",")?.map(Number) ?? [],
-      pedigree: searchParams?.get("pedigree")?.split(",") ?? [],
+      state: ChallengeFilterOptionGroups.state
+        .flatMap(({ options }) => options)
+        .filter(({ value }) => (searchParams?.get("state") ?? "").split(", ")?.includes(value.toString()))
+        .map(({ value }) => value),
+      type: ChallengeFilterOptionGroups.type
+        .flatMap(({ options }) => options)
+        .filter(({ value }) => (searchParams?.get("type") ?? "").split(", ")?.includes(value.toString()))
+        .map(({ value }) => value),
+      level: ChallengeFilterOptionGroups.level
+        .flatMap(({ options }) => options)
+        .filter(({ value }) => (searchParams?.get("level") ?? "").split(", ")?.includes(value.toString()))
+        .map(({ value }) => value),
+      pedigree: response.pedigree
+        .flatMap(({ options }) => options)
+        .filter(({ value }) => (searchParams?.get("pedigree") ?? "").split(", ")?.includes(value.toString()))
+        .map(({ value }) => value),
       keyword: searchParams?.get("keyword") ?? "",
-      sort: searchParams?.get("sort") ?? "latest",
-      page: Math.max(Math.min(Number(searchParams?.get("page") ?? 1), challenges.totalPage), 1),
+      sort:
+        ChallengeFilterOptionGroups.sort
+          .flatMap(({ options }) => options)
+          .find(({ value }) => searchParams?.get("sort") ?? "" === value)?.value ?? "latest",
+      page: !isNaN(Number(searchParams?.get("page")))
+        ? Math.max(Math.min(Number(searchParams?.get("page") ?? 1), response?.totalPage), 1)
+        : 1,
     },
   })
 
   const isSearched = useMemo(() => {
     if ((searchParams?.get("state")?.split(",") ?? []).length) return true
     if ((searchParams?.get("type")?.split(",") ?? []).length) return true
-    if ((searchParams?.get("level")?.split(",")?.map(Number) ?? []).length) return true
+    if ((searchParams?.get("level")?.split(",") ?? []).length) return true
     if ((searchParams?.get("pedigree")?.split(",") ?? []).length) return true
-    if (searchParams?.get("keyword")?.length) return true
+    if (searchParams?.get("keyword") !== "") return true
+    if (searchParams?.get("sort") !== "latest") return true
     if (Number(searchParams?.get("page") ?? 1) > 1) return true
     return false
   }, [searchParams])
@@ -124,7 +153,7 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
   }
 
   const onSubmit = (data: ChallengeFilterTypes) => {
-    const params = new URLSearchParams({
+    const newParams = new URLSearchParams({
       ...(data?.state?.length ? { state: data?.state?.join(",") } : {}),
       ...(data?.type?.length ? { type: data?.type?.join(",") } : {}),
       ...(data?.level?.length ? { level: data?.level?.join(",") } : {}),
@@ -133,122 +162,102 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
       ...(data?.sort ? { sort: data?.sort } : {}),
       ...(data?.page > 1 ? { page: data?.page?.toString() } : {}),
     })
-    router.replace(`/challenges?${params?.toString()}`)
+    router.replace(`/challenges?${newParams?.toString()}`)
   }
 
   return (
     <ChallengeHomeContainer ref={ref} as={asTag} className={`${className}`} {...restProps}>
-      <PageHeading>
+      {/* ChallengeHomeHeading */}
+      <ChallengeHomeHeading>
         <PageHeading.Title asTag="h2">챌린지</PageHeading.Title>
-      </PageHeading>
-
-      <ChallengeFilter
+      </ChallengeHomeHeading>
+      {/* ChallengeHomeFilter */}
+      <ChallengeHomeFilter
         formTitle={"전체 문제"}
         formData={filterForm}
         formPlaceholder={{
           state: "상태",
           type: "유형",
+          level: "난이도",
+          sort: "정렬",
+          pedigree: "기출",
           keyword: "문제 제목, 기출문제 검색",
         }}
         formOptionGroups={{
-          state: [
-            {
-              label: "상태 선택",
-              options: [
-                { value: "unsolved", text: "안 푼 문제" },
-                { value: "solving", text: "풀고 있는 문제" },
-                { value: "solved", text: "푼 문제" },
-              ],
-            },
-          ],
-          type: [
-            {
-              label: "유형 선택",
-              options: [
-                { value: "hash", text: "해시" },
-                { value: "stack-queue", text: "스택/큐" },
-                { value: "heap", text: "힙(Heap)" },
-                { value: "sorting", text: "정렬" },
-                { value: "brute-force", text: "완전탐색" },
-                { value: "greedy", text: "탐욕법(Greedy)" },
-                { value: "dynamic", text: "동적계획법(Dynamic Programming)" },
-                { value: "dfs-bfs", text: "깊이/너비 우선 탐색(DFS/BFS)" },
-                { value: "binary-search", text: "이분탐색" },
-                { value: "graph", text: "그래프" },
-                { value: "implement", text: "구현" },
-              ],
-            },
-          ],
-          level: [
-            {
-              label: "난이도 선택",
-              options: [
-                { value: 0, text: "Lv. 0" },
-                { value: 1, text: "Lv. 1" },
-                { value: 2, text: "Lv. 2" },
-                { value: 3, text: "Lv. 3" },
-                { value: 4, text: "Lv. 4" },
-                { value: 5, text: "Lv. 5" },
-              ],
-            },
-          ],
-          pedigree: [
-            {
-              label: "기출 선택",
-              options: [
-                { value: "2024-KAKAO-WINTER-INTERNSHIP", text: "2024 KAKAO WINTER INTERNSHIP" },
-                { value: "2023-KAKAO-BLIND-RECRUITMENT", text: "2023 KAKAO BLIND RECRUITMENT" },
-                { value: "2022-KAKAO-TECH-INTERNSHIP", text: "2022 KAKAO TECH INTERNSHIP" },
-                { value: "2022-KAKAO-BLIND-RECRUITMENT", text: "2022 KAKAO BLIND RECRUITMENT" },
-              ],
-            },
-          ],
-          sort: [
-            {
-              label: "정렬 선택",
-              options: [
-                { value: "latest", text: "최신순" },
-                { value: "high", text: "정답률 높은 순" },
-                { value: "low", text: "정답률 낮은 순" },
-              ],
-            },
-          ],
+          state: ChallengeFilterOptionGroups?.state ?? [],
+          type: ChallengeFilterOptionGroups?.type ?? [],
+          level: ChallengeFilterOptionGroups?.level ?? [],
+          sort: ChallengeFilterOptionGroups?.sort ?? [],
+          pedigree: response?.pedigree ?? [],
         }}
         formAction={{
           submit: "검색",
         }}
         handleValid={onSubmit}
       />
-
-      {challenges?.challenges?.length ? (
-        <>
-          <ChallengeList data={challenges?.challenges ?? []} />
-          <Pagination page={filterForm.getValues("page")} totalPage={challenges?.totalPage} onPaging={onPaging} />
-        </>
-      ) : isSearched ? (
-        <Notice type="block">
-          <Notice.Icon status="success" name="MagnifyingGlass" />
-          <Notice.Title>일치하는 문제가 없습니다</Notice.Title>
-          <Notice.Description>조건을 변경하시거나 다른 문제를 검색해보세요</Notice.Description>
-        </Notice>
-      ) : (
-        <Notice type="block">
-          <Notice.Icon status="success" name="MagnifyingGlass" />
-          <Notice.Title>등록된 문제가 없습니다</Notice.Title>
-        </Notice>
-      )}
+      {/* ChallengeHomeResult */}
+      <ChallengeHomeResult>
+        {response?.challenges?.length ? (
+          <>
+            <ChallengeList data={response?.challenges ?? []} />
+            <Pagination page={filterForm.getValues("page")} totalPage={response?.totalPage} onPaging={onPaging} />
+          </>
+        ) : isSearched ? (
+          <Notice type="block">
+            <Notice.Icon status="success" name="MagnifyingGlass" />
+            <Notice.Title>일치하는 문제가 없습니다</Notice.Title>
+            <Notice.Description>조건을 변경하시거나 다른 문제를 검색해보세요</Notice.Description>
+          </Notice>
+        ) : (
+          <Notice type="block">
+            <Notice.Icon status="success" name="MagnifyingGlass" />
+            <Notice.Title>등록된 문제가 없습니다</Notice.Title>
+          </Notice>
+        )}
+      </ChallengeHomeResult>
     </ChallengeHomeContainer>
   )
 })
 
+const ChallengeHomeHeading = styled(PageHeading)`
+  /*  */
+`
+
+const ChallengeHomeFilter = styled(ChallengeFilter)`
+  /*  */
+`
+
+const ChallengeHomeResult = styled.div`
+  nav {
+    margin-top: 24px;
+  }
+  @media ${(props) => props.theme.screen.device.md} {
+    nav {
+      margin-top: 16px;
+    }
+  }
+`
+
 const ChallengeHomeContainer = styled.article`
   padding-top: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  ${ChallengeHomeHeading} {
+  }
+  ${ChallengeHomeFilter} {
+    margin-top: 24px;
+  }
+  ${ChallengeHomeResult} {
+    margin-top: 24px;
+  }
   @media ${(props) => props.theme.screen.device.md} {
     padding-top: 24px;
-    gap: 16px;
+    ${ChallengeHomeHeading} {
+    }
+    ${ChallengeHomeFilter} {
+      margin-top: 16px;
+    }
+    ${ChallengeHomeResult} {
+      margin-top: 16px;
+    }
   }
 `
 
