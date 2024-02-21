@@ -148,6 +148,7 @@ const response = {
         expected: "0",
       },
     ],
+    questionCount: 2,
   },
   challengeIDE: {
     result: {
@@ -275,7 +276,7 @@ const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeD
           <IDE.Control>
             <Link href={`/challenges/${response?.challengeDetail?.id}/questions`} passHref={true} legacyBehavior={true}>
               <Button asTag="a" shape="square" variants="primary" emphasis="subtle" size="sm">
-                질문 (n)
+                {`질문 (${response?.challengeDetail?.questionCount})`}
               </Button>
             </Link>
             <Button
