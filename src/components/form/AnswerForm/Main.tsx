@@ -4,42 +4,27 @@ import { FieldValues } from "react-hook-form"
 import styled from "styled-components"
 import Button from "@/components/general/Button"
 import FormHoc, { FormHocMainProps } from "@/components/entry/FormHoc"
-import Input from "@/components/entry/Input"
 import Textarea from "@/components/entry/Textarea"
 import Helper from "@/components/entry/Helper"
 import Label from "@/components/entry/Label"
-import { QuestionFormTypes } from "@/components/form/QuestionForm"
+import { AnswerFormTypes } from "@/components/form/AnswerForm"
 
-export interface QuestionFormMainProps<T extends FieldValues = QuestionFormTypes> extends FormHocMainProps<T> {
+export interface AnswerFormMainProps<T extends FieldValues = AnswerFormTypes> extends FormHocMainProps<T> {
   //
 }
 
-const QuestionFormMain = FormHoc<QuestionFormTypes>((props: QuestionFormMainProps) => {
+const AnswerFormMain = FormHoc<AnswerFormTypes>((props: AnswerFormMainProps) => {
   const { formAction, formData, formPlaceholder, handleValid, handleCanceled, ...restProps } = props
 
   const { control, formState, handleSubmit } = formData
 
   return (
-    <QuestionFormMainContainer id="question-form" onSubmit={handleSubmit(handleValid)} noValidate {...restProps}>
+    <AnswerFormMainContainer id="question-form" onSubmit={handleSubmit(handleValid)} noValidate {...restProps}>
       <div className="row-input">
-        <Label htmlFor="title">제목</Label>
-        <Input<QuestionFormTypes>
-          control={control}
-          name="title"
-          rules={{
-            required: {
-              value: true,
-              message: "타이틀을 입력해주세요",
-            },
-          }}
-          type="text"
-          placeholder={formPlaceholder?.title ?? ""}
-        />
-        <Helper variants="error">{formState?.errors?.title?.message}</Helper>
-      </div>
-      <div className="row-input">
-        <Label htmlFor="content">내용</Label>
-        <Textarea<QuestionFormTypes>
+        <Label htmlFor="content" className="sr-only">
+          내용
+        </Label>
+        <Textarea<AnswerFormTypes>
           control={control}
           name="content"
           rules={{
@@ -65,14 +50,14 @@ const QuestionFormMain = FormHoc<QuestionFormTypes>((props: QuestionFormMainProp
           {formAction?.submit}
         </Button>
       </div>
-    </QuestionFormMainContainer>
+    </AnswerFormMainContainer>
   )
 })
 
-const QuestionFormMainContainer = styled.form`
+const AnswerFormMainContainer = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
   .row-input {
     display: flex;
     flex-direction: column;
@@ -84,8 +69,8 @@ const QuestionFormMainContainer = styled.form`
     gap: 12px;
   }
   @media ${(props) => props.theme.screen.device.md} {
-    gap: 16px;
+    gap: 12px;
   }
 `
 
-export default QuestionFormMain
+export default AnswerFormMain

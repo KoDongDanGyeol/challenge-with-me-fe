@@ -9,7 +9,7 @@ export interface FormHocMainProps<T extends FieldValues>
   formData: UseFormReturn<T>
   formTitle?: string
   formAction?: {
-    [key in "reset" | "submit" | "back"]?: string
+    [key in "reset" | "submit" | "cancel"]?: string
   }
   formPlaceholder?: {
     [key in keyof T]?: string
@@ -20,6 +20,7 @@ export interface FormHocMainProps<T extends FieldValues>
   isLoading?: boolean
   isSuccess?: boolean
   handleValid: SubmitHandler<T>
+  handleCanceled?: () => void
 }
 
 const FormHocMain = <T extends FieldValues>(FormHocMain: (props: FormHocMainProps<T>) => React.ReactNode) => {
