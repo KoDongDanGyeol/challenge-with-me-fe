@@ -2,6 +2,7 @@
 
 import { forwardRef } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import styled from "styled-components"
 import { PolymorphicComponentPropWithRef, PolymorphicRef } from "@/types/polymorphic"
@@ -42,12 +43,17 @@ const ChallengeQuestionCreate: ChallengeQuestionCreateComponent = forwardRef(fun
 >(props: ChallengeQuestionCreateProps<C>, ref?: PolymorphicRef<C>): React.ReactNode {
   const { asTag, className = "", ...restProps } = props
 
+  const router = useRouter()
   const createForm = useForm<QuestionFormTypes>({
     defaultValues: {
       title: "",
       content: "",
     },
   })
+
+  const onCancel = () => {
+    router.back()
+  }
 
   const onSubmit = (data: QuestionFormTypes) => {
     console.log(data)
@@ -74,16 +80,16 @@ const ChallengeQuestionCreate: ChallengeQuestionCreateComponent = forwardRef(fun
         </PageHeading.Breadcrumb>
         <PageHeading.Title asTag={"h2"}>{response?.challengeDetail?.title ?? ""}</PageHeading.Title>
       </ChallengeQuestionCreateHeading>
-      {/* ChallengeQuestionHomeFilter */}
-      <ChallengeQuestionHomeFilter>
+      {/* ChallengeQuestionCreateFilter */}
+      <ChallengeQuestionCreateFilter>
         <PageFilter.Title asTag="h3">질문하기</PageFilter.Title>
-      </ChallengeQuestionHomeFilter>
-      {/* ChallengeQuestionHomeForm */}
-      <ChallengeQuestionHomeForm
+      </ChallengeQuestionCreateFilter>
+      {/* ChallengeQuestionCreateForm */}
+      <ChallengeQuestionCreateForm
         formData={createForm}
         formAction={{
           submit: "등록",
-          back: "취소",
+          cancel: "취소",
         }}
         formPlaceholder={{
           title: "",
@@ -91,6 +97,7 @@ const ChallengeQuestionCreate: ChallengeQuestionCreateComponent = forwardRef(fun
             "문제와 관련된 질문을 구체적으로 작성해 주세요.\n타인에 대한 비방이나 욕설, 광고, 정답 공개 등 게시판의 목적과 관련 없는 내용은 삭제될 수 있습니다.",
         }}
         handleValid={onSubmit}
+        handleCanceled={onCancel}
       />
     </ChallengeQuestionCreateContainer>
   )
@@ -100,11 +107,11 @@ const ChallengeQuestionCreateHeading = styled(PageHeading)`
   /*  */
 `
 
-const ChallengeQuestionHomeFilter = styled(PageFilter)`
+const ChallengeQuestionCreateFilter = styled(PageFilter)`
   /*  */
 `
 
-const ChallengeQuestionHomeForm = styled(QuestionForm)`
+const ChallengeQuestionCreateForm = styled(QuestionForm)`
   /*  */
 `
 
@@ -112,20 +119,20 @@ const ChallengeQuestionCreateContainer = styled.section`
   padding-top: 40px;
   ${ChallengeQuestionCreateHeading} {
   }
-  ${ChallengeQuestionHomeFilter} {
+  ${ChallengeQuestionCreateFilter} {
     margin-top: 24px;
   }
-  ${ChallengeQuestionHomeForm} {
+  ${ChallengeQuestionCreateForm} {
     margin-top: 24px;
   }
   @media ${(props) => props.theme.screen.device.md} {
     padding-top: 24px;
     ${ChallengeQuestionCreateHeading} {
     }
-    ${ChallengeQuestionHomeFilter} {
+    ${ChallengeQuestionCreateFilter} {
       margin-top: 16px;
     }
-    ${ChallengeQuestionHomeForm} {
+    ${ChallengeQuestionCreateForm} {
       margin-top: 16px;
     }
   }

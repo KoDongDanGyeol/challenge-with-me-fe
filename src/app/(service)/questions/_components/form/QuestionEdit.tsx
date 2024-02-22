@@ -2,6 +2,7 @@
 
 import { forwardRef } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import styled from "styled-components"
 import { PolymorphicComponentPropWithRef, PolymorphicRef } from "@/types/polymorphic"
@@ -147,12 +148,18 @@ const QuestionEdit: QuestionEditComponent = forwardRef(function QuestionEdit<C e
 ): React.ReactNode {
   const { asTag, className = "", ...restProps } = props
 
+  const router = useRouter()
   const createForm = useForm<QuestionFormTypes>({
     defaultValues: {
-      title: response?.questionDetail?.title,
-      content: response?.questionDetail?.content,
+      id: response?.questionDetail?.id ?? 0,
+      title: response?.questionDetail?.title ?? "",
+      content: response?.questionDetail?.content ?? "",
     },
   })
+
+  const onCancel = () => {
+    router.back()
+  }
 
   const onSubmit = (data: QuestionFormTypes) => {
     console.log(data)
@@ -179,16 +186,16 @@ const QuestionEdit: QuestionEditComponent = forwardRef(function QuestionEdit<C e
         </PageHeading.Breadcrumb>
         <PageHeading.Title asTag={"h2"}>{response?.challengeDetail?.title ?? ""}</PageHeading.Title>
       </QuestionEditHeading>
-      {/* ChallengeQuestionHomeFilter */}
-      <ChallengeQuestionHomeFilter>
+      {/* QuestionEditFilter */}
+      <QuestionEditFilter>
         <PageFilter.Title asTag="h3">질문하기</PageFilter.Title>
-      </ChallengeQuestionHomeFilter>
-      {/* ChallengeQuestionHomeForm */}
-      <ChallengeQuestionHomeForm
+      </QuestionEditFilter>
+      {/* QuestionEditForm */}
+      <QuestionEditForm
         formData={createForm}
         formAction={{
           submit: "등록",
-          back: "취소",
+          cancel: "취소",
         }}
         formPlaceholder={{
           title: "",
@@ -196,9 +203,8 @@ const QuestionEdit: QuestionEditComponent = forwardRef(function QuestionEdit<C e
             "문제와 관련된 질문을 구체적으로 작성해 주세요.\n타인에 대한 비방이나 욕설, 광고, 정답 공개 등 게시판의 목적과 관련 없는 내용은 삭제될 수 있습니다.",
         }}
         handleValid={onSubmit}
-      >
-        {/*  */}
-      </ChallengeQuestionHomeForm>
+        handleCanceled={onCancel}
+      />
     </QuestionEditContainer>
   )
 })
@@ -207,11 +213,11 @@ const QuestionEditHeading = styled(PageHeading)`
   /*  */
 `
 
-const ChallengeQuestionHomeFilter = styled(PageFilter)`
+const QuestionEditFilter = styled(PageFilter)`
   /*  */
 `
 
-const ChallengeQuestionHomeForm = styled(QuestionForm)`
+const QuestionEditForm = styled(QuestionForm)`
   /*  */
 `
 
@@ -219,20 +225,20 @@ const QuestionEditContainer = styled.section`
   padding-top: 40px;
   ${QuestionEditHeading} {
   }
-  ${ChallengeQuestionHomeFilter} {
+  ${QuestionEditFilter} {
     margin-top: 24px;
   }
-  ${ChallengeQuestionHomeForm} {
+  ${QuestionEditForm} {
     margin-top: 24px;
   }
   @media ${(props) => props.theme.screen.device.md} {
     padding-top: 24px;
     ${QuestionEditHeading} {
     }
-    ${ChallengeQuestionHomeFilter} {
+    ${QuestionEditFilter} {
       margin-top: 16px;
     }
-    ${ChallengeQuestionHomeForm} {
+    ${QuestionEditForm} {
       margin-top: 16px;
     }
   }
