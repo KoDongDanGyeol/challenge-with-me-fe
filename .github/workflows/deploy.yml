@@ -36,4 +36,4 @@ jobs:
           aws-region: ap-northeast-2
       - name: Deploy app
         run: |
-          NODE_ENV=production && npm i && npx sst deploy --stage product
+          npm i && npx sst deploy --stage product
