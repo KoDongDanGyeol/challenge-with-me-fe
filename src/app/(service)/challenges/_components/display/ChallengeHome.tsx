@@ -1,7 +1,7 @@
 "use client"
 
 import { forwardRef, useMemo } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import styled from "styled-components"
 import { PolymorphicComponentPropWithRef, PolymorphicRef } from "@/types/polymorphic"
@@ -94,7 +94,9 @@ const response = {
 export type ChallengeHomeProps<C extends React.ElementType> = PolymorphicComponentPropWithRef<
   C,
   {
-    //
+    searchParams: {
+      [key in keyof ChallengeFilterTypes]?: string
+    }
   }
 >
 
@@ -105,50 +107,63 @@ export type ChallengeHomeComponent = <C extends React.ElementType = "section">(
 const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
   C extends React.ElementType = "section",
 >(props: ChallengeHomeProps<C>, ref?: PolymorphicRef<C>): React.ReactNode {
-  const { asTag, className = "", ...restProps } = props
+  const { asTag, searchParams, className = "", ...restProps } = props
 
   const router = useRouter()
-  const searchParams = useSearchParams()
+
+  const memoParams = useMemo(() => {
+    const params = new URLSearchParams(searchParams)
+    const state =
+      ChallengeFilterOptionGroups.state
+        .flatMap(({ options }) => options)
+        .filter(({ value }) => (params?.get("state") ?? "")?.split(",")?.includes(value.toString()))
+        .map(({ value }) => value) ?? []
+    const type =
+      ChallengeFilterOptionGroups.type
+        .flatMap(({ options }) => options)
+        .filter(({ value }) => (params?.get("type") ?? "")?.split(",")?.includes(value.toString()))
+        .map(({ value }) => value) ?? []
+    const level =
+      ChallengeFilterOptionGroups.level
+        .flatMap(({ options }) => options)
+        .filter(({ value }) => (params?.get("level") ?? "")?.split(",")?.includes(value.toString()))
+        .map(({ value }) => value) ?? []
+    const pedigree =
+      (response?.challengeList?.pedigree ?? [])
+        .flatMap(({ options }) => options)
+        .filter(({ value }) => (params?.get("pedigree") ?? "")?.split(",")?.includes(value.toString()))
+        .map(({ value }) => value) ?? []
+    const keyword = params?.get("keyword") ?? ""
+    const sort =
+      ChallengeFilterOptionGroups.sort
+        .flatMap(({ options }) => options)
+        .find(({ value }) => (params?.get("sort") ?? "").split(",")?.includes(value.toString()))?.value ?? "latest"
+    const page = !isNaN(Number(params?.get("page")))
+      ? Math.max(Math.min(Number(params?.get("page") ?? 1), response?.challengeList?.totalPage), 1)
+      : 1
+    const isSearched = [
+      Boolean(state.length),
+      Boolean(type.length),
+      Boolean(level.length),
+      Boolean(pedigree.length),
+      Boolean(keyword.length),
+      // Boolean(sort !== "latest"),
+      // Boolean(page > 1),
+    ].includes(true)
+    return { state, type, level, pedigree, keyword, sort, page, isSearched }
+  }, [searchParams])
 
   const filterForm = useForm<ChallengeFilterTypes>({
     defaultValues: {
-      state: ChallengeFilterOptionGroups.state
-        .flatMap(({ options }) => options)
-        .filter(({ value }) => (searchParams?.get("state") ?? "").split(", ")?.includes(value.toString()))
-        .map(({ value }) => value),
-      type: ChallengeFilterOptionGroups.type
-        .flatMap(({ options }) => options)
-        .filter(({ value }) => (searchParams?.get("type") ?? "").split(", ")?.includes(value.toString()))
-        .map(({ value }) => value),
-      level: ChallengeFilterOptionGroups.level
-        .flatMap(({ options }) => options)
-        .filter(({ value }) => (searchParams?.get("level") ?? "").split(", ")?.includes(value.toString()))
-        .map(({ value }) => value),
-      pedigree: response?.challengeList?.pedigree
-        .flatMap(({ options }) => options)
-        .filter(({ value }) => (searchParams?.get("pedigree") ?? "").split(", ")?.includes(value.toString()))
-        .map(({ value }) => value),
-      keyword: searchParams?.get("keyword") ?? "",
-      sort:
-        ChallengeFilterOptionGroups.sort
-          .flatMap(({ options }) => options)
-          .find(({ value }) => searchParams?.get("sort") ?? "" === value)?.value ?? "latest",
-      page: !isNaN(Number(searchParams?.get("page")))
-        ? Math.max(Math.min(Number(searchParams?.get("page") ?? 1), response?.challengeList?.totalPage), 1)
-        : 1,
+      state: memoParams?.state ?? [],
+      type: memoParams?.type ?? [],
+      level: memoParams?.level ?? [],
+      pedigree: memoParams?.pedigree ?? [],
+      keyword: memoParams?.keyword ?? "",
+      sort: memoParams?.sort ?? "latest",
+      page: memoParams?.page ?? 1,
     },
   })
-
-  const isSearched = useMemo(() => {
-    if ((searchParams?.get("state")?.split(",") ?? []).length) return true
-    if ((searchParams?.get("type")?.split(",") ?? []).length) return true
-    if ((searchParams?.get("level")?.split(",") ?? []).length) return true
-    if ((searchParams?.get("pedigree")?.split(",") ?? []).length) return true
-    if ((searchParams?.get("keyword") ?? "").length) return true
-    // if ((searchParams?.get("sort") ?? "latest") !== "latest") return true
-    // if (Number(searchParams?.get("page") ?? 1) > 1) return true
-    return false
-  }, [searchParams])
 
   const onPaging = (number: number) => {
     filterForm.setValue("page", number)
@@ -176,7 +191,7 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
       </ChallengeHomeHeading>
       {/* ChallengeHomeFilter */}
       <ChallengeHomeFilter
-        formTitle={isSearched ? `검색된 문제 ${response?.challengeList?.totalCount}개` : `모든 문제`}
+        formTitle={memoParams?.isSearched ? `검색된 문제 ${response?.challengeList?.totalCount}개` : `모든 문제`}
         formData={filterForm}
         formPlaceholder={{
           state: "상태",
@@ -209,7 +224,7 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
               onPaging={onPaging}
             />
           </>
-        ) : isSearched ? (
+        ) : memoParams && memoParams?.isSearched ? (
           <Notice type="block">
             <Notice.Icon status="success" name="MagnifyingGlass" />
             <Notice.Title>일치하는 문제가 없습니다</Notice.Title>

@@ -1,12 +1,11 @@
-import { Suspense } from "react"
-import ChallengeHome from "@/app/(service)/challenges/_components/display/ChallengeHome"
+import ChallengeHome, { ChallengeHomeProps } from "@/app/(service)/challenges/_components/display/ChallengeHome"
 
-const page = () => {
-  return (
-    <Suspense>
-      <ChallengeHome asTag="section" className="container" />
-    </Suspense>
-  )
+interface PageProps {
+  searchParams: ChallengeHomeProps<keyof JSX.IntrinsicElements>["searchParams"]
+}
+
+const page = ({ searchParams }: PageProps) => {
+  return <ChallengeHome asTag="section" searchParams={searchParams} className="container" />
 }
 
 export default page

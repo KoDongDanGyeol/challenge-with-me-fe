@@ -1,12 +1,11 @@
-import { Suspense } from "react"
-import QuestionHome from "@/app/(service)/questions/_components/display/QuestionHome"
+import QuestionHome, { QuestionHomeProps } from "@/app/(service)/questions/_components/display/QuestionHome"
 
-const page = () => {
-  return (
-    <Suspense>
-      <QuestionHome asTag="section" className="container" />
-    </Suspense>
-  )
+interface PageProps {
+  searchParams: QuestionHomeProps<keyof JSX.IntrinsicElements>["searchParams"]
+}
+
+const page = ({ searchParams }: PageProps) => {
+  return <QuestionHome asTag="section" searchParams={searchParams} className="container" />
 }
 
 export default page
