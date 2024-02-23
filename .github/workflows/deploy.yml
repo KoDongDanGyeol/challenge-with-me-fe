@@ -24,7 +24,7 @@ jobs:
           node-version: "18"
       - name: Create Env
         run: |
-          echo "AWS_CERT_ARN=$AWS_CERT_ARN" >> .env
+          echo "AWS_CERT_ARN=$AWS_CERT_ARN" >> .env &&
           echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> .env
         env:
           AWS_CERT_ARN: ${{ secrets.AWS_CERT_ARN }}
