@@ -1,7 +1,7 @@
 "use client"
 
 import { forwardRef, useMemo } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import styled from "styled-components"
 import { PolymorphicComponentPropWithRef, PolymorphicRef } from "@/types/polymorphic"
@@ -39,7 +39,9 @@ const response = {
 export type QuestionHomeProps<C extends React.ElementType> = PolymorphicComponentPropWithRef<
   C,
   {
-    //
+    searchParams: {
+      [key in keyof QuestionFilterTypes]?: string
+    }
   }
 >
 
@@ -51,35 +53,41 @@ const QuestionHome: QuestionHomeComponent = forwardRef(function QuestionHome<C e
   props: QuestionHomeProps<C>,
   ref?: PolymorphicRef<C>,
 ): React.ReactNode {
-  const { asTag, className = "", ...restProps } = props
+  const { asTag, searchParams, className = "", ...restProps } = props
 
   const router = useRouter()
-  const searchParams = useSearchParams()
+
+  const memoParams = useMemo(() => {
+    const params = new URLSearchParams(searchParams)
+    const state =
+      QuestionFilterOptionGroups.state
+        .flatMap(({ options }) => options)
+        .find(({ value }) => (params?.get("state") ?? "").split(",")?.includes(value.toString()))?.value ?? "all"
+    const keyword = params?.get("keyword") ?? ""
+    const sort =
+      QuestionFilterOptionGroups.sort
+        .flatMap(({ options }) => options)
+        .find(({ value }) => (params?.get("sort") ?? "").split(",")?.includes(value.toString()))?.value ?? "latest"
+    const page = !isNaN(Number(params?.get("page")))
+      ? Math.max(Math.min(Number(params?.get("page") ?? 1), response?.questionList?.totalPage), 1)
+      : 1
+    const isSearched = [
+      Boolean(state.length),
+      Boolean(keyword.length),
+      // Boolean(sort !== "latest"),
+      // Boolean(page > 1),
+    ].includes(true)
+    return { state, keyword, sort, page, isSearched }
+  }, [searchParams])
 
   const filterForm = useForm<QuestionFilterTypes>({
     defaultValues: {
-      state:
-        QuestionFilterOptionGroups.state
-          .flatMap(({ options }) => options)
-          .find(({ value }) => searchParams?.get("state") ?? "" === value)?.value ?? "all",
-      sort:
-        QuestionFilterOptionGroups.sort
-          .flatMap(({ options }) => options)
-          .find(({ value }) => searchParams?.get("sort") ?? "" === value)?.value ?? "latest",
-      keyword: searchParams?.get("keyword") ?? "",
-      page: !isNaN(Number(searchParams?.get("page")))
-        ? Math.max(Math.min(Number(searchParams?.get("page") ?? 1), response?.questionList?.totalCount), 1)
-        : 1,
+      state: memoParams?.state ?? "all",
+      sort: memoParams?.sort ?? "latest",
+      keyword: memoParams?.keyword ?? "",
+      page: memoParams?.page ?? 1,
     },
   })
-
-  const isSearched = useMemo(() => {
-    if ((searchParams?.get("state") ?? "all") !== "all") return true
-    if ((searchParams?.get("keyword") ?? "").length) return true
-    // if ((searchParams?.get("sort") ?? "latest") !== "latest") return true
-    // if (Number(searchParams?.get("page") ?? 1) > 1) return true
-    return false
-  }, [searchParams])
 
   const onPaging = (number: number) => {
     filterForm.setValue("page", number)
@@ -104,7 +112,7 @@ const QuestionHome: QuestionHomeComponent = forwardRef(function QuestionHome<C e
       </QuestionHomeHeading>
       {/* QuestionHomeFilter */}
       <QuestionHomeFilter
-        formTitle={isSearched ? `검색된 문제 ${response?.questionList?.totalCount}개` : `모든 문제`}
+        formTitle={memoParams?.isSearched ? `검색된 문제 ${response?.questionList?.totalCount}개` : `모든 문제`}
         formData={filterForm}
         formPlaceholder={{
           state: "상태",
@@ -131,7 +139,7 @@ const QuestionHome: QuestionHomeComponent = forwardRef(function QuestionHome<C e
               onPaging={onPaging}
             />
           </>
-        ) : isSearched ? (
+        ) : memoParams && memoParams?.isSearched ? (
           <Notice type="block">
             <Notice.Icon status="success" name="MagnifyingGlass" />
             <Notice.Title>일치하는 질문이 없습니다</Notice.Title>
