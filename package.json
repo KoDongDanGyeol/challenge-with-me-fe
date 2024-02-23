@@ -9,7 +9,8 @@
     "lint": "next lint",
     "mock": "npx tsx watch ./src/mocks/http.ts",
     "sstDev": "sst bind next dev",
-    "sstDeploy": "npx sst deploy"
+    "sstDeploy": "npx sst deploy",
+    "sstDeployProd": "npx sst deploy --stage product"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
@@ -51,8 +52,8 @@
     "prettier": "^3.2.5",
     "typescript": "^5",
     "sst": "^2.40.3",
-    "aws-cdk-lib": "2.124.0",
-    "constructs": "10.3.0"
+    "aws-cdk-lib": "2.79.1",
+    "constructs": "10.1.156"
   },
   "msw": {
     "workerDirectory": [
