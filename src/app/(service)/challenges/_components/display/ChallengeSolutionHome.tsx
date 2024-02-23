@@ -2,7 +2,7 @@
 
 import { forwardRef, useMemo } from "react"
 import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import styled from "styled-components"
 import { PolymorphicComponentPropWithRef, PolymorphicRef } from "@/types/polymorphic"
@@ -15,7 +15,9 @@ import SolutionFilter, { SolutionFilterTypes, SolutionFilterOptionGroups } from 
 export type ChallengeSolutionHomeProps<C extends React.ElementType> = PolymorphicComponentPropWithRef<
   C,
   {
-    //
+    searchParams: {
+      [key in keyof SolutionFilterTypes]?: string
+    }
   }
 >
 
@@ -81,34 +83,39 @@ public class Solution {
 const ChallengeSolutionHome: ChallengeSolutionHomeComponent = forwardRef(function ChallengeSolutionHome<
   C extends React.ElementType = "section",
 >(props: ChallengeSolutionHomeProps<C>, ref?: PolymorphicRef<C>): React.ReactNode {
-  const { asTag, className = "", ...restProps } = props
+  const { asTag, searchParams, className = "", ...restProps } = props
 
   const router = useRouter()
-  const searchParams = useSearchParams()
+
+  const memoParams = useMemo(() => {
+    const params = new URLSearchParams(searchParams)
+    const language =
+      SolutionFilterOptionGroups.language
+        .flatMap(({ options }) => options)
+        .find(({ value }) => (params?.get("language") ?? "").split(",")?.includes(value.toString()))?.value ?? "java"
+    const type =
+      SolutionFilterOptionGroups.type
+        .flatMap(({ options }) => options)
+        .find(({ value }) => (params?.get("type") ?? "").split(",")?.includes(value.toString()))?.value ?? "all"
+    const page = !isNaN(Number(params?.get("page")))
+      ? Math.max(Math.min(Number(params?.get("page") ?? 1), response?.solutionList?.totalPage), 1)
+      : 1
+    const isSearched = [
+      Boolean(language !== "java"),
+      Boolean(type !== "all"),
+      // Boolean(page > 1),
+    ].includes(true)
+    return { language, type, page, isSearched }
+  }, [searchParams])
 
   const filterForm = useForm<SolutionFilterTypes>({
     defaultValues: {
-      language:
-        SolutionFilterOptionGroups.language
-          .flatMap(({ options }) => options)
-          .find(({ value }) => searchParams?.get("language") ?? "" === value)?.value ?? "java",
-      type:
-        SolutionFilterOptionGroups.type
-          .flatMap(({ options }) => options)
-          .find(({ value }) => searchParams?.get("type") ?? "" === value)?.value ?? "all",
+      language: memoParams?.language ?? "java",
+      type: memoParams?.type ?? "all",
       size: 10,
-      page: !isNaN(Number(searchParams?.get("page")))
-        ? Math.max(Math.min(Number(searchParams?.get("page") ?? 1), response?.solutionList?.totalPage), 1)
-        : 1,
+      page: memoParams?.page ?? 1,
     },
   })
-
-  const isSearched = useMemo(() => {
-    if ((searchParams?.get("language") ?? "java") !== "java") return true
-    if ((searchParams?.get("type") ?? "all") !== "all") return true
-    // if (Number(searchParams?.get("page") ?? 1) > 1) return true
-    return false
-  }, [searchParams])
 
   const onPaging = (number: number) => {
     filterForm.setValue("page", number)
@@ -192,7 +199,7 @@ const ChallengeSolutionHome: ChallengeSolutionHomeComponent = forwardRef(functio
               onPaging={onPaging}
             />
           </>
-        ) : isSearched ? (
+        ) : memoParams && memoParams?.isSearched ? (
           <Notice type="block">
             <Notice.Icon status="success" name="MagnifyingGlass" />
             <Notice.Title>일치하는 풀이가 없습니다</Notice.Title>
