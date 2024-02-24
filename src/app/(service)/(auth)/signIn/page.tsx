@@ -2,6 +2,9 @@
 
 import Button from "@/components/general/Button"
 import IconMain from "@/components/general/Icon"
+import { signIn } from "next-auth/react"
+import { useFormState } from "react-dom"
+
 import styled from "styled-components"
 
 const SignIn = () => {
@@ -17,7 +20,15 @@ const SignIn = () => {
       <div>
         <SignInContainer>
           <h3>로그인</h3>
-          <Button emphasis="bold" shape="square" size="lg" variants="primary">
+          <Button
+            emphasis="bold"
+            shape="square"
+            size="lg"
+            variants="primary"
+            onClick={() => {
+              signIn("GoogleProvider")
+            }}
+          >
             <GoogleSymbol name="SymbolGoogle" />
             Google로 시작하기
           </Button>
@@ -50,7 +61,7 @@ const Container = styled.div`
   }
 `
 
-const SignInContainer = styled.div`
+const SignInContainer = styled.form`
   display: flex;
   flex-direction: column;
   max-width: 600px;

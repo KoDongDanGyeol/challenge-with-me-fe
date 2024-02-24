@@ -12,6 +12,7 @@ import { atomGlobal } from "@/stores/global"
 import Button from "@/components/general/Button"
 import Icon from "@/components/general/Icon"
 import Logo from "/public/logo.svg"
+import { signOut } from "next-auth/react"
 
 export interface LayoutHeaderProps extends React.HTMLAttributes<HTMLElement> {
   //
@@ -20,7 +21,7 @@ export interface LayoutHeaderProps extends React.HTMLAttributes<HTMLElement> {
 const LayoutHeader = (props: LayoutHeaderProps) => {
   const { className = "", ...restProps } = props
 
-  const pathname = usePathname()
+  const pathname = usePathname() || ""
   const timers = useRef<Timer>({ delay: null })
   const [global, setGlobal] = useRecoilState(atomGlobal)
   const [header, setHeader] = useState({ isHeaderActivated: false })
@@ -85,29 +86,37 @@ const LayoutHeader = (props: LayoutHeaderProps) => {
                   질문/답변
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="/user/activity" className={pathname.startsWith("/user/activity") ? "current" : ""}>
                   활동기록
                 </Link>
-              </li>
+              </li> */}
             </ul>
             <ul className="link-util">
               <li>
-                <Link href="/auth/login" passHref={true} legacyBehavior={true}>
+                <Link href="/signIn" passHref={true} legacyBehavior={true}>
                   <Button asTag="a" shape="plain" variants="secondary" emphasis="minimal">
                     로그인
                   </Button>
                 </Link>
               </li>
               <li>
-                <Link href="/user" passHref={true} legacyBehavior={true}>
+                <Link href="/myPage" passHref={true} legacyBehavior={true}>
                   <Button asTag="a" shape="plain" variants="secondary" emphasis="minimal">
                     마이페이지
                   </Button>
                 </Link>
               </li>
               <li>
-                <Button asTag="button" shape="plain" variants="secondary" emphasis="minimal">
+                <Button
+                  asTag="button"
+                  shape="plain"
+                  variants="secondary"
+                  emphasis="minimal"
+                  onClick={() => {
+                    signOut()
+                  }}
+                >
                   로그아웃
                 </Button>
               </li>
