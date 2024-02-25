@@ -8,7 +8,7 @@ interface PageProps {
   params: ChallengeDetailParams & ChallengeTestcaseParams
 }
 
-export const generateMetadata: ({ params }: PageProps) => Promise<Metadata> = async ({ params }) => {
+export const generateMetadata: (props: PageProps) => Promise<Metadata> = async ({ params }) => {
   const data = await getChallengeDetail({ queryKey: ["challengeDetail", params] })
   return {
     title: `${data?.title} - 챌린지 상세`,

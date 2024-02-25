@@ -2,10 +2,17 @@
 
 import { forwardRef, useMemo } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { notFound, useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
+import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 import { PolymorphicComponentPropWithRef, PolymorphicRef } from "@/types/polymorphic"
+import { ChallengeDetailParams, getChallengeDetail } from "@/app/(challenge)/challenges/_libs/getChallengeDetail"
+import {
+  ChallengeSolutionListParams,
+  ChallengeSolutionListSearchParams,
+  getChallengeSolutionList,
+} from "@/app/(service)/challenges/_libs/getChallengeSolutionList"
 import PageHeading from "@/components/display/PageHeading"
 import SolutionCard from "@/components/display/SolutionCard"
 import Notice from "@/components/display/Notice"
@@ -15,9 +22,8 @@ import SolutionFilter, { SolutionFilterTypes, SolutionFilterOptionGroups } from 
 export type ChallengeSolutionHomeProps<C extends React.ElementType> = PolymorphicComponentPropWithRef<
   C,
   {
-    searchParams: {
-      [key in keyof SolutionFilterTypes]?: string
-    }
+    params: ChallengeDetailParams & ChallengeSolutionListParams
+    searchParams: ChallengeSolutionListSearchParams
   }
 >
 
@@ -25,67 +31,24 @@ export type ChallengeSolutionHomeComponent = <C extends React.ElementType = "sec
   props: ChallengeSolutionHomeProps<C>,
 ) => React.ReactNode
 
-const response = {
-  challengeDetail: {
-    id: 1,
-    pedigree: {
-      value: "2024-KAKAO-WINTER-INTERNSHIP",
-      text: "2024 KAKAO WINTER INTERNSHIP",
-    },
-    type: {
-      value: "hash",
-      text: "해시",
-    },
-    title: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus optio id eum totam.
-      Aperiam, saepe dignissimos! Maxime cupiditate, nemo aperiam eos eligendi vero quasi quidem labore hic saepe quos ab?
-    `,
-  },
-  solutionList: {
-    totalPage: 12,
-    totalCount: 120,
-    solutions: [
-      {
-        id: 0,
-        name: "Lorem ipsum",
-        imgUrl: "https://source.unsplash.com/random/300x300/?person",
-        isLiked: true,
-        language: "java",
-        submitCode: `
-import java.util.Scanner;
-
-public class Solution {
-  public static void main(String[] args) {
-    Scanner sc = new Scanner(System.in);
-    String a = sc.next();
-  }
-}`,
-      },
-      {
-        id: 1,
-        name: "Dolor sit",
-        imgUrl: "",
-        isLiked: false,
-        language: "java",
-        submitCode: `
-import java.util.Scanner;
-
-public class Solution {
-  public static void main(String[] args) {
-    Scanner sc = new Scanner(System.in);
-    String a = sc.next();
-  }
-}`,
-      },
-    ],
-  },
-}
-
 const ChallengeSolutionHome: ChallengeSolutionHomeComponent = forwardRef(function ChallengeSolutionHome<
   C extends React.ElementType = "section",
 >(props: ChallengeSolutionHomeProps<C>, ref?: PolymorphicRef<C>): React.ReactNode {
-  const { asTag, searchParams, className = "", ...restProps } = props
+  const { asTag, params, searchParams, className = "", ...restProps } = props
 
   const router = useRouter()
+
+  const { data: challengeDetailData } = useQuery({
+    queryKey: ["challengeDetail", params],
+    queryFn: getChallengeDetail,
+    staleTime: 60 * 1000,
+  })
+
+  const { data: challengeSolutionListData } = useQuery({
+    queryKey: ["challengeSolutionList", params, searchParams],
+    queryFn: getChallengeSolutionList,
+    staleTime: 60 * 1000,
+  })
 
   const memoParams = useMemo(() => {
     const params = new URLSearchParams(searchParams)
@@ -98,11 +61,11 @@ const ChallengeSolutionHome: ChallengeSolutionHomeComponent = forwardRef(functio
         .flatMap(({ options }) => options)
         .find(({ value }) => (params?.get("type") ?? "").split(",")?.includes(value.toString()))?.value ?? "all"
     const page = !isNaN(Number(params?.get("page")))
-      ? Math.max(Math.min(Number(params?.get("page") ?? 1), response?.solutionList?.totalPage), 1)
+      ? Math.max(Math.min(Number(params?.get("page") ?? 1), challengeSolutionListData?.totalPages ?? 0), 1)
       : 1
     const isSearched = [
       Boolean(language !== "java"),
-      Boolean(type !== "all"),
+      // Boolean(type !== "all"),
       // Boolean(page > 1),
     ].includes(true)
     return { language, type, page, isSearched }
@@ -112,7 +75,7 @@ const ChallengeSolutionHome: ChallengeSolutionHomeComponent = forwardRef(functio
     defaultValues: {
       language: memoParams?.language ?? "java",
       type: memoParams?.type ?? "all",
-      size: 10,
+      size: 5,
       page: memoParams?.page ?? 1,
     },
   })
@@ -122,17 +85,21 @@ const ChallengeSolutionHome: ChallengeSolutionHomeComponent = forwardRef(functio
     filterForm.handleSubmit(onSubmit)()
   }
 
-  const onLike = (id: number) => {
-    console.log(id)
-  }
+  // const onLike = (id: number) => {
+  //   console.log(id)
+  // }
 
   const onSubmit = (data: SolutionFilterTypes) => {
-    const newParams = new URLSearchParams({
+    const params = new URLSearchParams({
       ...(data?.language ? { language: data?.language } : {}),
       ...(data?.type ? { type: data?.type } : {}),
       ...(data?.page > 1 ? { page: data?.page?.toString() } : {}),
     })
-    router.replace(`/challenges/${response?.challengeDetail?.id}/solutions?${newParams?.toString()}`)
+    router.replace(`/challenges/${challengeDetailData?.id ?? 0}/solutions?${params?.toString()}`)
+  }
+
+  if (!challengeDetailData || !challengeDetailData?.id) {
+    notFound()
   }
 
   return (
@@ -140,21 +107,21 @@ const ChallengeSolutionHome: ChallengeSolutionHomeComponent = forwardRef(functio
       {/* ChallengeSolutionHomeHeading */}
       <ChallengeSolutionHomeHeading>
         <PageHeading.Breadcrumb>
-          {response?.challengeDetail?.pedigree && (
-            <Link href={`/challenges?pedigree=${response?.challengeDetail?.pedigree?.value}&sort=latest`}>
-              <span>{response?.challengeDetail?.pedigree?.text}</span>
+          {challengeDetailData?.past && (
+            <Link href={`/challenges?pedigree=${challengeDetailData?.past}&sort=latest`}>
+              <span>{challengeDetailData?.past}</span>
             </Link>
           )}
-          {response?.challengeDetail?.type && (
-            <Link href={`/challenges?type=${response?.challengeDetail?.type?.value}&sort=latest`}>
-              <span>{response?.challengeDetail?.type?.text}</span>
+          {challengeDetailData?.type && (
+            <Link href={`/challenges?type=${challengeDetailData?.type}&sort=latest`}>
+              <span>{challengeDetailData?.type}</span>
             </Link>
           )}
-          <Link href={`/challenges/${response?.challengeDetail?.id}`}>
-            <span>{response?.challengeDetail?.title}</span>
+          <Link href={`/challenges/${challengeDetailData?.id ?? 0}`}>
+            <span>{challengeDetailData?.title ?? ""}</span>
           </Link>
         </PageHeading.Breadcrumb>
-        <PageHeading.Title asTag={"h2"}>{response?.challengeDetail?.title ?? ""}</PageHeading.Title>
+        <PageHeading.Title asTag={"h2"}>{challengeDetailData?.title ?? ""}</PageHeading.Title>
       </ChallengeSolutionHomeHeading>
       {/* ChallengeSolutionHomeFilter */}
       <ChallengeSolutionHomeFilter
@@ -172,30 +139,22 @@ const ChallengeSolutionHome: ChallengeSolutionHomeComponent = forwardRef(functio
       />
       {/* ChallengeSolutionHomeResult */}
       <ChallengeSolutionHomeResult>
-        {response?.solutionList?.solutions?.length ? (
+        {challengeSolutionListData?.content?.length ? (
           <>
             <ChallengeSolutionHomeList>
-              {response?.solutionList?.solutions?.map((solution) => (
+              {challengeSolutionListData?.content?.map((solution) => (
                 <SolutionCard key={solution?.id} asTag="li">
-                  <SolutionCard.Profile
-                    cardId={solution?.id}
-                    imgUrl={solution?.imgUrl}
-                    name={solution?.name}
-                    language={solution?.language}
-                  />
+                  <SolutionCard.Profile solution={solution} />
                   <SolutionCard.Content
-                    cardId={solution?.id}
-                    language={solution?.language}
-                    submitCode={solution?.submitCode}
-                    isLiked={solution?.isLiked}
-                    onLike={onLike}
+                    solution={solution}
+                    //onLike={onLike}
                   />
                 </SolutionCard>
               ))}
             </ChallengeSolutionHomeList>
             <Pagination
               page={filterForm.getValues("page")}
-              totalPage={response?.solutionList?.totalPage}
+              totalPages={challengeSolutionListData?.totalPages ?? 0}
               onPaging={onPaging}
             />
           </>

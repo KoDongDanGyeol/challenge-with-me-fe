@@ -1,10 +1,10 @@
 import { Metadata } from "next"
 import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query"
-import { ChallengeListParams, getChallengeList } from "@/app/(service)/challenges/_libs/getChallengeList"
+import { ChallengeListSearchParams, getChallengeList } from "@/app/(service)/challenges/_libs/getChallengeList"
 import ChallengeHome from "@/app/(service)/challenges/_components/display/ChallengeHome"
 
 interface PageProps {
-  searchParams: ChallengeListParams
+  searchParams: ChallengeListSearchParams
 }
 
 export const metadata: Metadata = {

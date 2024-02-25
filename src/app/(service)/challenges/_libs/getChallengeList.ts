@@ -1,7 +1,7 @@
 import { LibsQueryFunction } from "@/libs/utils"
 import { ChallengeFilterTypes } from "@/components/form/ChallengeFilter"
 
-export type ChallengeListParams = {
+export type ChallengeListSearchParams = {
   [key in keyof ChallengeFilterTypes]?: string
 }
 
@@ -44,15 +44,15 @@ export type ChallengeListModel = {
   empty: boolean
 }
 
-export type ChallengeListQueryKey = [_1: string, _2: ChallengeListParams]
+export type ChallengeListQueryKey = [_1: string, _2: ChallengeListSearchParams]
 
 export const getChallengeList: LibsQueryFunction<ChallengeListModel> = async (context) => {
-  const [, queries] = context?.queryKey as ChallengeListQueryKey
-  const params = new URLSearchParams({ ...queries })
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/challenges?${params.toString()}`, {
+  const [, searchParams] = context?.queryKey as ChallengeListQueryKey
+  const newParams = new URLSearchParams({ ...searchParams })
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/challenges?${newParams.toString()}`, {
     method: "get",
     next: {
-      tags: ["challengeList", params.toString()],
+      tags: ["challengeList", newParams.toString()],
     },
   })
   return response.json()
