@@ -6,23 +6,19 @@ import Icon from "@/components/general/Icon"
 
 export interface PaginationMainProps extends React.HTMLAttributes<HTMLElement> {
   page: number
-  totalPages: number
+  totalPage: number
   onPaging?: (number: number) => void
 }
 
 const PaginationMain = (props: PaginationMainProps) => {
-  const { page, totalPages, className = "", onPaging, ...restProps } = props
+  const { page, totalPage, className = "", onPaging, ...restProps } = props
 
   const paging = useMemo(() => {
     const size = 5
     const start = Math.max(Math.floor((page - 1) / size) * size + 1, 1)
-    const end = Math.min(start + (size - 1), totalPages)
+    const end = Math.min(start + (size - 1), totalPage)
     return [...Array(end - start + 1).keys()].map((i) => i + start)
-  }, [page, totalPages])
-
-  if (!totalPages) {
-    return null
-  }
+  }, [page, totalPage])
 
   return (
     <PaginationMainContainer role="navigation" className={`${className}`} {...restProps}>
@@ -36,7 +32,7 @@ const PaginationMain = (props: PaginationMainProps) => {
           <span>{number}</span>
         </button>
       ))}
-      <button type="button" disabled={page === totalPages} onClick={() => onPaging?.(page + 1)}>
+      <button type="button" disabled={page === totalPage} onClick={() => onPaging?.(page + 1)}>
         <Icon name="ChevronRight" aria-hidden={true} />
         <span className="sr-only">다음 페이지</span>
       </button>
