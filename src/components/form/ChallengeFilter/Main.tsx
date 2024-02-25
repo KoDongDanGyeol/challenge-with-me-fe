@@ -39,7 +39,7 @@ const ChallengeFilterMain = FormHoc<ChallengeFilterTypes>((props: ChallengeFilte
     state: getBadge("state"),
     type: getBadge("type"),
     level: getBadge("level"),
-    past: getBadge("past"),
+    pedigree: getBadge("pedigree"),
   }))
 
   const appendBadge = (key: keyof Badge) => {
@@ -58,7 +58,7 @@ const ChallengeFilterMain = FormHoc<ChallengeFilterTypes>((props: ChallengeFilte
     setValue("state", [])
     setValue("type", [])
     setValue("level", [])
-    setValue("past", [])
+    setValue("pedigree", [])
   }
 
   return (
@@ -117,35 +117,33 @@ const ChallengeFilterMain = FormHoc<ChallengeFilterTypes>((props: ChallengeFilte
         />
         <Select<ChallengeFilterTypes>
           control={control}
-          name="past"
+          name="pedigree"
           rules={{}}
           multiple={true}
           shape="square"
-          title={`${formPlaceholder?.past} 선택`}
-          placeholder={formPlaceholder?.past ?? ""}
-          optionGroups={formOptionGroups?.past ?? []}
+          title={`${formPlaceholder?.pedigree} 선택`}
+          placeholder={formPlaceholder?.pedigree ?? ""}
+          optionGroups={formOptionGroups?.pedigree ?? []}
           className="col-select"
           onChange={() => {
-            appendBadge("past")
+            appendBadge("pedigree")
             handleSubmit(handleValid)()
           }}
         />
-        {false && (
-          <Input<ChallengeFilterTypes>
-            control={control}
-            name="keyword"
-            rules={{}}
-            type="text"
-            placeholder={formPlaceholder?.keyword ?? ""}
-            appendIcon={
-              <button type="submit">
-                <Icon name="MagnifyingGlass" aria-hidden={true} />
-                <span className="sr-only">{formAction?.submit ?? "검색"}</span>
-              </button>
-            }
-            className="col-input"
-          />
-        )}
+        <Input<ChallengeFilterTypes>
+          control={control}
+          name="keyword"
+          rules={{}}
+          type="text"
+          placeholder={formPlaceholder?.keyword ?? ""}
+          appendIcon={
+            <button type="submit">
+              <Icon name="MagnifyingGlass" aria-hidden={true} />
+              <span className="sr-only">{formAction?.submit ?? "검색"}</span>
+            </button>
+          }
+          className="col-input"
+        />
       </PageFilter.Search>
       <PageFilter.Badge
         onReset={() => {

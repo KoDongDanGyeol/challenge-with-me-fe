@@ -54,10 +54,6 @@ const SelectMain = <T extends FieldValues>(props: SelectMainProps<T>) => {
     onChange?.()
   }, [field.value])
 
-  if (!optionGroups?.flatMap(({ options }) => options)?.length) {
-    return null
-  }
-
   return (
     <SelectMainContainer
       ref={containerRef}
