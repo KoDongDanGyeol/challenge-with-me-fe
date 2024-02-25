@@ -3,16 +3,12 @@
 import Link from "next/link"
 import styled from "styled-components"
 import Icon from "@/components/general/Icon"
+import { MergeTypes } from "@/libs/utils"
+import { QuestionListModel } from "@/app/(service)/questions/_libs/getQuestionList"
+import { ChallengeQuestionListModel } from "@/app/(service)/challenges/_libs/getChallengeQuestionList"
 
 export interface QuestionListMainProps extends React.HTMLAttributes<HTMLDivElement> {
-  data: {
-    id: number
-    challenge: string
-    title: string
-    name: string
-    createdAt: string
-    answerCounts: number
-  }[]
+  data: MergeTypes<QuestionListModel["content"][number], ChallengeQuestionListModel["content"][number]>[]
 }
 
 const QuestionListMain = (props: QuestionListMainProps) => {
@@ -25,7 +21,7 @@ const QuestionListMain = (props: QuestionListMainProps) => {
           <li key={question?.id}>
             <Link href={`/questions/${question?.id}`}>
               <div className="row-main">
-                <span className="col-challenge">{question?.challenge}</span>
+                {question?.problemTitle && <span className="col-challenge">{question?.problemTitle}</span>}
                 <strong className="col-title">{question?.title}</strong>
               </div>
               <div className="row-extra">

@@ -15,7 +15,9 @@ const SolutionCardProfile = (props: SolutionCardProfileProps) => {
     <SolutionCardProfileContainer className={`${className}`} {...restProps}>
       <Profile.Picture src={solution?.imgUrl} />
       <Profile.Content name={solution?.name}>
-        <span className="col-content">{solution?.language}</span>
+        <span className="col-content">
+          {solution?.language} · {new Date(solution?.createdAt).toJSON().slice(0, 10)}
+        </span>
       </Profile.Content>
     </SolutionCardProfileContainer>
   )
