@@ -3,18 +3,10 @@
 import Link from "next/link"
 import styled from "styled-components"
 import Icon from "@/components/general/Icon"
+import { ChallengeListModel } from "@/app/(service)/challenges/_libs/getchallengeList"
 
 export interface ChallengeListMainProps extends React.HTMLAttributes<HTMLDivElement> {
-  data: {
-    id: number
-    state: string
-    title: string
-    type: string
-    level: string
-    pedigree: string
-    completeCount: number
-    correctRate: number
-  }[]
+  data: ChallengeListModel["content"]
 }
 
 const ChallengeListMain = (props: ChallengeListMainProps) => {
@@ -24,7 +16,7 @@ const ChallengeListMain = (props: ChallengeListMainProps) => {
     <ChallengeListMainContainer className={`${className}`} {...restProps}>
       <table>
         <colgroup>
-          <col style={{ width: "68px" }} />
+          {data?.find((challenge) => challenge?.state) && <col style={{ width: "68px" }} />}
           <col style={{ width: "auto" }} />
           <col style={{ width: "80px" }} />
           <col style={{ width: "120px" }} />
@@ -32,7 +24,7 @@ const ChallengeListMain = (props: ChallengeListMainProps) => {
         </colgroup>
         <thead>
           <tr>
-            <th className="col-state">상태</th>
+            {data?.find((challenge) => challenge?.state) && <th className="col-state">상태</th>}
             <th className="col-title">제목</th>
             <th className="col-level">난이도</th>
             <th className="col-count">완료한 사람</th>
@@ -41,38 +33,38 @@ const ChallengeListMain = (props: ChallengeListMainProps) => {
         </thead>
         <tbody>
           {data.map((challenge) => (
-            <tr key={challenge.id}>
-              {challenge.state === "unsolved" ? (
+            <tr key={challenge?.id}>
+              {challenge?.state === "unsolved" ? (
                 <td className="col-state">
                   <span className="sr-only">안 푼 문제</span>
                 </td>
-              ) : challenge.state === "solving" ? (
+              ) : challenge?.state === "solving" ? (
                 <td className="col-state">
                   <Icon name="ExclamationCircle" className="icon-exclamation" aria-hidden={true} />
                   <span className="sr-only">풀고 있는 문제</span>
                 </td>
-              ) : challenge.state === "solved" ? (
+              ) : challenge?.state === "solved" ? (
                 <td className="col-state">
                   <Icon name="CheckCircle" className="icon-check" aria-hidden={true} />
                   <span className="sr-only">푼 문제</span>
                 </td>
-              ) : (
+              ) : challenge?.state ? (
                 <td className="col-state"></td>
-              )}
+              ) : null}
               <td className="col-title">
-                <Link href={`/challenges/${challenge.id}`}>{challenge.title}</Link>
-                <span className="color-gray">{`${challenge.type} | ${challenge.pedigree}`}</span>
+                <Link href={`/challenges/${challenge?.id}`}>{challenge?.title}</Link>
+                <span className="color-gray">{`${challenge?.type} | ${challenge?.past}`}</span>
               </td>
               <td className="col-level">
-                <span className={`color-level${parseInt(challenge.level.replace(/\D/g, ""), 10)}`}>
-                  {challenge.level}
+                <span className={`color-level${parseInt(challenge?.level.replace(/\D/g, ""), 10)}`}>
+                  {challenge?.level}
                 </span>
               </td>
               <td className="col-count">
-                <span className="color-gray">{`${challenge.completeCount > 9999999 ? "+" : ""}${Math.min(challenge.completeCount, 9999999).toLocaleString("ko-KR")}명`}</span>
+                <span className="color-gray">{`${challenge?.completedUserCount > 9999999 ? "+" : ""}${Math.min(challenge?.completedUserCount, 9999999).toLocaleString("ko-KR")}명`}</span>
               </td>
               <td className="col-rate">
-                <span className="color-gray">{`${Math.round(challenge.correctRate * 100) / 100}%`}</span>
+                <span className="color-gray">{`${Math.round(challenge?.correctRate * 100) / 100}%`}</span>
               </td>
             </tr>
           ))}
