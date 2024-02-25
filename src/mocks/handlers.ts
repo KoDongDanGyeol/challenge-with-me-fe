@@ -46,8 +46,8 @@ export const handlers = [
     const past = [...Array(faker.number.int({ min: 0, max: 5 }))].map(() => faker.lorem.words())
     return HttpResponse.json({
       past: past,
-      content: [...Array(totalElements % 10)].map(() => ({
-        id: faker.string.uuid(),
+      content: [...Array(faker.number.int({ min: 0, max: Math.min(10, totalElements) }))].map(() => ({
+        id: faker.number.int(),
         title: faker.lorem.lines(),
         type: faker.lorem.word(),
         past: getRandomElement(past),
@@ -70,7 +70,7 @@ export const handlers = [
       },
       last: true,
       totalElements: totalElements,
-      totalPages: Math.floor(totalElements / 10),
+      totalPages: Math.ceil(totalElements / 10),
       size: 10,
       number: 0,
       sort: {

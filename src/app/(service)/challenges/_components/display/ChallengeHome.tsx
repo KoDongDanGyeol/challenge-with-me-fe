@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 import { PolymorphicComponentPropWithRef, PolymorphicRef } from "@/types/polymorphic"
-import { ChallengeListParams, getchallengeList } from "@/app/(service)/challenges/_libs/getchallengeList"
+import { ChallengeListParams, getChallengeList } from "@/app/(service)/challenges/_libs/getChallengeList"
 import PageHeading from "@/components/display/PageHeading"
 import ChallengeList from "@/components/display/ChallengeList"
 import Pagination from "@/components/display/Pagination"
@@ -30,16 +30,16 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
   const { asTag, searchParams, className = "", ...restProps } = props
 
   const router = useRouter()
-  const { data } = useQuery({
+  const { data: challengeListData } = useQuery({
     queryKey: ["challengeList", searchParams],
-    queryFn: getchallengeList,
+    queryFn: getChallengeList,
     staleTime: 60 * 1000,
   })
 
   const memoParams = useMemo(() => {
     const params = new URLSearchParams(searchParams)
     const state =
-      (data?.content?.find((challenge) => challenge?.state) &&
+      ((challengeListData?.content ?? [])?.find((challenge) => challenge?.state) &&
         ChallengeFilterOptionGroups.state
           .flatMap(({ options }) => options)
           .filter(({ value }) => (params?.get("state") ?? "")?.split(",")?.includes(value.toString()))
@@ -56,14 +56,16 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
         .filter(({ value }) => (params?.get("level") ?? "")?.split(",")?.includes(value.toString()))
         .map(({ value }) => value) ?? []
     const past =
-      (data?.past ?? []).filter((value) => (params?.get("past") ?? "")?.split(",")?.includes(value.toString())) ?? []
+      (challengeListData?.past ?? []).filter((value) =>
+        (params?.get("past") ?? "")?.split(",")?.includes(value.toString()),
+      ) ?? []
     const keyword = params?.get("keyword") ?? ""
     const sort =
       ChallengeFilterOptionGroups.sort
         .flatMap(({ options }) => options)
-        .find(({ value }) => (params?.get("sort") ?? "").split(",")?.includes(value.toString()))?.value ?? "latest"
+        .find(({ value }) => (params?.get("sort") ?? "").split(",")?.includes(value.toString()))?.value ?? "createdAt"
     const page = !isNaN(Number(params?.get("page")))
-      ? Math.max(Math.min(Number(params?.get("page") ?? 1), data?.totalPages ?? 0), 1)
+      ? Math.max(Math.min(Number(params?.get("page") ?? 1), challengeListData?.totalPages ?? 0), 1)
       : 1
     const isSearched = [
       Boolean(state.length),
@@ -71,11 +73,11 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
       Boolean(level.length),
       Boolean(past.length),
       Boolean(keyword.length),
-      // Boolean(sort !== "latest"),
+      // Boolean(sort !== "createdAt"),
       // Boolean(page > 1),
     ].includes(true)
     return { state, type, level, past, keyword, sort, page, isSearched }
-  }, [searchParams, data?.content, data?.past, data?.totalPages])
+  }, [searchParams, challengeListData?.content, challengeListData?.past, challengeListData?.totalPages])
 
   const filterForm = useForm<ChallengeFilterTypes>({
     defaultValues: {
@@ -84,7 +86,7 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
       level: memoParams?.level ?? [],
       past: memoParams?.past ?? [],
       keyword: memoParams?.keyword ?? "",
-      sort: memoParams?.sort ?? "latest",
+      sort: memoParams?.sort ?? "createdAt",
       page: memoParams?.page ?? 1,
     },
   })
@@ -115,7 +117,7 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
       </ChallengeHomeHeading>
       {/* ChallengeHomeFilter */}
       <ChallengeHomeFilter
-        formTitle={memoParams?.isSearched ? `검색된 문제 ${data?.totalElements}개` : `모든 문제`}
+        formTitle={memoParams?.isSearched ? `검색된 문제 ${challengeListData?.totalElements ?? 0}개` : `모든 문제`}
         formData={filterForm}
         formPlaceholder={{
           state: "상태",
@@ -126,11 +128,15 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
           keyword: "문제 제목, 기출문제 검색",
         }}
         formOptionGroups={{
-          state: data?.content?.find((challenge) => challenge?.state) ? ChallengeFilterOptionGroups?.state : [] ?? [],
+          state: (challengeListData?.content ?? [])?.find((challenge) => challenge?.state)
+            ? ChallengeFilterOptionGroups?.state
+            : [] ?? [],
           type: ChallengeFilterOptionGroups?.type ?? [],
           level: ChallengeFilterOptionGroups?.level ?? [],
           sort: ChallengeFilterOptionGroups?.sort ?? [],
-          past: [{ label: "기출 선택", options: (data?.past ?? []).map((value) => ({ value, text: value })) }],
+          past: [
+            { label: "기출 선택", options: (challengeListData?.past ?? []).map((value) => ({ value, text: value })) },
+          ],
         }}
         formAction={{
           submit: "검색",
@@ -139,10 +145,14 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
       />
       {/* ChallengeHomeResult */}
       <ChallengeHomeResult>
-        {data?.content?.length ? (
+        {(challengeListData?.content ?? [])?.length ? (
           <>
-            <ChallengeList data={data?.content ?? []} />
-            <Pagination page={filterForm.getValues("page")} totalPages={data?.totalPages ?? 0} onPaging={onPaging} />
+            <ChallengeList data={challengeListData?.content ?? []} />
+            <Pagination
+              page={filterForm.getValues("page")}
+              totalPages={challengeListData?.totalPages ?? 0}
+              onPaging={onPaging}
+            />
           </>
         ) : memoParams && memoParams?.isSearched ? (
           <Notice type="block">

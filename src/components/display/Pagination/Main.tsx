@@ -14,6 +14,7 @@ const PaginationMain = (props: PaginationMainProps) => {
   const { page, totalPages, className = "", onPaging, ...restProps } = props
 
   const paging = useMemo(() => {
+    if (!totalPages) return []
     const size = 5
     const start = Math.max(Math.floor((page - 1) / size) * size + 1, 1)
     const end = Math.min(start + (size - 1), totalPages)
