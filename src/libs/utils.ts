@@ -1,3 +1,5 @@
+import { QueryFunctionContext, QueryKey } from "@tanstack/react-query"
+
 export type Nullable<T> = T | null | undefined
 
 export type NonNullable<T> = T extends null | undefined ? never : T
@@ -11,6 +13,10 @@ export type ObjectEntries<T extends object> = {
 export type ObjectKeys<T extends object> = Array<keyof T>
 
 export type ObjectValues<T extends object> = Array<T[keyof T]>
+
+export type LibsQueryFunction<T = unknown, TQueryKey extends QueryKey = QueryKey, TPageParam = never> = (
+  context?: Partial<QueryFunctionContext<TQueryKey, TPageParam>>,
+) => T | Promise<T>
 
 export const isEquals = (...arrays: unknown[][]): boolean => {
   if (arrays.length < 2) return false

@@ -1,6 +1,6 @@
 import { Metadata } from "next"
 import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query"
-import { ChallengeListParams, getchallengeList } from "@/app/(service)/challenges/_libs/getchallengeList"
+import { ChallengeListParams, getChallengeList } from "@/app/(service)/challenges/_libs/getChallengeList"
 import ChallengeHome from "@/app/(service)/challenges/_components/display/ChallengeHome"
 
 interface PageProps {
@@ -16,7 +16,7 @@ const page = async ({ searchParams }: PageProps) => {
   const queryClient = new QueryClient()
   await queryClient.prefetchQuery({
     queryKey: ["challengeList", searchParams],
-    queryFn: getchallengeList,
+    queryFn: getChallengeList,
   })
   const dehydratedState = dehydrate(queryClient)
 

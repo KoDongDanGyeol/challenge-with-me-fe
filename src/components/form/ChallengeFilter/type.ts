@@ -54,9 +54,9 @@ export const ChallengeFilterOptionGroups = {
     {
       label: "정렬 선택",
       options: [
-        { value: "latest", text: "최신순" },
-        { value: "high", text: "정답률 높은 순" },
-        { value: "low", text: "정답률 낮은 순" },
+        { value: "createdAt", text: "최신순" },
+        { value: "correctRateAsc", text: "정답률 높은 순" },
+        { value: "correctRateDesc", text: "정답률 낮은 순" },
       ],
     },
   ],

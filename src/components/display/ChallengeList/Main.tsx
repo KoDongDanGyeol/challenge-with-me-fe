@@ -3,7 +3,7 @@
 import Link from "next/link"
 import styled from "styled-components"
 import Icon from "@/components/general/Icon"
-import { ChallengeListModel } from "@/app/(service)/challenges/_libs/getchallengeList"
+import { ChallengeListModel } from "@/app/(service)/challenges/_libs/getChallengeList"
 
 export interface ChallengeListMainProps extends React.HTMLAttributes<HTMLDivElement> {
   data: ChallengeListModel["content"]
