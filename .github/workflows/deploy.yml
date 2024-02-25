@@ -14,6 +14,7 @@ permissions:
 
 jobs:
   DeployApp:
+    environment: challenge-with-me-fe-env
     runs-on: ubuntu-latest
     steps:
       - name: Git clone the repository
