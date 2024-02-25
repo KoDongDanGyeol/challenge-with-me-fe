@@ -10,6 +10,23 @@ const generateDate = () => {
   })
 }
 
+const getChallengeTestcase = () => {
+  return [...Array(faker.number.int({ min: 2, max: 5 }))].map(() => ({
+    input: [JSON.stringify(faker.lorem.words().split(" ")), JSON.stringify(faker.lorem.words().split(" "))],
+    expected: faker.number.int(),
+  }))
+}
+
+const getChallengeDescription = (testcase: { input: string[]; expected: number }[]) => {
+  return `
+##### 문제 설명\n
+${faker.lorem.lines({ min: 2, max: 10 })}
+##### 제한사항\n
+${[...Array(faker.number.int({ min: 2, max: 5 }))].map(() => `- ${faker.lorem.words()}`).join("\n")}\n
+##### 입출력 예\n
+| name | return |\n| ------ | ------ |\n${testcase.map(({ input, expected }) => `| ${input} | ${expected} |`).join("\n")}`
+}
+
 const getRandomElement = (array: unknown[]) => {
   return array[Math.floor(Math.random() * array.length)]
 }
@@ -81,6 +98,100 @@ export const handlers = [
       first: true,
       numberOfElements: totalElements % 10,
       empty: totalElements === 0,
+    })
+  }),
+  // challengeDetail
+  http.get("/api/challenges/:problemId", ({ params }) => {
+    const { problemId } = params
+    const testcase = getChallengeTestcase()
+    return HttpResponse.json({
+      id: problemId,
+      title: faker.lorem.lines(),
+      type: faker.lorem.word(),
+      past: faker.lorem.words(),
+      description: getChallengeDescription(testcase),
+      testcases: [
+        {
+          testcaseTypes: {
+            inputTypes: ["int[]", "int[]"],
+            outputType: "int",
+          },
+          testcaseValues: testcase,
+          hiddenTestcaseCount: faker.number.int({ min: 5, max: 10 }),
+        },
+      ],
+      questionsCount: faker.number.int({ min: 0, max: 15 }),
+      // isSuccessSoluction: true,
+    })
+  }),
+  // challengeTestcase
+  http.get("/api/challenges/:problemId/testcase", ({ params }) => {
+    const testcase = getChallengeTestcase()
+    return HttpResponse.json({
+      testcaseTypes: {
+        input: ["int[]", "int[]"],
+        expected: "int",
+      },
+      testcaseValues: testcase,
+    })
+  }),
+  // challengeRun
+  http.post("/api/challenges/:problemId/run", ({ params }) => {
+    return HttpResponse.json({
+      submitType: "run",
+      runResult: [
+        {
+          input: ["12"],
+          expected: "28",
+          output: "실행한 결괏값 50이 기댓값 28과 다릅니다.",
+          performance: 1,
+          errorMsg: null,
+        },
+        {
+          input: ["12"],
+          expected: "28",
+          output: "테스트를 통과하였습니다.",
+          performance: 0,
+          errorMsg: null,
+          passed: true,
+        },
+      ],
+    })
+  }),
+  // challengeSubmit
+  http.post("/api/challenges/:problemId/submit", ({ params }) => {
+    return HttpResponse.json({
+      submitType: "submit",
+      runResult: [
+        {
+          input: ["12"],
+          expected: "28",
+          output: "실행한 결괏값 16이 기댓값 28과 다릅니다.",
+          performance: 0,
+          errorMsg: null,
+          passed: false,
+        },
+        {
+          input: ["0"],
+          expected: "0",
+          output: "테스트를 통과하였습니다.",
+          performance: 0,
+          errorMsg: null,
+          passed: true,
+        },
+      ],
+      submitResult: [
+        {
+          errorMsg: null,
+          accuracyTest: "실패 (수행시간 : 0)",
+          passed: false,
+        },
+        {
+          errorMsg: null,
+          accuracyTest: "통과 (수행시간 : 0)",
+          passed: true,
+        },
+      ],
     })
   }),
 ]

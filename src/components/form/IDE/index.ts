@@ -7,7 +7,13 @@ import IDESolutionEditor, { IDESolutionEditorProps } from "@/components/form/IDE
 import IDESolutionResult, { IDESolutionResultProps } from "@/components/form/IDE/SolutionResult"
 import IDETestcaseEditor, { IDETestcaseEditorProps } from "@/components/form/IDE/TestcaseEditor"
 import IDETestcaseResult, { IDETestcaseResultProps } from "@/components/form/IDE/TestcaseResult"
-import { IDETypes, IDEGridArea, IDESolutionResultStatus, IDESolutionResultType } from "@/components/form/IDE/type"
+import {
+  IDETypes,
+  IDEGridArea,
+  IDESolutionResultStatus,
+  IDESolutionResultType,
+  IDESolutionInitialValue,
+} from "@/components/form/IDE/type"
 
 export type {
   IDETypes,
@@ -24,6 +30,8 @@ export type {
   IDETestcaseEditorProps,
   IDETestcaseResultProps,
 }
+
+export { IDESolutionInitialValue }
 
 export default Object.assign(IDEMain, {
   Grid: IDEGrid,

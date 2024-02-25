@@ -3,24 +3,20 @@
 import styled from "styled-components"
 import Icon from "@/components/general/Icon"
 import { IDESolutionResultStatus, IDESolutionResultType } from "@/components/form/IDE/type"
+import { ChallengeRunModel } from "@/app/(challenge)/challenges/_libs/postChallengeRun"
 
 export interface IDESolutionResultProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
   resultType: IDESolutionResultType
   resultStatus: IDESolutionResultStatus
-  resultGrade: {
-    input?: string[]
-    output?: string
-    passed?: boolean
-    expected?: string
-    errorMsg?: string | null
-  }[]
+  runResult: ChallengeRunModel["runResult"]
+  submitResult: ChallengeRunModel["submitResult"]
 }
 
 const IDESolutionResult = (props: IDESolutionResultProps) => {
-  const { resultType, resultStatus, resultGrade = [], className = "", ...restProps } = props
+  const { resultType, resultStatus, runResult = [], submitResult = [], className = "", ...restProps } = props
 
-  const countAll = resultGrade.length
-  const countPassed = resultGrade.filter((result) => result?.passed).length
+  const countAll = runResult.length + submitResult.length
+  const countPassed = [...runResult, ...submitResult].filter((result) => result?.passed).length
 
   if (resultType === IDESolutionResultType.Ready) {
     return (
@@ -44,7 +40,7 @@ const IDESolutionResult = (props: IDESolutionResultProps) => {
               {resultStatus === IDESolutionResultStatus.Complete && "채점이 완료되었습니다"}
             </p>
             <div className="markdown-table">
-              {resultGrade.map((grade, index) => (
+              {runResult.map((result, index) => (
                 <table key={index}>
                   <colgroup>
                     <col style={{ width: "100px" }} />
@@ -56,11 +52,11 @@ const IDESolutionResult = (props: IDESolutionResultProps) => {
                     </tr>
                     <tr>
                       <td>입력값</td>
-                      <td>{grade.input}</td>
+                      <td>{result?.input}</td>
                     </tr>
                     <tr>
                       <td>기댓값</td>
-                      <td>{grade.expected}</td>
+                      <td>{result?.expected}</td>
                     </tr>
                     <tr>
                       <td>실행 결과</td>
@@ -73,8 +69,8 @@ const IDESolutionResult = (props: IDESolutionResultProps) => {
                         )}
                         {resultStatus === IDESolutionResultStatus.Cancel && null}
                         {resultStatus === IDESolutionResultStatus.Complete && (
-                          <span className={grade.passed ? "color-success" : "color-danger"}>
-                            {grade.output || grade.errorMsg || ""}
+                          <span className={result?.passed ? "color-success" : "color-danger"}>
+                            {result?.output || result?.errorMsg || ""}
                           </span>
                         )}
                       </td>
@@ -114,13 +110,53 @@ const IDESolutionResult = (props: IDESolutionResultProps) => {
               {resultStatus === IDESolutionResultStatus.Complete && "채점이 완료되었습니다"}
             </p>
             <div className="markdown-table">
+              {runResult.map((result, index) => (
+                <table key={index}>
+                  <colgroup>
+                    <col style={{ width: "100px" }} />
+                    <col style={{ width: "auto" }} />
+                  </colgroup>
+                  <tbody>
+                    <tr>
+                      <td colSpan={2}>{`테스트 ${index + 1}`}</td>
+                    </tr>
+                    <tr>
+                      <td>입력값</td>
+                      <td>{result?.input}</td>
+                    </tr>
+                    <tr>
+                      <td>기댓값</td>
+                      <td>{result?.expected}</td>
+                    </tr>
+                    <tr>
+                      <td>실행 결과</td>
+                      <td>
+                        {resultStatus === IDESolutionResultStatus.Wait && (
+                          <span>
+                            <Icon name="Loading" className="icon-loading" aria-hidden={true} />
+                            <span className="sr-only">loading</span>
+                          </span>
+                        )}
+                        {resultStatus === IDESolutionResultStatus.Cancel && null}
+                        {resultStatus === IDESolutionResultStatus.Complete && (
+                          <span className={result?.passed ? "color-success" : "color-danger"}>
+                            {result?.output || result?.errorMsg || ""}
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              ))}
+            </div>
+            <div className="markdown-table">
               <table>
                 <colgroup>
                   <col style={{ width: "100px" }} />
                   <col style={{ width: "auto" }} />
                 </colgroup>
                 <tbody>
-                  {resultGrade.map((grade, index) => (
+                  {submitResult.map((result, index) => (
                     <tr key={index}>
                       <td>{`테스트 ${index + 1}`}</td>
                       <td>
@@ -132,8 +168,8 @@ const IDESolutionResult = (props: IDESolutionResultProps) => {
                         )}
                         {resultStatus === IDESolutionResultStatus.Cancel && null}
                         {resultStatus === IDESolutionResultStatus.Complete && (
-                          <span className={grade.passed ? "color-success" : "color-danger"}>
-                            {grade.output || grade.errorMsg || ""}
+                          <span className={result?.passed ? "color-success" : "color-danger"}>
+                            {result?.accuracyTest || result?.errorMsg || ""}
                           </span>
                         )}
                       </td>
@@ -146,7 +182,7 @@ const IDESolutionResult = (props: IDESolutionResultProps) => {
           {resultStatus === IDESolutionResultStatus.Complete && (
             <div className="markdown-card">
               <strong>채점 결과</strong>
-              <p>{(countPassed / countAll) * 100} / 100</p>
+              <p>{Math.ceil((countPassed / countAll) * 100 * 100) / 100} / 100</p>
             </div>
           )}
         </div>

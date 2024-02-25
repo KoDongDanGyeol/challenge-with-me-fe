@@ -386,8 +386,8 @@ const StyledGlobal = styled.createGlobalStyle`
     }
 
     .markdown-table-auto {
+      overflow-x: auto;
       table {
-        overflow-x: auto;
         width: auto;
       }
     }
