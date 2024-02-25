@@ -30,6 +30,7 @@ const ChallengeHome: ChallengeHomeComponent = forwardRef(function ChallengeHome<
   const { asTag, searchParams, className = "", ...restProps } = props
 
   const router = useRouter()
+
   const { data: challengeListData } = useQuery({
     queryKey: ["challengeList", searchParams],
     queryFn: getChallengeList,

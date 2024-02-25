@@ -31,12 +31,31 @@ const QuestionFilterMain = FormHoc<QuestionFilterTypes>((props: QuestionFilterMa
       {...restProps}
     >
       <PageFilter.Search>
+        {false && (
+          <Input<QuestionFilterTypes>
+            control={control}
+            name="keyword"
+            rules={{}}
+            type="text"
+            placeholder={formPlaceholder?.keyword ?? ""}
+            appendIcon={
+              <button type="submit">
+                <Icon name="MagnifyingGlass" aria-hidden={true} />
+                <span className="sr-only">{formAction?.submit ?? "검색"}</span>
+              </button>
+            }
+            className="col-input"
+          />
+        )}
+      </PageFilter.Search>
+      <PageFilter.Title>{formTitle}</PageFilter.Title>
+      <PageFilter.Action>
         <Select<QuestionFilterTypes>
           control={control}
           name="state"
           rules={{}}
           multiple={false}
-          shape="square"
+          shape="plain"
           title={`${formPlaceholder?.state} 선택`}
           placeholder={formPlaceholder?.state ?? ""}
           optionGroups={formOptionGroups?.state ?? []}
@@ -45,23 +64,6 @@ const QuestionFilterMain = FormHoc<QuestionFilterTypes>((props: QuestionFilterMa
             handleSubmit(handleValid)()
           }}
         />
-        <Input<QuestionFilterTypes>
-          control={control}
-          name="keyword"
-          rules={{}}
-          type="text"
-          placeholder={formPlaceholder?.keyword ?? ""}
-          appendIcon={
-            <button type="submit">
-              <Icon name="MagnifyingGlass" aria-hidden={true} />
-              <span className="sr-only">{formAction?.submit ?? "검색"}</span>
-            </button>
-          }
-          className="col-input"
-        />
-      </PageFilter.Search>
-      <PageFilter.Title>{formTitle}</PageFilter.Title>
-      <PageFilter.Action>
         <Select<QuestionFilterTypes>
           control={control}
           name="sort"

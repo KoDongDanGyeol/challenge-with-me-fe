@@ -206,11 +206,97 @@ export const handlers = [
         submitCode: `import java.util.Scanner;\n  public class Solution {\n    public static void main(String[] args) {\n      Scanner sc = new Scanner(System.in);\n      String a = sc.next();\n    }\n  }`,
         language: "java",
         status: "성공",
-        createdAt: faker.date.anytime,
-        modifiedAt: faker.date.anytime,
+        createdAt: faker.date.anytime(),
+        modifiedAt: faker.date.anytime(),
         name: faker.internet.userName(),
         imgUrl: "https://source.unsplash.com/random/300x300/?person",
         correct: true,
+      })),
+      pageable: {
+        pageNumber: 0,
+        pageSize: 5,
+        sort: {
+          empty: false,
+          unsorted: false,
+          sorted: true,
+        },
+        offset: 0,
+        paged: true,
+        unpaged: false,
+      },
+      last: true,
+      totalPages: Math.ceil(totalElements / 10),
+      totalElements: totalElements,
+      size: 5,
+      number: 0,
+      sort: {
+        empty: false,
+        unsorted: false,
+        sorted: true,
+      },
+      first: true,
+      numberOfElements: totalElements % 10,
+      empty: totalElements === 0,
+    })
+  }),
+  // challengeQuestionList
+  http.get("/api/questions/:problemId/group", ({ params }) => {
+    const { problemId } = params
+    const totalElements = faker.number.int({ min: 0, max: 500 })
+    return HttpResponse.json({
+      content: [...Array(faker.number.int({ min: 0, max: Math.min(5, totalElements) }))].map(() => ({
+        id: faker.number.int(),
+        problemId: problemId,
+        title: faker.lorem.lines(),
+        memberId: faker.number.int({ min: 1, max: 5 }),
+        answerCounts: faker.number.int({ min: 1, max: 200 }),
+        name: faker.internet.userName(),
+        profileImgUrl: "https://source.unsplash.com/random/300x300/?person",
+        createdAt: faker.date.anytime(),
+        modifiedAt: faker.date.anytime(),
+      })),
+      pageable: {
+        pageNumber: 0,
+        pageSize: 5,
+        sort: {
+          empty: false,
+          unsorted: false,
+          sorted: true,
+        },
+        offset: 0,
+        paged: true,
+        unpaged: false,
+      },
+      last: true,
+      totalPages: Math.ceil(totalElements / 10),
+      totalElements: totalElements,
+      size: 5,
+      number: 0,
+      sort: {
+        empty: false,
+        unsorted: false,
+        sorted: true,
+      },
+      first: true,
+      numberOfElements: totalElements % 10,
+      empty: totalElements === 0,
+    })
+  }),
+  // questionList
+  http.get("/api/questions/group", () => {
+    const totalElements = faker.number.int({ min: 0, max: 500 })
+    return HttpResponse.json({
+      content: [...Array(faker.number.int({ min: 0, max: Math.min(5, totalElements) }))].map(() => ({
+        id: faker.number.int(),
+        problemId: faker.number.int(),
+        problemTitle: faker.lorem.lines(),
+        title: faker.lorem.lines(),
+        memberId: faker.number.int({ min: 1, max: 5 }),
+        answerCounts: faker.number.int({ min: 1, max: 200 }),
+        name: faker.internet.userName(),
+        profileImgUrl: "https://source.unsplash.com/random/300x300/?person",
+        createdAt: faker.date.anytime(),
+        modifiedAt: faker.date.anytime(),
       })),
       pageable: {
         pageNumber: 0,

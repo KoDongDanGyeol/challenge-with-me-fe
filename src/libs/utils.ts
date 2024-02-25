@@ -14,6 +14,12 @@ export type ObjectKeys<T extends object> = Array<keyof T>
 
 export type ObjectValues<T extends object> = Array<T[keyof T]>
 
+export type MergeTypes<T, U> = {
+  [K in Extract<keyof T, keyof U>]: T[K]
+} & {
+  [K in Exclude<keyof T, keyof U>]?: T[K]
+}
+
 export type LibsQueryFunction<T = unknown, TQueryKey extends QueryKey = QueryKey, TPageParam = never> = (
   context?: Partial<QueryFunctionContext<TQueryKey, TPageParam>>,
 ) => T | Promise<T>
