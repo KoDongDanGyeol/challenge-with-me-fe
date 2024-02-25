@@ -1,18 +1,29 @@
 "use client"
 
 import { forwardRef, useState } from "react"
-import { useForm } from "react-hook-form"
 import Link from "next/link"
+import { notFound } from "next/navigation"
+import { useForm } from "react-hook-form"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 import { PolymorphicComponentPropWithRef, PolymorphicRef } from "@/types/polymorphic"
-import IDE, { IDETypes, IDESolutionResultType, IDESolutionResultStatus } from "@/components/form/IDE"
-import PageHeading from "@/components/display/PageHeading"
+import { ChallengeDetailParams, getChallengeDetail } from "@/app/(challenge)/challenges/_libs/getChallengeDetail"
+import { ChallengeTestcaseParams, getChallengeTestcase } from "@/app/(challenge)/challenges/_libs/getChallengeTestcase"
+import { ChallengeRunModel, postChallengeRun } from "@/app/(challenge)/challenges/_libs/postChallengeRun"
+import { ChallengeSubmitModel, postChallengeSubmit } from "@/app/(challenge)/challenges/_libs/postChallengeSubmit"
 import Button from "@/components/general/Button"
+import PageHeading from "@/components/display/PageHeading"
+import IDE, {
+  IDETypes,
+  IDESolutionResultType,
+  IDESolutionResultStatus,
+  IDESolutionInitialValue,
+} from "@/components/form/IDE"
 
 export type ChallengeDetailProps<C extends React.ElementType> = PolymorphicComponentPropWithRef<
   C,
   {
-    //
+    params: ChallengeDetailParams & ChallengeTestcaseParams
   }
 >
 
@@ -20,193 +31,141 @@ export type ChallengeDetailComponent = <C extends React.ElementType = "article">
   props: ChallengeDetailProps<C>,
 ) => React.ReactNode
 
-const response = {
-  challengeDetail: {
-    id: 1,
-    pedigree: {
-      value: "2024-KAKAO-WINTER-INTERNSHIP",
-      text: "2024 KAKAO WINTER INTERNSHIP",
-    },
-    type: {
-      value: "hash",
-      text: "해시",
-    },
-    title: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus optio id eum totam.
-      Aperiam, saepe dignissimos! Maxime cupiditate, nemo aperiam eos eligendi vero quasi quidem labore hic saepe quos ab?
-    `,
-    content: `
-  # Heading 1
-  ## Heading 2
-  ### Heading 3
-  #### Heading 4
-  ##### Heading 5
-  ###### Heading 6
-  
-  **Bold** or __Bold__
-  
-  *Italic* or _Italic_
-  
-  ~Cancel~ or ~~Cancel~~
-  
-  [Link Text](http://www.google.com/)
-  
-  ![Alt Text]()
-  
-  - ul>li 1
-  - ul>li 2
-      - ul>li 2-1
-      - ul>li 2-2
-          - ul>li 3-1
-          - ul>li 3-2
-  
-  1. ol>li 1
-  2. ol>li 2
-      1. ol>li 2-1
-      2. ol>li 2-2
-  
-  * [ ] Task
-  * [x] Checked
-  
-  > Blockquotes
-  
-  | th 1 | th 2 |
-  | ------ | ------ |
-  | td 1   | td 2   |
-  
-  | a | b  |  c |  d  |
-  | - | :- | -: | :-: |
-  | lorem   | lorem   | lorem   | lorem   |
-  
-  Lorem \`ipsum\` dolor
-  
-  ~~~java
-  import java.util.Scanner;
-  
-  public class Solution {
-    public static void main(String[] args) {
-      Scanner sc = new Scanner(System.in);
-      String a = sc.next();
-    }
-  }
-  ~~~
-  
-  \`\`\`java
-  import java.util.Scanner;
-  
-  public class Solution {
-    public static void main(String[] args) {
-      Scanner sc = new Scanner(System.in);
-      String a = sc.next();
-    }
-  }
-  \`\`\`
-  
-  ---
-  
-  ***
-  
-  # XSS Attack Vectors
-  
-  ## Potential Exploits
-  
-  - Exploit 1: [malicious payload](javascript:alert("hi%20there"))
-  - Exploit 2: <a>hello</a>
-  - Exploit 3: <script>alert('Exploit 3')</script>
-  - Exploit 4: <a href="\x01javascript:javascript:alert(1)">test</a>
-  - Exploit 5: [![owasp]()](javascript:javascript:alert("Exploit%205"))
-  - Exploit 6: [__bold exploit__](javascript:javascript:alert("Exploit%206"))
-  - Exploit 7: [*italic exploit*](javascript:javascript:alert("Exploit%207"))
-  - Exploit 8: [really anything](javascript:javascript:alert("Exploit%208"))
-  - Exploit 9: [really anything - single](javascript:alert("Exploit%209"))
-  - Exploit 10: <a href="javascript:alert("Hello")">Hello!</a>
-  
-  ## Working Exploits
-  
-  - None!
-  
-  ## Other
-  
-  - This is a [real link to Google](https://google.com).
-  
-  ---
-  
-  Here is a simple footnote[^1]. With some additional text after it.
-  
-  [^1]: My reference.
-    `,
-    testcaseType: {
-      input: ["int[][]", "int", "int"],
-      expected: "int",
-    },
-    testcaseValue: [
-      {
-        input: ["[[1,2],[2,3]]", "3", "2"],
-        expected: "28",
-      },
-      {
-        input: ["[[4,4,3],[3,2,2],[2,1,0]]", "5", "3"],
-        expected: "0",
-      },
-    ],
-    questionCount: 2,
-  },
-  challengeIDE: {
-    result: {
-      resultType: "ready" as IDESolutionResultType,
-      resultStatus: "complete" as IDESolutionResultStatus,
-      resultGrade: [
-        {
-          input: ["[[1,2],[2,3]]", "3", "2"],
-          expected: "28",
-          output: "실행한 결괏값 50이 기댓값 28과 다릅니다.",
-          passed: false,
-          errorMsg: "lorem...",
-        },
-        {
-          input: ["[[4,4,3],[3,2,2],[2,1,0]]", "5", "3"],
-          expected: "0",
-          output: "테스트를 통과하였습니다.",
-          passed: true,
-          errorMsg: "lorem...",
-        },
-      ],
-    },
-  },
-}
-
 const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeDetail<
   C extends React.ElementType = "article",
 >(props: ChallengeDetailProps<C>, ref?: PolymorphicRef<C>): React.ReactNode {
-  const { asTag, className = "", ...restProps } = props
+  const { asTag, params, className = "", ...restProps } = props
 
   const [structure, setStructure] = useState<{
     mode: "solution" | "testcase"
     language: "java"
+    resultType: IDESolutionResultType
+    resultStatus: IDESolutionResultStatus
+    runResult: ChallengeRunModel["runResult"]
+    submitResult: ChallengeRunModel["submitResult"]
   }>({
     mode: "solution",
     language: "java",
+    resultType: "ready",
+    resultStatus: "complete",
+    runResult: [],
+    submitResult: [],
   })
 
-  const { control, formState, getValues, setValue, resetField, handleSubmit } = useForm<IDETypes>({
+  const { data: challengeDetailData } = useQuery({
+    queryKey: ["challengeDetail", params],
+    queryFn: getChallengeDetail,
+    staleTime: 60 * 1000,
+  })
+
+  const { data: challengeTestcaseData } = useQuery({
+    queryKey: ["challengeTestcase", params],
+    queryFn: getChallengeTestcase,
+    staleTime: 60 * 1000,
+  })
+
+  const { control, formState, getValues, setValue, resetField, watch, handleSubmit } = useForm<IDETypes>({
     defaultValues: {
-      solution: "",
-      testcaseType: response?.challengeDetail?.testcaseType,
-      testcaseValue: {
-        public: response?.challengeDetail?.testcaseValue.map(({ input, expected }) => ({ input, expected })),
+      id: challengeDetailData?.id ?? 0,
+      solution: IDESolutionInitialValue[structure?.language] ?? "",
+      testcaseTypes: {
+        input: challengeTestcaseData?.testcaseTypes?.input ?? [],
+        expected: challengeTestcaseData?.testcaseTypes?.expected ?? "",
+      },
+      testcaseValues: {
+        public: challengeTestcaseData?.testcaseValues ?? [],
         userSaved: [],
         userDraft: [],
       },
     },
   })
 
+  const mutationRun = useMutation<Response, unknown, IDETypes>({
+    mutationFn: (variables) => {
+      setStructure((prev) => ({
+        ...prev,
+        resultType: "run",
+        resultStatus: "wait",
+        runResult: (challengeTestcaseData?.testcaseValues ?? [])?.map(({ input, expected }) => ({
+          input,
+          expected,
+        })),
+        submitResult: [],
+      }))
+      return postChallengeRun(variables)
+    },
+    onSuccess: async (response) => {
+      const data: ChallengeRunModel = await response.json()
+      setStructure((prev) => ({
+        ...prev,
+        resultType: "run",
+        resultStatus: "complete",
+        runResult: data?.runResult ?? [],
+        submitResult: data?.submitResult ?? [],
+      }))
+    },
+    onError: (error) => {
+      console.error(error)
+      setStructure((prev) => ({
+        ...prev,
+        resultType: "run",
+        resultStatus: "complete",
+        runResult: [],
+        submitResult: [],
+      }))
+    },
+  })
+
+  const mutationSubmit = useMutation<Response, unknown, IDETypes>({
+    mutationFn: (variables) => {
+      setStructure((prev) => ({
+        ...prev,
+        resultType: "submit",
+        resultStatus: "wait",
+        runResult: (challengeTestcaseData?.testcaseValues ?? [])?.map(({ input, expected }) => ({
+          input,
+          expected,
+        })),
+        submitResult: [...Array(challengeDetailData?.testcases?.[0]?.hiddenTestcaseCount ?? 0)].map(() => ({
+          accuracyTest: "",
+        })),
+      }))
+      return postChallengeSubmit(variables)
+    },
+    onSuccess: async (response) => {
+      const data: ChallengeSubmitModel = await response.json()
+      setStructure((prev) => ({
+        ...prev,
+        resultType: "submit",
+        resultStatus: "complete",
+        runResult: data?.runResult ?? [],
+        submitResult: data?.submitResult ?? [],
+      }))
+    },
+    onError: (error) => {
+      console.error(error)
+      setStructure((prev) => ({
+        ...prev,
+        resultType: "submit",
+        resultStatus: "complete",
+        runResult: [],
+        submitResult: [],
+      }))
+    },
+  })
+
   const onSubmit = (data: IDETypes) => {
     if (structure.mode === "testcase") {
-      if (formState.errors.testcaseValue?.userDraft?.root) return
-      setValue("testcaseValue.userSaved", getValues("testcaseValue.userDraft"))
+      if (formState.errors.testcaseValues?.userDraft?.root) return
+      setValue("testcaseValues.userSaved", getValues("testcaseValues.userDraft"))
       setStructure((prev) => ({ ...prev, mode: "solution" }))
       return
     }
-    console.log(data)
+    mutationSubmit.mutate(data)
+  }
+
+  if (!challengeDetailData || !challengeDetailData?.id) {
+    notFound()
   }
 
   return (
@@ -216,24 +175,24 @@ const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeD
         <IDE.Grid gridArea="leading">
           <PageHeading>
             <PageHeading.Breadcrumb>
-              {response?.challengeDetail?.pedigree && (
-                <Link href={`/challenges?pedigree=${response?.challengeDetail?.pedigree?.value}&sort=latest`}>
-                  <span>{response?.challengeDetail?.pedigree?.text}</span>
+              {challengeDetailData?.past && (
+                <Link href={`/challenges?pedigree=${challengeDetailData?.past}&sort=latest`}>
+                  <span>{challengeDetailData?.past}</span>
                 </Link>
               )}
-              {response?.challengeDetail?.type && (
-                <Link href={`/challenges?type=${response?.challengeDetail?.type?.value}&sort=latest`}>
-                  <span>{response?.challengeDetail?.type?.text}</span>
+              {challengeDetailData?.type && (
+                <Link href={`/challenges?type=${challengeDetailData?.type}&sort=latest`}>
+                  <span>{challengeDetailData?.type}</span>
                 </Link>
               )}
-              <span>{response?.challengeDetail?.title}</span>
+              <span>{challengeDetailData?.title ?? ""}</span>
             </PageHeading.Breadcrumb>
-            <PageHeading.Title asTag={"h2"}>{response?.challengeDetail?.title ?? ""}</PageHeading.Title>
+            <PageHeading.Title asTag={"h2"}>{challengeDetailData?.title ?? ""}</PageHeading.Title>
           </PageHeading>
         </IDE.Grid>
         <IDE.Grid gridArea="challenge">
           <IDE.Head>문제 설명</IDE.Head>
-          <IDE.Markdown>{response?.challengeDetail?.content ?? ""}</IDE.Markdown>
+          <IDE.Markdown>{challengeDetailData?.description ?? ""}</IDE.Markdown>
         </IDE.Grid>
         {structure.mode === "solution" && (
           <IDE.Grid gridArea="editor">
@@ -251,8 +210,11 @@ const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeD
             <IDE.Head>테스트 케이스</IDE.Head>
             <IDE.TestcaseEditor<IDETypes>
               control={control}
-              name="testcaseValue"
-              testcaseType={response?.challengeDetail?.testcaseType}
+              name="testcaseValues"
+              testcaseTypes={{
+                input: challengeTestcaseData?.testcaseTypes?.input ?? [],
+                expected: challengeTestcaseData?.testcaseTypes?.expected ?? "",
+              }}
             />
           </IDE.Grid>
         )}
@@ -260,23 +222,24 @@ const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeD
           <IDE.Grid gridArea="result">
             <IDE.Head>실행 결과</IDE.Head>
             <IDE.SolutionResult
-              resultType={response?.challengeIDE?.result?.resultType}
-              resultStatus={response?.challengeIDE?.result?.resultStatus}
-              resultGrade={response?.challengeIDE?.result?.resultGrade}
+              resultType={structure.resultType}
+              resultStatus={structure.resultStatus}
+              runResult={structure.runResult}
+              submitResult={structure.submitResult}
             />
           </IDE.Grid>
         )}
         {structure.mode === "testcase" && (
           <IDE.Grid gridArea="result">
             <IDE.Head>테스트 케이스 형식</IDE.Head>
-            <IDE.TestcaseResult errorMessage={formState.errors.testcaseValue?.userDraft?.root?.message} />
+            <IDE.TestcaseResult errorMessage={formState.errors.testcaseValues?.userDraft?.root?.message} />
           </IDE.Grid>
         )}
         <IDE.Grid gridArea="trailing">
           <IDE.Control>
-            <Link href={`/challenges/${response?.challengeDetail?.id}/questions`} passHref={true} legacyBehavior={true}>
+            <Link href={`/challenges/${challengeDetailData?.id ?? 0}/questions`} passHref={true} legacyBehavior={true}>
               <Button asTag="a" shape="square" variants="primary" emphasis="subtle" size="sm">
-                {`질문 (${response?.challengeDetail?.questionCount})`}
+                {`질문${challengeDetailData?.questionsCount ? ` (${challengeDetailData?.questionsCount})` : ``}`}
               </Button>
             </Link>
             <Button
@@ -285,7 +248,9 @@ const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeD
               variants="primary"
               emphasis="subtle"
               size="sm"
+              disabled={structure.resultStatus === "wait"}
               onClick={() => {
+                setValue("testcaseValues.userDraft", getValues("testcaseValues.userSaved"))
                 setStructure((prev) => ({
                   ...prev,
                   mode: prev.mode === "solution" ? "testcase" : "solution",
@@ -297,13 +262,57 @@ const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeD
           </IDE.Control>
           {structure.mode === "solution" && (
             <IDE.Control>
-              <Button type="button" shape="square" variants="primary" emphasis="subtle" size="sm">
+              {(!Object.prototype.hasOwnProperty.call(challengeDetailData, "isSuccessSoluction") ||
+                challengeDetailData?.isSuccessSoluction) && (
+                <Link
+                  href={`/challenges/${challengeDetailData?.id ?? 0}/solutions`}
+                  passHref={true}
+                  legacyBehavior={true}
+                >
+                  <Button asTag="a" shape="square" variants="primary" emphasis="subtle" size="sm">
+                    풀이
+                  </Button>
+                </Link>
+              )}
+              <Button
+                type="button"
+                shape="square"
+                variants="primary"
+                emphasis="subtle"
+                size="sm"
+                disabled={structure.resultStatus === "wait"}
+                onClick={() => {
+                  setStructure((prev) => ({
+                    ...prev,
+                    resultType: "ready",
+                    resultStatus: "complete",
+                    runResult: [],
+                    submitResult: [],
+                  }))
+                  setValue("solution", IDESolutionInitialValue[structure?.language] ?? "")
+                }}
+              >
                 초기화
               </Button>
-              <Button type="button" shape="square" variants="primary" emphasis="subtle" size="sm">
+              <Button
+                type="button"
+                shape="square"
+                variants="primary"
+                emphasis="subtle"
+                size="sm"
+                disabled={structure.resultStatus === "wait"}
+                onClick={() => mutationRun.mutate(watch())}
+              >
                 코드 실행
               </Button>
-              <Button type="submit" shape="square" variants="primary" emphasis="bold" size="sm">
+              <Button
+                type="submit"
+                shape="square"
+                variants="primary"
+                emphasis="bold"
+                size="sm"
+                disabled={structure.resultStatus === "wait"}
+              >
                 제출 후 채점하기
               </Button>
             </IDE.Control>
@@ -317,7 +326,7 @@ const ChallengeDetail: ChallengeDetailComponent = forwardRef(function ChallengeD
                 emphasis="subtle"
                 size="sm"
                 onClick={() => {
-                  resetField("testcaseValue.userDraft")
+                  resetField("testcaseValues.userDraft")
                 }}
               >
                 초기화

@@ -12,7 +12,7 @@ export interface IDETestcaseEditorProps<T extends FieldValues = IDETypes>
   extends React.HtmlHTMLAttributes<HTMLDivElement> {
   control: Control<T>
   name: FieldPath<T>
-  testcaseType: IDETypes["testcaseType"]
+  testcaseTypes: IDETypes["testcaseTypes"]
 }
 
 const typeGuard = (type: string, value: string) => {
@@ -59,7 +59,7 @@ const typeGuard = (type: string, value: string) => {
 }
 
 const IDETestcaseEditor = <T extends FieldValues = IDETypes>(props: IDETestcaseEditorProps<T>) => {
-  const { control, name, testcaseType, className = "", ...restProps } = props
+  const { control, name, testcaseTypes, className = "", ...restProps } = props
 
   const appendRef = useRef<HTMLButtonElement | null>(null)
 
@@ -74,10 +74,10 @@ const IDETestcaseEditor = <T extends FieldValues = IDETypes>(props: IDETestcaseE
     rules: {
       validate: {
         typeGuard: (v) => {
-          const value = [...v] as IDETypes["testcaseValue"]["userDraft"]
+          const value = [...v] as IDETypes["testcaseValues"]["userDraft"]
           const flatValue = value.flatMap(({ input, expected }) => [
-            ...input.map((value, index) => ({ value, type: testcaseType.input[index] })),
-            { value: expected, type: testcaseType.expected },
+            ...input.map((value, index) => ({ value, type: testcaseTypes.input[index] })),
+            { value: expected, type: testcaseTypes.expected },
           ])
           const invalidValue = flatValue.some(({ type, value }) => value === "")
           if (invalidValue) return "데이터를 모두 입력해주세요"
@@ -91,7 +91,7 @@ const IDETestcaseEditor = <T extends FieldValues = IDETypes>(props: IDETestcaseE
 
   const appendFields = () => {
     userDraftFields.append(
-      { input: Array(testcaseType.input.length).fill(""), expected: "" } as FieldArray<T, ArrayPath<T>>,
+      { input: Array(testcaseTypes.input.length).fill(""), expected: "" } as FieldArray<T, ArrayPath<T>>,
       { focusName: `${name}.userDraft.${userDraftFields.fields.length}.input.${0}` },
     )
   }
@@ -101,7 +101,7 @@ const IDETestcaseEditor = <T extends FieldValues = IDETypes>(props: IDETestcaseE
     appendRef.current?.focus()
   }
 
-  if (!testcaseType.input.length) {
+  if (!testcaseTypes.input.length) {
     return null
   }
 
@@ -109,14 +109,14 @@ const IDETestcaseEditor = <T extends FieldValues = IDETypes>(props: IDETestcaseE
     <IDETestcaseEditorContainer className={`${className}`} {...restProps}>
       <table>
         <colgroup>
-          {testcaseType.input.map((type, colIndex) => (
+          {testcaseTypes.input.map((type, colIndex) => (
             <col key={colIndex} style={{ width: "168px" }} />
           ))}
           <col style={{ width: "200px" }} />
         </colgroup>
         <thead>
           <tr>
-            <th colSpan={testcaseType.input.length} scope="colgroup">
+            <th colSpan={testcaseTypes.input.length} scope="colgroup">
               Parameters
               <Button
                 ref={appendRef}
@@ -136,20 +136,20 @@ const IDETestcaseEditor = <T extends FieldValues = IDETypes>(props: IDETestcaseE
             <th scope="col">Result</th>
           </tr>
           <tr>
-            {testcaseType.input.map((type, colIndex) => (
+            {testcaseTypes.input.map((type, colIndex) => (
               <th key={colIndex} scope="col">
                 {type}
               </th>
             ))}
             <th scope="col" colSpan={2}>
-              {testcaseType.expected}
+              {testcaseTypes.expected}
             </th>
           </tr>
         </thead>
         <tbody>
           {publicFields.fields.map((field, rowIndex) => (
             <tr key={field.id}>
-              {testcaseType.input.map((type, colIndex) => (
+              {testcaseTypes.input.map((type, colIndex) => (
                 <td key={`${field.id}-input${colIndex}`}>
                   <Input<T>
                     control={control}
@@ -173,7 +173,7 @@ const IDETestcaseEditor = <T extends FieldValues = IDETypes>(props: IDETestcaseE
           ))}
           {userDraftFields.fields.map((field, rowIndex) => (
             <tr key={field.id}>
-              {testcaseType.input.map((type, colIndex) => (
+              {testcaseTypes.input.map((type, colIndex) => (
                 <td key={`${field.id}-input${colIndex}`}>
                   <Input<T>
                     control={control}

@@ -1,10 +1,11 @@
 export interface IDETypes {
+  id: number
   solution: string
-  testcaseType: {
+  testcaseTypes: {
     input: string[]
     expected: string
   }
-  testcaseValue: {
+  testcaseValues: {
     public: {
       input: string[]
       expected: string
@@ -45,3 +46,14 @@ export const IDESolutionResultStatus = {
 } as const
 
 export type IDESolutionResultStatus = (typeof IDESolutionResultStatus)[keyof typeof IDESolutionResultStatus]
+
+export const IDESolutionInitialValue: { [key in string]: string } = {
+  java: `import java.util.Scanner;
+
+public class Solution {
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    String a = sc.next();
+  }
+}`,
+}
