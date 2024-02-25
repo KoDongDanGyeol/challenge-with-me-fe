@@ -1,36 +1,34 @@
 "use client"
 
 import styled from "styled-components"
+import { ChallengeSolutionListModel } from "@/app/(service)/challenges/_libs/getChallengeSolutionList"
 import Button from "@/components/general/Button"
 import Icon from "@/components/general/Icon"
 import Markdown from "@/components/display/Markdown"
 
 export interface SolutionCardContentProps extends React.HTMLAttributes<HTMLDivElement> {
-  cardId: number
-  language: string
-  submitCode: string
-  isLiked: boolean
+  solution: ChallengeSolutionListModel["content"][number]
   onLike?: (id: number) => void
 }
 
 const SolutionCardContent = (props: SolutionCardContentProps) => {
-  const { cardId, language, submitCode, isLiked, className = "", onLike, ...restProps } = props
+  const { solution, className = "", onLike, ...restProps } = props
 
   return (
     <SolutionCardContentContainer className={`${className}`} $hasLike={Boolean(onLike)} {...restProps}>
-      <Markdown>{`~~~${language} ${submitCode}`}</Markdown>
+      <Markdown>{`~~~${solution?.language} ${solution?.submitCode}`}</Markdown>
       {onLike && (
         <Button
           type="button"
           shape="square"
           variants="primary"
-          emphasis={isLiked ? "bold" : "subtle"}
+          emphasis={solution?.isLiked ? "bold" : "subtle"}
           size="xs"
           className="button-like"
-          onClick={() => onLike?.(cardId)}
-          aria-pressed={isLiked}
+          onClick={() => onLike?.(solution?.id)}
+          aria-pressed={solution?.isLiked}
         >
-          <Icon name={isLiked ? "HeartSolid" : "Heart"} aria-hidden={true} />
+          <Icon name={solution?.isLiked ? "HeartSolid" : "Heart"} aria-hidden={true} />
           좋아요
         </Button>
       )}

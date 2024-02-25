@@ -30,12 +30,12 @@ export type ChallengeDetailModel = {
 export type ChallengeDetailQueryKey = readonly [_1?: string, _2?: ChallengeDetailParams]
 
 export const getChallengeDetail: LibsQueryFunction<ChallengeDetailModel> = async (context) => {
-  const [, queries] = context?.queryKey as ChallengeDetailQueryKey
-  const params = new URLSearchParams({ ...queries })
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/challenges/${queries?.problemId}`, {
+  const [, params] = context?.queryKey as ChallengeDetailQueryKey
+  const newParams = new URLSearchParams({ ...params })
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/challenges/${newParams.get("problemId")}`, {
     method: "get",
     next: {
-      tags: ["challengeDetail", params.toString()],
+      tags: ["challengeDetail", newParams.toString()],
     },
   })
   return response.json()

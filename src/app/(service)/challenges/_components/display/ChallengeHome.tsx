@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 import { PolymorphicComponentPropWithRef, PolymorphicRef } from "@/types/polymorphic"
-import { ChallengeListParams, getChallengeList } from "@/app/(service)/challenges/_libs/getChallengeList"
+import { ChallengeListSearchParams, getChallengeList } from "@/app/(service)/challenges/_libs/getChallengeList"
 import PageHeading from "@/components/display/PageHeading"
 import ChallengeList from "@/components/display/ChallengeList"
 import Pagination from "@/components/display/Pagination"
@@ -16,7 +16,7 @@ import ChallengeFilter, { ChallengeFilterTypes, ChallengeFilterOptionGroups } fr
 export type ChallengeHomeProps<C extends React.ElementType> = PolymorphicComponentPropWithRef<
   C,
   {
-    searchParams: ChallengeListParams
+    searchParams: ChallengeListSearchParams
   }
 >
 

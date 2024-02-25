@@ -1,23 +1,21 @@
 "use client"
 
 import styled from "styled-components"
+import { ChallengeSolutionListModel } from "@/app/(service)/challenges/_libs/getChallengeSolutionList"
 import Profile from "@/components/display/Profile"
 
 export interface SolutionCardProfileProps extends React.HTMLAttributes<HTMLDivElement> {
-  cardId: number
-  imgUrl: string
-  name: string
-  language: string
+  solution: ChallengeSolutionListModel["content"][number]
 }
 
 const SolutionCardProfile = (props: SolutionCardProfileProps) => {
-  const { cardId, imgUrl, name, language, className = "", ...restProps } = props
+  const { solution, className = "", ...restProps } = props
 
   return (
     <SolutionCardProfileContainer className={`${className}`} {...restProps}>
-      <Profile.Picture src={imgUrl} />
-      <Profile.Content name={name}>
-        <span className="col-content">{language}</span>
+      <Profile.Picture src={solution?.imgUrl} />
+      <Profile.Content name={solution?.name}>
+        <span className="col-content">{solution?.language}</span>
       </Profile.Content>
     </SolutionCardProfileContainer>
   )
