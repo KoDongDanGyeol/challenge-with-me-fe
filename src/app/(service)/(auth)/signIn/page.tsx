@@ -31,7 +31,7 @@ const SignIn = () => {
       params.append("img", session.user.image || "")
 
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/backend/api/oauth/login/google`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/oauth/login/google`, {
           method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",

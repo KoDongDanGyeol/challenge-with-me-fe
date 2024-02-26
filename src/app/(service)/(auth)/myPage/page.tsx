@@ -39,7 +39,7 @@ const MyPage = () => {
   const deleteAccount = async () => {
     const result = confirm("정말 삭제하시겠습니까?")
     if (result === true) {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/backend/api/user/withdrawal`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/user/withdrawal`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

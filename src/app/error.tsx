@@ -2,6 +2,8 @@
 
 import { useEffect } from "react"
 import "@/styles/error.css"
+import { useRouter } from "next/navigation"
+import Button from "@/components/general/Button"
 
 interface PageProps {
   error: Error & {
@@ -17,11 +19,21 @@ const Page = (props: PageProps) => {
     console.error(error)
   }, [error])
 
+  const router = useRouter()
   return (
-    <div>
-      <h2>Error</h2>
-      <button onClick={() => reset()}>Try again</button>
-    </div>
+    <main className="not-found-container">
+      <p className="error-code">500</p>
+      <h2 className="not-found-h2">앗,문제가 생겼습니다</h2>
+      <p className="not-found-p">
+        문제를 해결중에 있습니다.
+        <br />
+        다시 한번 시도해주세요.
+      </p>
+
+      <Button emphasis="bold" shape="square" size="lg" variants="primary" onClick={() => router.push("/signIn")}>
+        홈으로 이동
+      </Button>
+    </main>
   )
 }
 
