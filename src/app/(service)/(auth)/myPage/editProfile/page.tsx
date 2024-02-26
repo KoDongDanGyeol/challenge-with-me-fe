@@ -35,7 +35,7 @@ const EditProfile = () => {
   })
 
   const updateProfile = async (data: object) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/user/profile`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/backend/api/user/profile`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

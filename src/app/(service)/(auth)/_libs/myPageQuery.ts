@@ -4,7 +4,7 @@ export const getMyPageData = async () => {
   const cookieToken = getCookie("accessToken-token")
   if (!cookieToken) throw new Error("로그인 후 이용 가능합니다.")
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/user/mypage`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/backend/api/user/mypage`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${cookieToken.toString()}`,
