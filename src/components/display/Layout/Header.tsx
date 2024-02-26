@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { useRecoilState } from "recoil"
@@ -12,6 +12,8 @@ import { atomGlobal } from "@/stores/global"
 import Button from "@/components/general/Button"
 import Icon from "@/components/general/Icon"
 import Logo from "/public/logo.svg"
+import { signOut, useSession } from "next-auth/react"
+import { deleteCookie, hasCookie } from "cookies-next"
 
 export interface LayoutHeaderProps extends React.HTMLAttributes<HTMLElement> {
   //
@@ -25,6 +27,7 @@ const LayoutHeader = (props: LayoutHeaderProps) => {
   const [global, setGlobal] = useRecoilState(atomGlobal)
   const [header, setHeader] = useState({ isHeaderActivated: false })
   const { focusTrapRefs, onActivate, onDeactivate } = useFocusTrap(false, [["Escape", () => toggleSidebar(false)]])
+  const { data: session, status } = useSession()
 
   const toggleSidebar = useCallback(
     async (isActivate: boolean) => {
@@ -61,6 +64,11 @@ const LayoutHeader = (props: LayoutHeaderProps) => {
     setHeader((prev) => ({ ...prev, isHeaderActivated: false }))
   }, [global.screen, setGlobal])
 
+  const logOut = async () => {
+    deleteCookie("accessToken-token")
+    signOut({ callbackUrl: "/signIn" })
+  }
+
   return (
     <LayoutHeaderContainer className={`${className}`} {...restProps}>
       <div className="inner">
@@ -92,25 +100,39 @@ const LayoutHeader = (props: LayoutHeaderProps) => {
               </li> */}
             </ul>
             <ul className="link-util">
-              <li>
-                <Link href="/auth/login" passHref={true} legacyBehavior={true}>
-                  <Button asTag="a" shape="plain" variants="secondary" emphasis="minimal">
-                    로그인
+              {status === "unauthenticated" && (
+                <li>
+                  <Link href="/signIn" passHref={true} legacyBehavior={true}>
+                    <Button asTag="a" shape="plain" variants="secondary" emphasis="minimal">
+                      로그인
+                    </Button>
+                  </Link>
+                </li>
+              )}
+              {status === "authenticated" && (
+                <li>
+                  <Link href="/myPage" passHref={true} legacyBehavior={true}>
+                    <Button asTag="a" shape="plain" variants="secondary" emphasis="minimal">
+                      마이페이지
+                    </Button>
+                  </Link>
+                </li>
+              )}
+              {status === "authenticated" && (
+                <li>
+                  <Button
+                    asTag="button"
+                    shape="plain"
+                    variants="secondary"
+                    emphasis="minimal"
+                    onClick={() => {
+                      logOut()
+                    }}
+                  >
+                    로그아웃
                   </Button>
-                </Link>
-              </li>
-              <li>
-                <Link href="/user" passHref={true} legacyBehavior={true}>
-                  <Button asTag="a" shape="plain" variants="secondary" emphasis="minimal">
-                    마이페이지
-                  </Button>
-                </Link>
-              </li>
-              <li>
-                <Button asTag="button" shape="plain" variants="secondary" emphasis="minimal">
-                  로그아웃
-                </Button>
-              </li>
+                </li>
+              )}
             </ul>
           </LayoutHeaderLink>
           <LayoutHeaderControl
